@@ -13,12 +13,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tanuj24.github.io/goku/localstack-alternative.html</loc>
-    <lastmod>2026-09-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://tanuj24.github.io/goku/run-aws-locally.html</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>

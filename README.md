@@ -97,7 +97,6 @@ The [install guide](https://tanuj24.github.io/goku/install.html) covers every op
 ## Guides
 
 - [How to run AWS locally without an AWS account](https://tanuj24.github.io/goku/run-aws-locally.html)
-- [A free LocalStack alternative](https://tanuj24.github.io/goku/localstack-alternative.html)
 - [Test and debug AWS Lambda locally](https://tanuj24.github.io/goku/test-aws-lambda-locally.html)
 - [Run DynamoDB locally](https://tanuj24.github.io/goku/dynamodb-local.html)
 - [Run AWS Glue jobs locally](https://tanuj24.github.io/goku/aws-glue-locally.html)
@@ -130,5 +129,4 @@ Goku was called **Mimir**, and every name is Goku now:
 - 🐛 Bug reports and feature requests: [Issues](https://github.com/tanuj24/goku/issues)
 - 📦 goku CLI downloads: [Releases](https://github.com/tanuj24/goku/releases)
 
-Goku is free to use. It is an independent project and is not affiliated with or endorsed by Amazon Web Services or
-LocalStack.
+Goku is free to use. It is an independent project and is not affiliated with or endorsed by Amazon Web Services.
