@@ -1,0 +1,22 @@
+<svg viewBox="86 77 130 130" xmlns="http://www.w3.org/2000/svg">
+  <!-- Goku's mark: a terminal prompt surfing a golden cloud (static; the console's top bar animates it). -->
+  <defs>
+    <linearGradient id="cloud" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE27A"/>
+      <stop offset="0.55" stop-color="#FFC53D"/>
+      <stop offset="1" stop-color="#F29A1F"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3B8BF0"/>
+      <stop offset="1" stop-color="#1E5FC4"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#cloud)" d="M104 176 C 92 176, 88 160, 102 156 C 100 140, 120 132, 132 142 C 138 126, 164 124, 172 140 C 184 132, 204 140, 200 156 C 214 158, 214 176, 198 178 C 170 186, 128 186, 104 176 Z"/>
+  <path fill="#FFF3C4" opacity="0.7" d="M120 150 C 126 142, 138 142, 142 150 C 134 147, 126 147, 120 150 Z"/>
+  <path fill="#FFF3C4" opacity="0.6" d="M160 144 C 166 137, 178 138, 181 146 C 173 142, 166 142, 160 144 Z"/>
+  <g transform="rotate(-5 151 141)">
+    <rect x="126" y="101" width="50" height="40" rx="9" fill="url(#chip)" stroke="#9FD0FF" stroke-width="2"/>
+    <path d="M137 113 L 146 121 L 137 129" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="151" y="127" width="14" height="4" rx="2" fill="#FFFFFF"/>
+  </g>
+</svg>

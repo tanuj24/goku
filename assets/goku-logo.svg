@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 240" width="660" height="240" role="img" aria-labelledby="t d">
+  <title id="t">Goku</title>
+  <desc id="d">A terminal prompt surfing on a golden speed-cloud, next to the Goku wordmark.</desc>
+  <defs>
+    <linearGradient id="cloud" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE27A"/>
+      <stop offset="0.55" stop-color="#FFC53D"/>
+      <stop offset="1" stop-color="#F29A1F"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3B8BF0"/>
+      <stop offset="1" stop-color="#1E5FC4"/>
+    </linearGradient>
+    <linearGradient id="trail" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#FFC53D" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#FFC53D" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .ride   { animation: bob 2.4s ease-in-out infinite; transform-origin: 150px 150px; }
+      .rider  { animation: lean 2.4s ease-in-out infinite; transform-origin: 150px 140px; }
+      .speed  { stroke-dasharray: 40 160; animation: dash 1.1s linear infinite; }
+      .speed.s2 { animation-delay: -0.35s; }
+      .speed.s3 { animation-delay: -0.7s; }
+      .puff   { animation: puff 1.6s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+      .puff.p2 { animation-delay: -0.55s; }
+      .puff.p3 { animation-delay: -1.1s; }
+      .cursor { animation: blink 1s steps(1) infinite; }
+      .spark  { animation: twinkle 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+      .word   { font: 800 76px "Avenir Next", "Montserrat", "Segoe UI", system-ui, sans-serif; letter-spacing: 2px; }
+      .sub    { font: 500 17px "Avenir Next", "Montserrat", "Segoe UI", system-ui, sans-serif; letter-spacing: 0.5px; }
+      @keyframes bob   { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-9px) rotate(1.5deg); } }
+      @keyframes lean  { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(2deg); } }
+      @keyframes dash  { from { stroke-dashoffset: 200; } to { stroke-dashoffset: 0; } }
+      @keyframes puff  { 0% { opacity: .85; transform: translateX(0) scale(1); } 100% { opacity: 0; transform: translateX(-60px) scale(.35); } }
+      @keyframes blink { 50% { opacity: 0; } }
+      @keyframes twinkle { 0%,100% { opacity: .25; transform: scale(.6); } 50% { opacity: 1; transform: scale(1.1); } }
+      @media (prefers-reduced-motion: reduce) {
+        .ride, .rider, .speed, .puff, .cursor, .spark { animation: none; }
+      }
+    </style>
+  </defs>
+
+  <rect width="660" height="240" rx="18" fill="#0E1E40"/>
+
+  <!-- speed lines -->
+  <g stroke="#4CC9F0" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.8">
+    <path class="speed"    d="M24 128 H118"/>
+    <path class="speed s2" d="M10 150 H104"/>
+    <path class="speed s3" d="M34 172 H110"/>
+  </g>
+
+  <g class="ride">
+    <!-- trail and puffs left behind -->
+    <path d="M40 170 C 70 160, 95 158, 118 160 L 118 178 C 92 182, 66 180, 40 170 Z" fill="url(#trail)"/>
+    <circle class="puff"    cx="70" cy="168" r="7" fill="#FFD25A"/>
+    <circle class="puff p2" cx="86" cy="164" r="5" fill="#FFD25A"/>
+    <circle class="puff p3" cx="60" cy="174" r="4" fill="#FFD25A"/>
+
+    <!-- the speed-cloud -->
+    <g filter="url(#glow)">
+      <path fill="url(#cloud)" d="M104 176
+        C 92 176, 88 160, 102 156
+        C 100 140, 120 132, 132 142
+        C 138 126, 164 124, 172 140
+        C 184 132, 204 140, 200 156
+        C 214 158, 214 176, 198 178
+        C 170 186, 128 186, 104 176 Z"/>
+      <path fill="#FFF3C4" opacity="0.7" d="M120 150 C 126 142, 138 142, 142 150 C 134 147, 126 147, 120 150 Z"/>
+      <path fill="#FFF3C4" opacity="0.6" d="M160 144 C 166 137, 178 138, 181 146 C 173 142, 166 142, 160 144 Z"/>
+    </g>
+
+    <!-- the rider: a terminal prompt standing on the cloud -->
+    <g class="rider">
+      <rect x="126" y="101" width="50" height="40" rx="9" fill="url(#chip)" stroke="#9FD0FF" stroke-width="2"/>
+      <path d="M137 113 L 146 121 L 137 129" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect class="cursor" x="151" y="127" width="14" height="4" rx="2" fill="#FFFFFF"/>
+    </g>
+  </g>
+
+  <!-- sparkle -->
+  <path class="spark" fill="#FFE27A" d="M226 96 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4 z"/>
+
+  <!-- wordmark -->
+  <text class="word" x="252" y="150" fill="#F5F7FA">GOKU</text>
+  <text class="sub"  x="256" y="180" fill="#9FB3D1">See your cloud, before you ship your cloud.</text>
+</svg>

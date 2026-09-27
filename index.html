@@ -4,27 +4,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1120">
-  <title>Mimir — Local AWS Cloud Emulator | Free LocalStack Alternative</title>
-  <meta name="description" content="Run AWS locally: 54 AWS-compatible services including S3, Lambda, DynamoDB, RDS and Step Functions, with a 27-service web console. Free, no AWS account.">
+  <title>Goku (formerly Mimir) — Local AWS Cloud Emulator | Free LocalStack Alternative</title>
+  <meta name="description" content="Goku, formerly Mimir: run AWS locally with 73 AWS-compatible services including S3, Lambda, DynamoDB, RDS and Step Functions, plus a 60-service web console. Free, no AWS account.">
   <link rel="canonical" href="https://tanuj24.github.io/mimir/">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Mimir — Your Local AWS Cloud">
-  <meta property="og:description" content="Free local AWS cloud emulator: 54 AWS-compatible services, a 27-service web console, real Postgres/Redis/Kubernetes engines and automatic persistence. No AWS account, no bill.">
+  <meta property="og:site_name" content="Goku">
+  <meta property="og:title" content="Goku (formerly Mimir) — Your Local AWS Cloud">
+  <meta property="og:description" content="Free local AWS cloud emulator: 73 AWS-compatible services, a 60-service web console, real Postgres/Redis/Kubernetes engines and automatic persistence. No AWS account, no bill.">
   <meta property="og:url" content="https://tanuj24.github.io/mimir/">
-  <meta property="og:image" content="https://tanuj24.github.io/mimir/screenshots/step-functions-workflow-graph-live-execution.png">
+  <meta property="og:image" content="https://tanuj24.github.io/mimir/screenshots/goku-console-home-aws-services.png">
+  <meta property="og:image:alt" content="The Goku web console home with local AWS services">
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Mimir",
-    "operatingSystem": "macOS, Linux, Windows (Docker)",
+    "name": "Goku",
+    "alternateName": "Mimir",
+    "operatingSystem": "macOS, Linux, Windows",
     "applicationCategory": "DeveloperApplication",
-    "description": "Local AWS cloud emulator in one Docker image — 54 AWS-compatible services including S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway and Glue, with a full web console. Free LocalStack alternative.",
+    "description": "Goku (formerly Mimir) is a local AWS cloud emulator in one Docker image: 73 AWS-compatible services including S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway and Glue, with a web console covering 60 services. Free LocalStack alternative.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "softwareVersion": "3.0",
+    "softwareVersion": "4.0.0",
     "url": "https://tanuj24.github.io/mimir/",
-    "downloadUrl": "https://hub.docker.com/r/tanujsoni027/mimir-aws",
+    "downloadUrl": "https://tanuj24.github.io/mimir/install.html",
+    "installUrl": "https://tanuj24.github.io/mimir/install.html",
+    "image": "https://tanuj24.github.io/mimir/screenshots/goku-console-home-aws-services.png",
     "author": { "@type": "Person", "name": "Tanuj Soni" }
   }
   </script>
@@ -35,33 +41,43 @@
     "mainEntity": [
       {
         "@type": "Question",
+        "name": "Goku was formerly Mimir. What changed?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Only the name. Goku is the same product, renamed in the 4.0.0 release. Existing installs, commands and data carry over: the image tanujsoni027/mimir-aws, the mimir container and the mimir-data volume keep their names, MIMIR_* settings still work, and the mimir command keeps working as a deprecated alias of goku." }
+      },
+      {
+        "@type": "Question",
         "name": "How do I run AWS locally without an AWS account?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Install Mimir and point your AWS CLI or SDK at http://localhost:4566 with access key mimir, secret mimir and region us-east-1. All 54 AWS-compatible services accept standard API calls with those local credentials — no account and no sign-up. Core services work offline once the image is pulled; container-backed engines (Glue, RDS, EKS) download their engine images on first use." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Install Goku and point your AWS CLI or SDK at http://localhost:4566 with region us-east-1 and any local credentials, for example test/test. The goku env command sets those variables for you. There is no account and no sign-up, and once the image and any runtime images your services need are pulled, everything runs on your machine without internet access." }
       },
       {
         "@type": "Question",
-        "name": "Is Mimir a free alternative to LocalStack?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Mimir is free, and that includes services LocalStack gates behind paid tiers — such as RDS, ECS, EKS, Cognito, Athena and Glue job execution — plus a full web console covering 27 services." }
+        "name": "Is Goku a free alternative to LocalStack?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Everything in Goku is free, including services LocalStack gates behind paid tiers such as RDS, ECS, EKS, Cognito, Athena and Glue job execution, plus a web console covering 60 services." }
       },
       {
         "@type": "Question",
-        "name": "Can I test Lambda functions locally?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Lambda functions run in real runtime containers with logs, versions, aliases and event source mappings. Create, invoke and debug them from the console or the AWS CLI." }
+        "name": "Can I test and debug Lambda functions locally?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Lambda functions run in real runtime containers for every runtime AWS Lambda supports today, with logs, versions, aliases, function URLs and event source mappings (SQS, Kinesis, DynamoDB Streams). You can step through a handler from VS Code, IntelliJ, PyCharm or GoLand." }
       },
       {
         "@type": "Question",
         "name": "Does my data survive restarts and updates?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. State persists automatically in a mimir-data Docker volume — no flags needed. It survives stops, container removal and image updates, and mimir update is lossless: your resources are always preserved." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. State persists automatically in the mimir-data Docker volume with no flags needed. It survives stops, container removal and image updates, and goku update preserves your resources. Environment snapshots can also save and restore the whole local cloud." }
       },
       {
         "@type": "Question",
-        "name": "Does Mimir run on Apple Silicon?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The image is multi-arch (linux/arm64 and linux/amd64), so it runs natively on Apple Silicon Macs, Intel/AMD machines and Linux CI." }
+        "name": "Does Goku run on Windows and Apple Silicon?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The goku CLI installs natively on macOS, Linux and Windows and runs Goku in Docker. The image is multi-arch (linux/arm64 and linux/amd64), so it runs natively on Apple Silicon Macs, Intel and AMD machines and Linux CI." }
       },
       {
         "@type": "Question",
-        "name": "What do I need to run Mimir?",
-        "acceptedAnswer": { "@type": "Answer", "text": "A container runtime — Docker Desktop, Docker Engine or colima. The first download is about 1 GB. On macOS and Linux the one-line installer sets up the mimir CLI; on any platform, including Windows, you can run the Docker image directly." }
+        "name": "What do I need to run Goku?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Docker: Docker Desktop on macOS and Windows, and Docker Engine or Docker Desktop on Linux." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Goku a production AWS replacement?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. Goku is a local development and testing sandbox: build and iterate locally, then deploy to real AWS for production." }
       }
     ]
   }
@@ -84,21 +100,33 @@
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); font-size: 1.05rem; line-height: 1.7; }
     .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
     a { color: var(--cyan); }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    p code, li code, td code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; font-size: 0.86em; color: var(--ink); overflow-wrap: anywhere; }
 
     /* Nav */
     nav { position: sticky; top: 0; z-index: 50; background: rgba(11,17,32,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
     nav .wrap { display: flex; align-items: center; gap: 22px; height: 56px; }
-    .wordmark { font-weight: 800; font-size: 1.12rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; margin-right: auto; }
+    .wordmark { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; margin-right: auto; }
+    .wordmark img { height: 32px; width: auto; display: block; }
     .wordmark span { color: var(--teal); }
-    nav a.navlink { color: var(--muted); text-decoration: none; font-size: 0.95rem; padding: 4px 2px; }
+    nav a.navlink { color: var(--muted); text-decoration: none; font-size: 0.95rem; padding: 4px 2px; white-space: nowrap; }
     nav a.navlink:hover { color: var(--ink); }
     nav a.navlink.active { color: var(--teal); font-weight: 600; }
+    @media (max-width: 640px) { nav .wrap { gap: 16px; } .nav-wide { display: none; } }
+
+    /* Announcement */
+    .announce { margin: 22px auto 0; max-width: 780px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 12px; padding: 14px 18px; font-size: 0.95rem; color: var(--muted); text-align: left; }
+    .announce-tag { flex: none; color: #04211c; background: var(--teal); border-radius: 999px; padding: 1px 10px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .announce strong { color: var(--ink); }
+    .announce p { flex: 1 1 420px; margin: 0; }
+    .announce a { white-space: nowrap; font-weight: 600; }
 
     /* Hero */
-    header { padding: 84px 0 44px; text-align: center; background: radial-gradient(900px 420px at 50% -80px, var(--glow), transparent 70%); }
-    h1 { font-size: clamp(2.2rem, 5vw, 3.3rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 18px; }
+    header { padding: 36px 0 44px; text-align: center; background: radial-gradient(900px 420px at 50% -80px, var(--glow), transparent 70%); }
+    .hero-logo { display: block; width: min(520px, 100%); height: auto; margin: 26px auto 26px; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); }
+    h1 { font-size: clamp(2.1rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 18px; }
     .grad { background: linear-gradient(90deg, #14b8a6, #4cc9f0); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .tagline { font-size: 1.2rem; color: var(--muted); max-width: 740px; margin: 0 auto 30px; }
+    .tagline { font-size: 1.2rem; color: var(--muted); max-width: 760px; margin: 0 auto 30px; }
     .tagline strong { color: var(--ink); }
 
     /* Buttons */
@@ -110,15 +138,19 @@
 
     /* Terminal */
     .terminal { max-width: 760px; margin: 30px auto 0; background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; text-align: left; }
-    .term-bar { display: flex; align-items: center; gap: 7px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    .term-bar { display: flex; align-items: center; gap: 7px; padding: 8px 12px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
     .term-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
     .term-dot.r { background: #ff5f57; } .term-dot.y { background: #febc2e; } .term-dot.g { background: #28c840; }
-    .term-title { color: var(--muted); font-size: 0.78rem; margin-left: 6px; margin-right: auto; }
+    .os-tabs { display: flex; gap: 4px; margin-left: 8px; margin-right: auto; }
+    .os-tab { font: inherit; font-size: 0.78rem; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 6px; padding: 2px 10px; cursor: pointer; }
+    .os-tab:hover { color: var(--ink); }
+    .os-tab[aria-selected="true"] { color: var(--ink); border-color: var(--line); background: var(--surface); }
+    .os-tab:focus-visible, .copy-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 1px; }
     .copy-btn { background: var(--surface); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 3px 12px; font-size: 0.78rem; font-family: inherit; cursor: pointer; }
     .copy-btn:hover { color: var(--ink); border-color: var(--teal); }
     .terminal pre { padding: 18px 20px; overflow-x: auto; font-size: 0.9rem; line-height: 1.5; color: var(--ink); }
-    .terminal code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    .prompt { color: var(--teal); user-select: none; }
+    .prompt { color: var(--teal); user-select: none; -webkit-user-select: none; }
+    @media (max-width: 640px) { .terminal pre { white-space: pre-wrap; overflow-wrap: anywhere; } }
     .install-caption { font-size: 0.9rem; color: var(--muted); max-width: 760px; margin: 14px auto 0; }
     .install-caption strong { color: var(--ink); }
 
@@ -128,12 +160,29 @@
     .stat-l { display: block; font-size: 0.88rem; color: var(--muted); margin-top: 2px; }
 
     /* Sections */
-    section { padding: 52px 0; border-top: 1px solid var(--line); }
+    section, section.wrap { padding-top: 52px; padding-bottom: 52px; border-top: 1px solid var(--line); scroll-margin-top: 64px; }
     .kicker { display: block; color: var(--teal); text-transform: uppercase; letter-spacing: .1em; font-size: 0.78rem; font-weight: 700; margin-bottom: 8px; }
     h2 { font-size: 1.65rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 14px; }
     h2 + p, .section-lede { color: var(--muted); margin-bottom: 12px; }
     section p { color: var(--muted); margin-bottom: 12px; }
-    img.shot { width: 100%; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); margin: 14px 0 30px; }
+    section p strong { color: var(--ink); }
+    img.shot { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); margin: 14px 0 30px; }
+    img.shot.modal { max-width: 768px; display: block; margin-left: auto; margin-right: auto; }
+
+    /* What's new */
+    .rename { background: linear-gradient(135deg, rgba(20,184,166,0.10), rgba(76,201,240,0.06)); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 14px; padding: 22px 22px 10px; margin: 22px 0 18px; }
+    .rename h3 { font-size: 1.25rem; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
+    .rename ul { list-style: none; margin: 4px 0 12px; }
+    .rename li { color: var(--muted); padding-left: 20px; position: relative; margin-bottom: 8px; }
+    .rename li::before { content: ""; position: absolute; left: 4px; top: 0.72em; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+    .rename li strong { color: var(--ink); }
+    .devtools { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-top: 16px; }
+    .devtools h3 { font-size: 1.02rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .devtools > p { font-size: 0.95rem; margin-bottom: 10px; }
+    .devtools ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px 22px; }
+    .devtools li { color: var(--muted); font-size: 0.93rem; line-height: 1.55; padding-left: 20px; position: relative; }
+    .devtools li::before { content: ""; position: absolute; left: 3px; top: 0.62em; width: 7px; height: 7px; border-radius: 2px; border: 1.5px solid var(--teal); }
+    .devtools li strong { color: var(--ink); font-weight: 600; }
 
     /* Service explorer */
     .explorer { display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: 26px; margin: 26px 0 10px; align-items: start; }
@@ -145,6 +194,8 @@
     .svc-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 1px; }
     .svc-btn[aria-pressed="true"] { color: #04211c; background: var(--teal); border-color: var(--teal); font-weight: 600; }
     .svc-btn[aria-pressed="true"]:hover { background: var(--teal-deep); border-color: var(--teal-deep); color: #04211c; }
+    .svc-new { font-size: 0.66rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--cyan); margin-left: 6px; }
+    .svc-btn[aria-pressed="true"] .svc-new { color: #04211c; }
     .svc-stage { position: sticky; top: 76px; }
     .svc-shot { background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); overflow: hidden; }
     .svc-shot img { display: block; width: 100%; height: auto; aspect-ratio: 1440 / 860; }
@@ -161,7 +212,7 @@
     }
 
     /* Feature cards */
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 24px 0 20px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; margin: 24px 0 20px; }
     .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; transition: border-color .15s ease, box-shadow .15s ease; }
     .card:hover { border-color: var(--teal); box-shadow: 0 8px 30px rgba(20,184,166,0.08); }
     .card .icon { color: var(--teal); margin-bottom: 10px; }
@@ -177,64 +228,157 @@
     tr:last-child td { border-bottom: none; }
     th { color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-size: 0.75rem; font-weight: 700; background: var(--surface2); }
     td { color: var(--muted); }
-    td.mimir { color: var(--teal); font-weight: 600; }
+    td.goku { color: var(--teal); font-weight: 600; }
 
     /* FAQ */
     .faq h3 { font-size: 1.08rem; font-weight: 700; color: var(--ink); margin: 22px 0 6px; }
-    .faq p strong { color: var(--ink); }
 
-    footer { padding: 44px 0 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    footer, footer.wrap { padding-top: 44px; padding-bottom: 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    footer .signoff { color: var(--ink); font-weight: 600; margin-bottom: 8px; }
     .disclaimer { font-size: 0.8rem; margin-top: 12px; }
   </style>
 </head>
 <body>
-  <nav>
+  <nav aria-label="Main">
     <div class="wrap">
-      <a class="wordmark" href="index.html">Mimir<span>.</span></a>
+      <a class="wordmark" href="index.html"><img src="assets/goku-logo-bar.svg" alt="" width="74" height="32">Goku<span>.</span></a>
       <a class="navlink active" href="index.html" aria-current="page">Home</a>
+      <a class="navlink nav-wide" href="#whats-new">What's new</a>
       <a class="navlink" href="install.html">Install</a>
-      <a class="navlink" href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a>
+      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a>
     </div>
   </nav>
 
   <header>
     <div class="wrap">
-      <h1>Mimir — Your <span class="grad">Local AWS Cloud</span></h1>
-      <p class="tagline"><strong>See your cloud, before you ship your cloud.</strong><br>
-      A local AWS cloud emulator: 54 AWS-compatible services — S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway, Glue and more — on <strong>localhost:4566</strong>, with a 27-service web console on <strong>localhost:8080</strong>, real container-backed engines, and zero AWS account. Free.</p>
-      <a class="btn btn-primary" href="install.html">Install Mimir</a>
-      <a class="btn btn-ghost" href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a>
+      <div class="announce" role="note" aria-label="Product rename">
+        <span class="announce-tag">New name</span>
+        <p><strong>Mimir is now Goku.</strong> It's the same product with a new name: existing installs, commands and data carry over, and the <code>mimir</code> command keeps working as a deprecated alias of <code>goku</code>.</p>
+        <a href="#whats-new">What's new in 4.0 &rarr;</a>
+      </div>
+      <img class="hero-logo" src="assets/goku-logo.svg" width="660" height="240" alt="Goku logo: a terminal prompt surfing a golden cloud, with the tagline See your cloud, before you ship your cloud">
+      <h1>Goku — Your <span class="grad">Local AWS Cloud</span></h1>
+      <p class="tagline"><strong>Goku</strong> (formerly Mimir) is a local AWS cloud emulator: 73 AWS-compatible services — S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway, Glue and more — on <strong>localhost:4566</strong>, with a web console for 60 services on <strong>localhost:8080</strong>, real container-backed engines, and zero AWS account. Free.</p>
+      <a class="btn btn-primary" href="install.html">Install Goku</a>
+      <a class="btn btn-ghost" href="#whats-new">What's new in 4.0</a>
       <div class="terminal">
         <div class="term-bar">
           <span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span>
-          <span class="term-title">terminal</span>
-          <button class="copy-btn" type="button" onclick="copyInstall(this)">Copy</button>
+          <div class="os-tabs" role="tablist" aria-label="Operating system">
+            <button class="os-tab" type="button" role="tab" id="tab-unix" aria-selected="true" aria-controls="install-panel" data-cmd="curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh" data-prompt="$ ">macOS / Linux</button>
+            <button class="os-tab" type="button" role="tab" id="tab-win" aria-selected="false" aria-controls="install-panel" data-cmd="irm https://tanuj24.github.io/mimir/install.ps1 | iex" data-prompt="PS&gt; ">Windows</button>
+          </div>
+          <button class="copy-btn" type="button" id="copy-install">Copy</button>
         </div>
-        <pre><code><span class="prompt">$ </span><span id="install-cmd">curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh</span></code></pre>
+        <pre id="install-panel" role="tabpanel" aria-labelledby="tab-unix"><code><span class="prompt" id="install-prompt">$ </span><span id="install-cmd">curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh</span></code></pre>
       </div>
-      <p class="install-caption">Then run <strong>mimir start</strong> and open <strong>http://localhost:8080</strong> — click &ldquo;Load sample data&rdquo; on any console page to explore a populated cloud.<br>
-      or run it with Docker — <a href="install.html">see all install options</a>. Needs a container runtime (Docker Desktop, Docker Engine or colima); first download ~1&nbsp;GB.</p>
+      <p class="install-caption">Then run <strong>goku start</strong> and open <strong>http://localhost:8080</strong> — click &ldquo;Load sample data&rdquo; on any console page to explore a populated cloud.<br>
+      Or run it with Docker directly — <a href="install.html">see all install options</a>. Needs Docker Desktop on macOS and Windows, or Docker Engine or Docker Desktop on Linux.</p>
     </div>
   </header>
 
   <div class="stats wrap">
-    <div class="stat"><span class="stat-n">54</span><span class="stat-l">AWS-compatible services</span></div>
-    <div class="stat"><span class="stat-n">27</span><span class="stat-l">console UIs</span></div>
+    <div class="stat"><span class="stat-n">73</span><span class="stat-l">AWS-compatible services</span></div>
+    <div class="stat"><span class="stat-n">60</span><span class="stat-l">console services</span></div>
     <div class="stat"><span class="stat-n">$0.00</span><span class="stat-l">everything free</span></div>
     <div class="stat"><span class="stat-n">amd64 + arm64</span><span class="stat-l">multi-arch image</span></div>
   </div>
 
+  <section class="wrap" id="whats-new">
+    <span class="kicker">Release notes · 4.0.0</span>
+    <h2>What's new in Goku 4.0</h2>
+    <p class="section-lede">Goku 4.0 adds AWS Glue 6.0, DynamoDB vector search, AWS Lambda runtime parity, a rebuilt ECS, the IAM Policy Lab, a lightweight start with per-service subscriptions, a Resource Center, real engines behind a dozen more services, and console pages for 33 more services — 60 in total, on a backend of 73.</p>
+
+    <div class="rename">
+      <h3>Mimir is now Goku.</h3>
+      <p>This is a change of name only: the platform, its capabilities and your data all continue under Goku.</p>
+      <ul>
+        <li><strong>New name everywhere:</strong> the console, documentation, API messages, logs, the startup banner and the tools. Settings are documented as <code>GOKU_*</code> variables and Goku's own API lives under <code>/_goku/</code>.</li>
+        <li><strong>Everything you have keeps working:</strong> every <code>MIMIR_*</code> variable (when both are set, <code>GOKU_*</code> wins), every <code>/_mimir/</code> endpoint and your existing state. The <code>mimir</code> command still works as a deprecated alias of <code>goku</code>.</li>
+        <li><strong>Names kept on purpose,</strong> so upgrades keep their data and deployments keep working: the image <code>tanujsoni027/mimir-aws</code>, the <code>mimir</code> container and the <code>mimir-data</code> volume.</li>
+      </ul>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.9 2.9M15.5 15.5l2.9 2.9M18.4 5.6l-2.9 2.9M8.5 15.5l-2.9 2.9"/></svg></div>
+        <h3>AWS Glue 6.0</h3>
+        <p>Glue 6.0 (Spark 4.1.1, Python 3.13, Java 17) and Glue 5.1, per job or notebook. AWS publishes no Glue 6.0 image, so Goku builds one locally the first time a 6.0 job runs — a one-time step of a few minutes. New jobs default to Glue 5.1, as on AWS.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/><path d="M8 11h6M11 8v6"/></svg></div>
+        <h3>DynamoDB vector search</h3>
+        <p>The <code>VectorIndexes</code> and <code>SearchVectors</code> APIs with cosine, Euclidean and dot-product distance, and a console tab to search by text, by a similar item or by raw vector. Plus a rebuilt item explorer and a PartiQL editor.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+        <h3>Lambda runtime parity</h3>
+        <p>Every runtime AWS Lambda supports today — Node.js, Python, Java, .NET, Ruby and <code>provided.al2023</code> — on arm64 and x86_64, with AWS's lifecycle dates. Also provisioned concurrency, SnapStart, container-image functions and response streaming.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <h3>A rebuilt ECS</h3>
+        <p>Self-healing services, rolling deployments and a circuit breaker with rollback; health checks, secrets and volumes; ECS Exec from the AWS CLI, Service Connect and AWS Cloud Map; and a browser terminal into running containers.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg></div>
+        <h3>IAM Policy Lab</h3>
+        <p>Answers &ldquo;if I ship this IAM change, who gains or loses what access, and why?&rdquo; before you ship it: effective access with evidence, policy drafts you can diff, simulate and size by blast radius, and IAM tests with regression reports — for Goku or, read-only, a real AWS account.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M4 12h16M4 17h7"/><circle cx="17" cy="7" r="2"/><circle cx="14" cy="17" r="2"/></svg></div>
+        <h3>Start light, subscribe to what you use</h3>
+        <p>A new installation starts only the core services — S3, DynamoDB, Lambda, SQS, SNS, IAM/STS, CloudWatch, KMS, Secrets Manager and Systems Manager. Subscribe to more, or to a preset such as Containers, Databases or Analytics, on the Services page.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+        <h3>Resource Center</h3>
+        <p>Everything Goku runs — databases, brokers, clusters, functions and build containers — with live memory and CPU. Pause, stop, restart or remove any of it from one place, with a memory budget, idle auto-stop and disk cleanup.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div>
+        <h3>Real engines for a dozen more services</h3>
+        <p>Bedrock through a local Ollama, Redshift and its Data API, Amazon MWAA on real Airflow, EMR Serverless on real Spark, MemoryDB on real Valkey, DocumentDB on real MongoDB and Amazon MQ on real RabbitMQ or ActiveMQ.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 9v11"/></svg></div>
+        <h3>33 more console pages</h3>
+        <p>60 in total. New pages include Route 53, Elastic Load Balancing, CloudFront, CodeBuild, CodeDeploy, AWS Backup, AWS Config, Bedrock, Cost Explorer, Redshift, Amazon MWAA, CloudTrail, X-Ray and AWS Organizations.</p>
+      </div>
+    </div>
+
+    <div class="devtools">
+      <h3>Build, test and debug faster</h3>
+      <p>New developer tools, in the console, the API and the <code>goku</code> CLI:</p>
+      <ul>
+        <li><strong>Lambda step-through debugging</strong> from VS Code, IntelliJ, PyCharm or GoLand (Node, Python, Java, Ruby, Go), with timeouts lifted while paused.</li>
+        <li><strong>Environment snapshots:</strong> save, restore, reset, export and import the whole local cloud, RDS data and EC2 filesystems included.</li>
+        <li><strong>Fault injection:</strong> throttling, errors, latency, Lambda cold starts and timeouts, SQS drops and duplicates — each failing the way the real service fails.</li>
+        <li><strong>Least-privilege IAM from activity:</strong> audit what your app calls, generate the minimal policy, then enforce IAM so anything missing fails with <code>AccessDenied</code>.</li>
+        <li><strong>AWS Organizations</strong> with SCPs and RCPs enforced locally, and the policy that denied a call in the evidence.</li>
+        <li><strong>Request journeys:</strong> every hop across S3, SNS, EventBridge, SQS, Lambda and DynamoDB as one timeline, with replay and dead-letter queue redrive.</li>
+        <li><strong>Clone staging locally:</strong> copy a real account's configuration read-only, with every ARN rewritten and a plan to review first.</li>
+        <li><strong>Step Functions testing:</strong> the <code>TestState</code> API, mock configurations and test suites with JUnit reports.</li>
+        <li><strong>In CI:</strong> a backend-only image ready in about a second, a readiness API, a GitHub Action and Testcontainers modules for Java, Node, Python and Go.</li>
+        <li><strong>Terraform, CDK and Pulumi</strong> support, plus a pre-deploy review that prices a change and reviews its IAM as a pull-request check.</li>
+        <li><strong>Operation coverage map:</strong> every AWS SDK operation classified as implemented, partial or missing, on a Service coverage page.</li>
+        <li><strong>The <code>goku</code> CLI and a VS Code extension:</strong> services, readiness, snapshots, fault injection, IAM and Lambda debugging from your terminal or editor.</li>
+      </ul>
+    </div>
+    <p class="also">Also new in 4.0: real engines behind a dozen more services — including Bedrock through a local Ollama, Redshift, Amazon MWAA on real Airflow, EMR Serverless on real Spark, MemoryDB, DocumentDB and Amazon MQ — and console pages for 33 more services, from Route 53 and CloudFront to Cost Explorer and AWS Organizations.</p>
+  </section>
+
   <section class="wrap">
     <span class="kicker">Live execution</span>
     <h2>Watch Step Functions run — locally</h2>
-    <p>A real-time workflow graph: states color in real time as the execution progresses, Choice branches show their conditions, and Task nodes deep-link to the local resources they invoke.</p>
-    <img class="shot" src="screenshots/step-functions-workflow-graph-live-execution.png" alt="AWS Step Functions running locally with a live workflow graph in the Mimir console" loading="lazy">
+    <p>A real-time workflow graph: states color in as the execution progresses, Choice branches show their conditions, and Task nodes deep-link to the local resources they invoke.</p>
+    <img class="shot modal" src="screenshots/step-functions-workflow-graph-live-execution.png" width="768" height="901" alt="AWS Step Functions running locally with a live workflow graph in the Goku console" loading="lazy">
   </section>
 
   <section class="wrap" id="service-explorer">
     <span class="kicker">Every service, a real console</span>
     <h2>Pick a service, see its console</h2>
-    <p class="section-lede">All 27 services in the bundled web console, grouped the way AWS groups them. Click any service to see its page.</p>
+    <p class="section-lede">A tour of the bundled web console: 27 of its 60 service consoles, grouped the way AWS groups them, plus tools new in Goku 4.0. Click any one to see its page.</p>
     <div class="explorer">
       <div class="svc-nav" aria-label="Console services by category">
         <div class="svc-group">
@@ -290,6 +434,7 @@
           <span class="svc-group-label" id="svc-cat-security">Security &amp; Identity</span>
           <div class="svc-list" role="group" aria-labelledby="svc-cat-security">
             <button class="svc-btn" type="button" data-svc="iam" aria-pressed="false">IAM</button>
+            <button class="svc-btn" type="button" data-svc="iam-policy-lab" aria-pressed="false">IAM Policy Lab<span class="svc-new">New</span></button>
             <button class="svc-btn" type="button" data-svc="cognito" aria-pressed="false">Cognito</button>
             <button class="svc-btn" type="button" data-svc="kms" aria-pressed="false">KMS</button>
             <button class="svc-btn" type="button" data-svc="secrets" aria-pressed="false">Secrets Manager</button>
@@ -309,21 +454,30 @@
             <button class="svc-btn" type="button" data-svc="metrics" aria-pressed="false">CloudWatch Metrics</button>
           </div>
         </div>
+        <div class="svc-group">
+          <span class="svc-group-label" id="svc-cat-tools">Goku tools</span>
+          <div class="svc-list" role="group" aria-labelledby="svc-cat-tools">
+            <button class="svc-btn" type="button" data-svc="resource-center" aria-pressed="false">Resource Center<span class="svc-new">New</span></button>
+            <button class="svc-btn" type="button" data-svc="fault-injection" aria-pressed="false">Fault Injection<span class="svc-new">New</span></button>
+            <button class="svc-btn" type="button" data-svc="journeys" aria-pressed="false">Journeys<span class="svc-new">New</span></button>
+            <button class="svc-btn" type="button" data-svc="service-coverage" aria-pressed="false">Service coverage<span class="svc-new">New</span></button>
+          </div>
+        </div>
       </div>
       <div class="svc-stage">
         <div class="svc-shot">
-          <img id="svc-img" src="screenshots/services/s3.png" alt="S3 console in Mimir — local AWS S3 emulation" loading="lazy" width="1440" height="860">
+          <img id="svc-img" src="screenshots/services/s3.png" alt="S3 console in Goku — local AWS S3 emulation" loading="lazy" width="1440" height="860">
         </div>
-        <p class="svc-caption" id="svc-caption" aria-live="polite">Storage · <strong>S3</strong> console in Mimir</p>
+        <p class="svc-caption" id="svc-caption" aria-live="polite">Storage · <strong>S3</strong> console in Goku</p>
       </div>
     </div>
   </section>
 
   <section class="wrap">
     <span class="kicker">Console</span>
-    <h2>27 AWS service consoles, one image</h2>
-    <p>The bundled web console covers 27 services — every page has a one-click &ldquo;Load sample data&rdquo; button, so you can explore a populated cloud immediately.</p>
-    <img class="shot" src="screenshots/mimir-console-home-aws-services.png" alt="Mimir web console with local AWS services: S3, Lambda, DynamoDB, RDS, ECS, Step Functions, API Gateway" loading="lazy">
+    <h2>60 AWS service consoles, one image</h2>
+    <p>The bundled web console covers 60 services, and every service page has a one-click &ldquo;Load sample data&rdquo; button, so you can explore a populated cloud in under a minute.</p>
+    <img class="shot" src="screenshots/goku-console-home-aws-services.png" width="1440" height="860" alt="Goku web console home with local AWS services: S3, DynamoDB, Lambda, SQS, SNS, CloudWatch, EC2, ECS, EKS, Glue and more" loading="lazy">
   </section>
 
   <section class="wrap">
@@ -333,121 +487,161 @@
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></div>
         <h3>Real engines, not mocks</h3>
-        <p>Lambda runs in real runtime containers. RDS starts a real PostgreSQL, MySQL or MariaDB container — connect with psql or any client, exactly like the real thing. ElastiCache runs real Redis, Valkey or Memcached. OpenSearch is the real engine. EKS boots real k3s. EC2 gives you local instances with a browser SSH terminal.</p>
+        <p>RDS starts a real PostgreSQL, MySQL or MariaDB container — connect with <code>psql</code> on localhost:5500. ElastiCache and MemoryDB run real Redis or Valkey, DocumentDB runs real MongoDB, Amazon MQ runs real RabbitMQ or ActiveMQ, OpenSearch is the real engine and EKS boots real k3s. Lambda functions run in real runtime containers.</p>
       </div>
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
         <h3>API Gateway you can curl</h3>
-        <p>Create a REST or HTTP API in the console, attach a Lambda integration, and curl it on localhost seconds later — no deploy pipeline, no waiting.</p>
+        <p>Build REST, HTTP and WebSocket APIs in the console, attach a Lambda integration, and invoke them on localhost seconds later — no deploy pipeline, no waiting.</p>
       </div>
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.9 2.9M15.5 15.5l2.9 2.9M18.4 5.6l-2.9 2.9M8.5 15.5l-2.9 2.9"/></svg></div>
         <h3>Glue that actually runs</h3>
-        <p>Real PySpark jobs and notebooks — including Apache Hudi — plus MSK/Kafka and ECS, all container-backed.</p>
+        <p>Real PySpark jobs and interactive notebooks with the real <code>awsglue</code> libraries, Glue 6.0 back to 2.0, with Hudi, Delta Lake and Iceberg. Step Functions Task states really invoke your local Lambdas.</p>
       </div>
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
         <h3>Automatic persistence</h3>
-        <p>State persists automatically in a mimir-data Docker volume — surviving stops, container removal and image updates. No flags needed.</p>
+        <p>Your buckets, tables, functions and jobs persist automatically in the <code>mimir-data</code> Docker volume — surviving stops, container removal and image updates. No flags needed.</p>
       </div>
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/></svg></div>
         <h3>No port roulette</h3>
-        <p>Data endpoints live in a dedicated 5500&ndash;5550 range — RDS, ElastiCache and Neptune via the published 5500&ndash;5524 ports; OpenSearch, EC2 SSH, EKS and ECR bind their host ports automatically. Your local Redis, Postgres and Elasticsearch stay untouched.</p>
+        <p>Data endpoints live in a dedicated 5500&ndash;5659 range, so they never clash with a local Redis, Postgres or Elasticsearch. RDS, ElastiCache and Neptune use the published 5500&ndash;5524 ports; the rest bind on your host automatically.</p>
       </div>
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg></div>
         <h3>CloudWatch everywhere</h3>
-        <p>CloudFormation deploys real stacks, and every service streams logs to its AWS-convention CloudWatch log group, exactly like the real cloud.</p>
+        <p>CloudFormation stacks actually provision the buckets, queues and topics in your template, and every container-backed service streams logs to its AWS-convention CloudWatch log group, exactly like the real cloud.</p>
       </div>
     </div>
-    <p>Zero code changes: point your AWS CLI, SDK or app at <strong>http://localhost:4566</strong> with access key <strong>mimir</strong>, secret <strong>mimir</strong>, region <strong>us-east-1</strong> — everything runs locally on your machine.</p>
+    <p>Zero code changes: point your AWS CLI, SDK or app at <strong>http://localhost:4566</strong>, region <strong>us-east-1</strong>, with any local credentials such as <strong>test</strong> / <strong>test</strong> — or let <code>goku env</code> set it all for you.</p>
   </section>
 
   <section class="wrap">
     <span class="kicker">Comparison</span>
-    <h2>Mimir vs LocalStack</h2>
+    <h2>Goku vs LocalStack</h2>
     <div class="table-card">
       <div class="table-scroll">
         <table>
-          <tr><th></th><th>Mimir</th><th>LocalStack (free)</th></tr>
-          <tr><td>Web console</td><td class="mimir">✓ 27 services, bundled</td><td>Resource browser</td></tr>
-          <tr><td>RDS / ElastiCache</td><td class="mimir">✓ Real Postgres/Redis, free</td><td>Paid tier</td></tr>
-          <tr><td>ECS / EKS</td><td class="mimir">✓ Real containers / k3s, free</td><td>Paid tier</td></tr>
-          <tr><td>Glue job execution</td><td class="mimir">✓ Real local Spark, free</td><td>Paid tier</td></tr>
-          <tr><td>Cognito / Athena</td><td class="mimir">✓ Included, free</td><td>Paid tier</td></tr>
-          <tr><td>Step Functions UI</td><td class="mimir">✓ Live workflow graph</td><td>&mdash;</td></tr>
-          <tr><td>Price</td><td class="mimir">✓ Everything free</td><td>Free core + paid tiers</td></tr>
+          <tr><th></th><th>Goku</th><th>LocalStack (free)</th></tr>
+          <tr><td>Web console</td><td class="goku">✓ 60 services, bundled</td><td>Resource browser (limited free)</td></tr>
+          <tr><td>RDS / ElastiCache</td><td class="goku">✓ Real Postgres/MySQL/Redis, free</td><td>Paid tier</td></tr>
+          <tr><td>ECS / EKS</td><td class="goku">✓ Real containers / k3s, free</td><td>Paid tier</td></tr>
+          <tr><td>Glue job execution</td><td class="goku">✓ Real local Spark, free</td><td>Paid tier</td></tr>
+          <tr><td>Cognito / Athena</td><td class="goku">✓ Included, free</td><td>Paid tier</td></tr>
+          <tr><td>Step Functions UI</td><td class="goku">✓ Live workflow graph</td><td>&mdash;</td></tr>
+          <tr><td>Setup</td><td class="goku">✓ One image</td><td>One container + separate UI products</td></tr>
+          <tr><td>Price</td><td class="goku">✓ Everything free</td><td>Free core + paid tiers</td></tr>
         </table>
       </div>
     </div>
+    <p>If you need byte-exact AWS parity across hundreds of edge cases, use the real cloud for the last mile. If you want a fast, free, visual local AWS sandbox — that's Goku.</p>
   </section>
 
   <section class="wrap faq">
     <span class="kicker">FAQ</span>
     <h2>FAQ</h2>
+    <h3>Goku was formerly Mimir. What changed?</h3>
+    <p>Only the name. Goku is the same product, renamed in the 4.0.0 release. Existing installs, commands and data carry over: the image <code>tanujsoni027/mimir-aws</code>, the <code>mimir</code> container and the <code>mimir-data</code> volume keep their names, <code>MIMIR_*</code> settings still work, and the <code>mimir</code> command keeps working as a deprecated alias of <code>goku</code>.</p>
     <h3>How do I run AWS locally without an AWS account?</h3>
-    <p>Install Mimir and point your AWS CLI or SDK at http://localhost:4566 with access key <strong>mimir</strong>, secret <strong>mimir</strong>, region <strong>us-east-1</strong>. No account and no sign-up. Core services work offline once pulled; container-backed engines (Glue, RDS, EKS) download their engine images on first use.</p>
-    <h3>Is Mimir a free alternative to LocalStack?</h3>
-    <p>Yes — Mimir is free, including services LocalStack gates behind paid tiers: RDS, ECS, EKS, Cognito, Athena and Glue job execution, plus a full 27-service web console.</p>
-    <h3>Can I test Lambda functions locally?</h3>
-    <p>Yes. Functions run in real runtime containers with logs, versions, aliases, function URLs and event source mappings.</p>
+    <p>Install Goku and point your AWS CLI or SDK at http://localhost:4566, region <strong>us-east-1</strong>, with any local credentials such as <strong>test</strong> / <strong>test</strong> — <code>goku env</code> sets these for you. No account and no sign-up. Once the image and any runtime images your services need are pulled, everything runs on your machine without internet access.</p>
+    <h3>Is Goku a free alternative to LocalStack?</h3>
+    <p>Yes — everything in Goku is free, including services LocalStack gates behind paid tiers: RDS, ECS, EKS, Cognito, Athena and Glue job execution, plus a web console covering 60 services.</p>
+    <h3>Can I test and debug Lambda functions locally?</h3>
+    <p>Yes. Functions run in real runtime containers for every runtime AWS Lambda supports today, with logs, versions, aliases, function URLs and event source mappings. Step through a handler from VS Code, IntelliJ, PyCharm or GoLand.</p>
     <h3>Does my data survive restarts and updates?</h3>
-    <p>Yes. State persists automatically in a <strong>mimir-data</strong> Docker volume — no flags needed. It survives stops, container removal and image updates, and <strong>mimir update</strong> is lossless.</p>
-    <h3>Does Mimir run on Apple Silicon?</h3>
-    <p>Yes — the image is multi-arch (arm64 + amd64), Apple Silicon native.</p>
-    <h3>What do I need to run Mimir?</h3>
-    <p>A container runtime — Docker Desktop, Docker Engine or colima. The first download is about 1&nbsp;GB. See <a href="install.html">all install options</a>.</p>
+    <p>Yes. State persists automatically in the <code>mimir-data</code> Docker volume — no flags needed. It survives stops, container removal and image updates, and <code>goku update</code> preserves your resources. Environment snapshots can save and restore the whole local cloud.</p>
+    <h3>Does Goku run on Windows and Apple Silicon?</h3>
+    <p>Yes. The <code>goku</code> CLI installs natively on macOS, Linux and Windows and runs Goku in Docker. The image is multi-arch (arm64 + amd64), so it runs natively on Apple Silicon.</p>
+    <h3>What do I need to run Goku?</h3>
+    <p>Docker: Docker Desktop on macOS and Windows, and Docker Engine or Docker Desktop on Linux. See <a href="install.html">all install options</a>.</p>
+    <h3>Is Goku a production AWS replacement?</h3>
+    <p>No. Goku is a local development and testing sandbox — build and iterate locally, then deploy to real AWS for production.</p>
   </section>
 
   <footer class="wrap">
-    <p><a href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a> · <a href="https://github.com/tanuj24/mimir/issues">Support</a></p>
-    <p class="disclaimer">Mimir is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
+    <p class="signoff">See your cloud, before you ship your cloud.</p>
+    <p><a href="install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a> · <a href="https://github.com/tanuj24/mimir/issues">Support</a></p>
+    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
   </footer>
 
   <script>
-    function copyInstall(btn) {
-      var text = document.getElementById('install-cmd').textContent;
-      function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done);
-      } else {
-        var ta = document.createElement('textarea');
-        ta.value = text; document.body.appendChild(ta); ta.select();
-        try { document.execCommand('copy'); done(); } catch (e) {}
-        document.body.removeChild(ta);
+    (function () {
+      var tabs = document.querySelectorAll('.os-tab');
+      var cmd = document.getElementById('install-cmd');
+      var prompt = document.getElementById('install-prompt');
+      var panel = document.getElementById('install-panel');
+      function choose(tab) {
+        for (var i = 0; i < tabs.length; i++) {
+          var on = tabs[i] === tab;
+          tabs[i].setAttribute('aria-selected', on ? 'true' : 'false');
+          tabs[i].tabIndex = on ? 0 : -1;
+        }
+        cmd.textContent = tab.getAttribute('data-cmd');
+        prompt.textContent = tab.getAttribute('data-prompt');
+        panel.setAttribute('aria-labelledby', tab.id);
       }
-    }
+      for (var i = 0; i < tabs.length; i++) {
+        tabs[i].addEventListener('click', function () { choose(this); });
+        tabs[i].addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+          var next = this === tabs[0] ? tabs[1] : tabs[0];
+          choose(next); next.focus(); e.preventDefault();
+        });
+      }
+      if (/Windows/i.test(navigator.userAgent)) choose(document.getElementById('tab-win'));
+      else tabs[1].tabIndex = -1;
+
+      var btn = document.getElementById('copy-install');
+      btn.addEventListener('click', function () {
+        var text = cmd.textContent;
+        function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done);
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+      });
+    })();
 
     (function () {
       var services = {
-        's3':             { name: 'S3',                 cat: 'Storage',             file: 's3.png' },
-        'dynamodb':       { name: 'DynamoDB',           cat: 'Databases',           file: 'dynamodb.png' },
-        'rds':            { name: 'RDS',                cat: 'Databases',           file: 'rds.png' },
-        'elasticache':    { name: 'ElastiCache',        cat: 'Databases',           file: 'elasticache.png' },
-        'lambda':         { name: 'Lambda',             cat: 'Compute',             file: 'lambda.png' },
-        'ec2':            { name: 'EC2',                cat: 'Compute',             file: 'ec2.png' },
-        'ecs':            { name: 'ECS',                cat: 'Containers',          file: 'ecs.png' },
-        'ecr':            { name: 'ECR',                cat: 'Containers',          file: 'ecr.png' },
-        'eks':            { name: 'EKS',                cat: 'Containers',          file: 'eks.png' },
-        'api-gateway':    { name: 'API Gateway',        cat: 'App Integration',     file: 'api-gateway.png' },
-        'step-functions': { name: 'Step Functions',     cat: 'App Integration',     file: 'step-functions.png' },
-        'eventbridge':    { name: 'EventBridge',        cat: 'App Integration',     file: 'eventbridge.png' },
-        'sqs':            { name: 'SQS',                cat: 'App Integration',     file: 'sqs.png' },
-        'sns':            { name: 'SNS',                cat: 'App Integration',     file: 'sns.png' },
-        'glue':           { name: 'Glue',               cat: 'Analytics',           file: 'glue.png' },
-        'athena':         { name: 'Athena',             cat: 'Analytics',           file: 'athena.png' },
-        'kinesis':        { name: 'Kinesis',            cat: 'Analytics',           file: 'kinesis.png' },
-        'opensearch':     { name: 'OpenSearch',         cat: 'Analytics',           file: 'opensearch.png' },
-        'kafka':          { name: 'MSK/Kafka',          cat: 'Analytics',           file: 'kafka.png' },
-        'iam':            { name: 'IAM',                cat: 'Security & Identity', file: 'iam.png' },
-        'cognito':        { name: 'Cognito',            cat: 'Security & Identity', file: 'cognito.png' },
-        'kms':            { name: 'KMS',                cat: 'Security & Identity', file: 'kms.png' },
-        'secrets':        { name: 'Secrets Manager',    cat: 'Security & Identity', file: 'secrets.png' },
-        'cloudformation': { name: 'CloudFormation',     cat: 'Management',          file: 'cloudformation.png' },
-        'ssm':            { name: 'Systems Manager',    cat: 'Management',          file: 'ssm.png' },
-        'logs':           { name: 'CloudWatch Logs',    cat: 'Observability',       file: 'logs.png' },
-        'metrics':        { name: 'CloudWatch Metrics', cat: 'Observability',       file: 'metrics.png' }
+        's3':               { name: 'S3',                 cat: 'Storage',             file: 's3.png' },
+        'dynamodb':         { name: 'DynamoDB',           cat: 'Databases',           file: 'dynamodb.png' },
+        'rds':              { name: 'RDS',                cat: 'Databases',           file: 'rds.png' },
+        'elasticache':      { name: 'ElastiCache',        cat: 'Databases',           file: 'elasticache.png' },
+        'lambda':           { name: 'Lambda',             cat: 'Compute',             file: 'lambda.png' },
+        'ec2':              { name: 'EC2',                cat: 'Compute',             file: 'ec2.png' },
+        'ecs':              { name: 'ECS',                cat: 'Containers',          file: 'ecs.png' },
+        'ecr':              { name: 'ECR',                cat: 'Containers',          file: 'ecr.png' },
+        'eks':              { name: 'EKS',                cat: 'Containers',          file: 'eks.png' },
+        'api-gateway':      { name: 'API Gateway',        cat: 'App Integration',     file: 'api-gateway.png' },
+        'step-functions':   { name: 'Step Functions',     cat: 'App Integration',     file: 'step-functions.png' },
+        'eventbridge':      { name: 'EventBridge',        cat: 'App Integration',     file: 'eventbridge.png' },
+        'sqs':              { name: 'SQS',                cat: 'App Integration',     file: 'sqs.png' },
+        'sns':              { name: 'SNS',                cat: 'App Integration',     file: 'sns.png' },
+        'glue':             { name: 'Glue',               cat: 'Analytics',           file: 'glue.png' },
+        'athena':           { name: 'Athena',             cat: 'Analytics',           file: 'athena.png' },
+        'kinesis':          { name: 'Kinesis',            cat: 'Analytics',           file: 'kinesis.png' },
+        'opensearch':       { name: 'OpenSearch',         cat: 'Analytics',           file: 'opensearch.png' },
+        'kafka':            { name: 'MSK/Kafka',          cat: 'Analytics',           file: 'kafka.png' },
+        'iam':              { name: 'IAM',                cat: 'Security & Identity', file: 'iam.png' },
+        'iam-policy-lab':   { name: 'IAM Policy Lab',     cat: 'Security & Identity', file: 'iam-policy-lab.png', page: true },
+        'cognito':          { name: 'Cognito',            cat: 'Security & Identity', file: 'cognito.png' },
+        'kms':              { name: 'KMS',                cat: 'Security & Identity', file: 'kms.png' },
+        'secrets':          { name: 'Secrets Manager',    cat: 'Security & Identity', file: 'secrets.png' },
+        'cloudformation':   { name: 'CloudFormation',     cat: 'Management',          file: 'cloudformation.png' },
+        'ssm':              { name: 'Systems Manager',    cat: 'Management',          file: 'ssm.png' },
+        'logs':             { name: 'CloudWatch Logs',    cat: 'Observability',       file: 'logs.png' },
+        'metrics':          { name: 'CloudWatch Metrics', cat: 'Observability',       file: 'metrics.png' },
+        'resource-center':  { name: 'Resource Center',    cat: 'Goku tools',          file: 'resource-center.png', page: true },
+        'fault-injection':  { name: 'Fault Injection',    cat: 'Goku tools',          file: 'fault-injection.png', page: true },
+        'journeys':         { name: 'Journeys',           cat: 'Goku tools',          file: 'journeys.png', page: true },
+        'service-coverage': { name: 'Service coverage',   cat: 'Goku tools',          file: 'service-coverage.png', page: true }
       };
       var explorer = document.getElementById('service-explorer');
       if (!explorer) return;
@@ -457,14 +651,15 @@
       function select(btn) {
         var s = services[btn.getAttribute('data-svc')];
         if (!s) return;
+        var kind = s.page ? ' page in Goku' : ' console in Goku';
         img.src = 'screenshots/services/' + s.file;
-        img.alt = s.name + ' console in Mimir — local AWS ' + s.name + ' emulation';
+        img.alt = s.page ? s.name + kind : s.name + ' console in Goku — local AWS ' + s.name + ' emulation';
         caption.innerHTML = '';
         caption.appendChild(document.createTextNode(s.cat + ' · '));
         var strong = document.createElement('strong');
         strong.textContent = s.name;
         caption.appendChild(strong);
-        caption.appendChild(document.createTextNode(' console in Mimir'));
+        caption.appendChild(document.createTextNode(kind));
         for (var j = 0; j < buttons.length; j++) {
           buttons[j].setAttribute('aria-pressed', buttons[j] === btn ? 'true' : 'false');
         }

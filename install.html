@@ -4,44 +4,52 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1120">
-  <title>Install Mimir — Run AWS Locally in One Command | Install Local AWS</title>
-  <meta name="description" content="Install a local AWS cloud in one command: curl the Mimir installer or run one Docker command — 54 AWS services and a full web console. Free, no account.">
+  <title>Install Goku (formerly Mimir) — Run AWS Locally on macOS, Linux and Windows</title>
+  <meta name="description" content="Install Goku, the local AWS cloud formerly called Mimir: one command on macOS, Linux or Windows, or one Docker command. 73 AWS-compatible services and a 60-service web console. Free, no account.">
   <link rel="canonical" href="https://tanuj24.github.io/mimir/install.html">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Install Mimir — Run AWS Locally in One Command">
-  <meta property="og:description" content="Install a local AWS cloud: one curl command on macOS/Linux, or one Docker command anywhere. 54 AWS-compatible services, full web console, state persists automatically. Free.">
+  <meta property="og:site_name" content="Goku">
+  <meta property="og:title" content="Install Goku (formerly Mimir) — Run AWS Locally in One Command">
+  <meta property="og:description" content="Install a local AWS cloud: one command on macOS, Linux or Windows, or one Docker command. 73 AWS-compatible services, a 60-service web console, state that persists automatically. Free.">
   <meta property="og:url" content="https://tanuj24.github.io/mimir/install.html">
-  <meta property="og:image" content="https://tanuj24.github.io/mimir/screenshots/mimir-console-home-aws-services.png">
+  <meta property="og:image" content="https://tanuj24.github.io/mimir/screenshots/goku-console-home-aws-services.png">
+  <meta property="og:image:alt" content="The Goku web console home with local AWS services">
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    "name": "Install Mimir and run AWS locally",
-    "description": "Install Mimir, a free local AWS cloud with 54 AWS-compatible services and a full web console, using a one-line install script on macOS/Linux or a single Docker command on any platform.",
+    "name": "Install Goku and run AWS locally",
+    "description": "Install Goku (formerly Mimir), a free local AWS cloud with 73 AWS-compatible services and a web console for 60 services, using the goku CLI on macOS, Linux or Windows, or a single Docker command.",
     "tool": [
-      { "@type": "HowToTool", "name": "A container runtime: Docker Desktop, Docker Engine, or colima" }
+      { "@type": "HowToTool", "name": "Docker Desktop on macOS or Windows; Docker Engine or Docker Desktop on Linux" }
     ],
     "step": [
       {
         "@type": "HowToStep",
-        "name": "Install a container runtime",
-        "text": "Install and start Docker Desktop, Docker Engine, or colima. Mimir runs as a single container image (~1 GB first download)."
+        "name": "Install Docker",
+        "text": "Install and start Docker Desktop on macOS or Windows, or Docker Engine or Docker Desktop on Linux. Goku runs in Docker."
       },
       {
         "@type": "HowToStep",
-        "name": "Run the install script (macOS and Linux)",
-        "text": "Run: curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh — this installs the mimir CLI."
+        "name": "Install the goku CLI",
+        "text": "On macOS or Linux, run: curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh. On Windows, in PowerShell, run: irm https://tanuj24.github.io/mimir/install.ps1 | iex. This installs the goku command, plus mimir, its former name, as a deprecated alias."
       },
       {
         "@type": "HowToStep",
-        "name": "Start Mimir",
-        "text": "Run: mimir start. On Windows or any platform, run the Docker image directly instead: docker run -d --name mimir -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/mimir-glue:/tmp/mimir-glue tanujsoni027/mimir-aws:latest"
+        "name": "Start Goku",
+        "text": "Run: goku start. It downloads the image on first run, starts Goku and opens the web console at http://localhost:8080."
       },
       {
         "@type": "HowToStep",
-        "name": "Open the console and connect",
-        "text": "Open http://localhost:8080 for the web console. Point your AWS CLI or SDK at http://localhost:4566 with access key mimir, secret key mimir, region us-east-1. State persists automatically in a mimir-data Docker volume."
+        "name": "Point your AWS tools at Goku",
+        "text": "On macOS or Linux, run: eval \"$(goku env)\". On Windows, run: goku env --shell powershell | Invoke-Expression. The AWS CLI and every AWS SDK then use the AWS-compatible endpoint http://localhost:4566. State persists automatically in the mimir-data Docker volume."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Or run the Docker image without the CLI",
+        "text": "On any platform, run: docker run -d --name mimir -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/mimir-glue:/tmp/mimir-glue tanujsoni027/mimir-aws:latest"
       }
     ]
   }
@@ -67,36 +75,42 @@
 
     nav { position: sticky; top: 0; z-index: 50; background: rgba(11,17,32,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
     nav .wrap { display: flex; align-items: center; gap: 22px; height: 56px; }
-    .wordmark { font-weight: 800; font-size: 1.12rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; margin-right: auto; }
+    .wordmark { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; margin-right: auto; }
+    .wordmark img { height: 32px; width: auto; display: block; }
     .wordmark span { color: var(--teal); }
-    nav a.navlink { color: var(--muted); text-decoration: none; font-size: 0.95rem; padding: 4px 2px; }
+    nav a.navlink { color: var(--muted); text-decoration: none; font-size: 0.95rem; padding: 4px 2px; white-space: nowrap; }
     nav a.navlink:hover { color: var(--ink); }
     nav a.navlink.active { color: var(--teal); font-weight: 600; }
+    @media (max-width: 640px) { nav .wrap { gap: 16px; } .nav-wide { display: none; } }
 
-    header.hero { text-align: center; padding: 84px 0 44px; background: radial-gradient(900px 420px at 50% -80px, var(--glow), transparent 70%); }
+    header.hero { text-align: center; padding: 72px 0 44px; background: radial-gradient(900px 420px at 50% -80px, var(--glow), transparent 70%); }
     h1 { font-size: clamp(2.2rem, 5vw, 3.3rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.12; margin-bottom: 18px; }
     .grad { background: linear-gradient(90deg, #14b8a6, #4cc9f0); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .tagline { font-size: 1.15rem; color: var(--muted); max-width: 720px; margin: 0 auto 26px; }
+    .tagline { font-size: 1.15rem; color: var(--muted); max-width: 740px; margin: 0 auto 26px; }
     .tagline strong { color: var(--ink); }
     .btn-primary, .btn-ghost { display: inline-block; padding: 12px 24px; border-radius: 10px; font-weight: 700; text-decoration: none; margin: 6px; transition: background .15s ease, border-color .15s ease, transform .15s ease; }
     .btn-primary { background: var(--teal); color: #04211c; }
     .btn-primary:hover { background: var(--teal-deep); transform: translateY(-1px); }
     .btn-ghost { border: 1.5px solid var(--line); color: var(--ink); font-weight: 600; }
     .btn-ghost:hover { border-color: var(--teal); }
+    .hero-note { font-size: 0.92rem; color: var(--muted); margin-top: 16px; }
 
     .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; max-width: 820px; margin: 40px auto 0; }
     .stat b { display: block; font-size: 1.65rem; font-weight: 800; letter-spacing: -0.01em; color: var(--teal); line-height: 1.2; }
     .stat span { color: var(--muted); font-size: 0.88rem; }
 
-    section { padding: 48px 0; border-top: 1px solid var(--line); scroll-margin-top: 70px; }
+    section, section.wrap { padding-top: 48px; padding-bottom: 48px; border-top: 1px solid var(--line); scroll-margin-top: 70px; }
     .kicker { text-transform: uppercase; letter-spacing: .1em; font-size: 0.78rem; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
     h2 { font-size: 1.6rem; letter-spacing: -0.01em; margin-bottom: 14px; }
-    h3 { font-size: 1.1rem; margin: 20px 0 6px; }
+    h3 { font-size: 1.1rem; margin: 24px 0 6px; }
     p { color: var(--muted); margin-bottom: 12px; }
-    p strong { color: var(--ink); }
-    td code, p code, li code, .card code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; font-size: 0.88em; color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    p strong, li strong { color: var(--ink); }
+    td code, p code, li code, .card code, .callout code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; font-size: 0.88em; color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-wrap: anywhere; }
+    ul.list { list-style: none; margin: 8px 0 14px; }
+    ul.list li { color: var(--muted); padding-left: 20px; position: relative; margin-bottom: 8px; }
+    ul.list li::before { content: ""; position: absolute; left: 4px; top: 0.72em; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
 
-    .term { background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin: 20px 0; text-align: left; }
+    .term { background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin: 14px 0 20px; text-align: left; }
     .term-bar { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
     .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
     .dot.r { background: #ff5f57; }
@@ -105,13 +119,16 @@
     .term-title { color: var(--muted); font-size: 0.78rem; margin-left: 6px; }
     .term .copy { margin-left: auto; background: var(--surface); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 3px 12px; font-size: 0.75rem; font-family: inherit; cursor: pointer; transition: color .15s ease, border-color .15s ease; }
     .term .copy:hover { color: var(--teal); border-color: var(--teal); }
+    .term .copy:focus-visible { outline: 2px solid var(--cyan); outline-offset: 1px; }
     .term pre { margin: 0; padding: 16px 18px; overflow-x: auto; font-size: 0.88rem; line-height: 1.55; color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
     .prompt { color: var(--teal); user-select: none; -webkit-user-select: none; }
+    @media (max-width: 640px) { .term pre.one { white-space: pre-wrap; overflow-wrap: anywhere; } }
 
     .table-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 18px; overflow-x: auto; margin: 18px 0; }
     table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
     th { text-align: left; text-transform: uppercase; letter-spacing: .06em; font-size: 0.75rem; color: var(--muted); padding: 12px; border-bottom: 1px solid var(--line); }
-    td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--muted); }
+    td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--muted); vertical-align: top; }
+    table.cmd-table td:first-child { white-space: nowrap; }
     tr:last-child td { border-bottom: none; }
 
     .callout { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 14px 16px; color: var(--muted); margin: 16px 0; }
@@ -124,71 +141,102 @@
     .card .ic svg { display: block; }
     .card strong { color: var(--ink); display: block; margin-bottom: 6px; }
 
-    footer { padding: 44px 0 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    .os-block { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 20px 8px; margin: 16px 0; }
+    .os-block h3 { margin-top: 16px; }
+    .os-block p { font-size: 0.97rem; }
+
+    footer, footer.wrap { padding-top: 44px; padding-bottom: 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    footer .signoff { color: var(--ink); font-weight: 600; margin-bottom: 8px; }
     .disclaimer { font-size: 0.8rem; margin-top: 12px; }
   </style>
 </head>
 <body>
-  <nav>
+  <nav aria-label="Main">
     <div class="wrap">
-      <a class="wordmark" href="index.html">Mimir<span>.</span></a>
+      <a class="wordmark" href="index.html"><img src="assets/goku-logo-bar.svg" alt="" width="74" height="32">Goku<span>.</span></a>
       <a class="navlink" href="index.html">Home</a>
+      <a class="navlink nav-wide" href="index.html#whats-new">What's new</a>
       <a class="navlink active" href="install.html" aria-current="page">Install</a>
-      <a class="navlink" href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a>
+      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a>
     </div>
   </nav>
 
   <header class="hero">
     <div class="wrap">
-      <h1>Install <span class="grad">Mimir</span></h1>
+      <h1>Install <span class="grad">Goku</span></h1>
       <p class="tagline"><strong>See your cloud, before you ship your cloud.</strong><br>
-      Install a local AWS cloud with one curl command on macOS and Linux, or one Docker command on any platform. 54 AWS-compatible services on <strong>localhost:4566</strong>, a 27-service web console on <strong>localhost:8080</strong> — free, no AWS account needed.</p>
-      <a class="btn-primary" href="#script">Install script — macOS &amp; Linux</a>
+      Install a local AWS cloud with one command on macOS, Linux or Windows, or run one Docker command. 73 AWS-compatible services on <strong>localhost:4566</strong> and a web console for 60 services on <strong>localhost:8080</strong> — free, no AWS account needed.</p>
+      <a class="btn-primary" href="#cli">Install the CLI</a>
       <a class="btn-ghost" href="#docker">Use Docker instead</a>
+      <p class="hero-note">Goku was formerly Mimir. <a href="#rename">Upgrading an existing install?</a> Your install, commands and data carry over.</p>
       <div class="stats">
-        <div class="stat"><b>54</b><span>AWS-compatible services</span></div>
-        <div class="stat"><b>27</b><span>console UIs</span></div>
+        <div class="stat"><b>73</b><span>AWS-compatible services</span></div>
+        <div class="stat"><b>60</b><span>console services</span></div>
         <div class="stat"><b>$0.00</b><span>everything free</span></div>
         <div class="stat"><b>amd64 + arm64</b><span>multi-arch</span></div>
       </div>
     </div>
   </header>
 
-  <section class="wrap" id="script">
+  <section class="wrap" id="cli">
     <div class="kicker">Option 1 — Recommended</div>
-    <h2>macOS &amp; Linux</h2>
-    <p>Install the <code>mimir</code> CLI with one command:</p>
+    <h2>The goku CLI — macOS, Linux and Windows</h2>
+    <p>The CLI installs natively on each platform and runs Goku in Docker for you — no <code>docker</code> commands to write. It installs the <code>goku</code> command, plus <code>mimir</code>, its former name, as a deprecated alias (<a href="#rename">details</a>).</p>
+    <h3>macOS and Linux</h3>
     <div class="term">
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
-      <pre><span class="prompt">$ </span><code>curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh</code></pre>
+      <pre class="one"><span class="prompt">$ </span><code>curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh</code></pre>
     </div>
-    <p>Then start your local cloud:</p>
+    <h3>Windows (PowerShell)</h3>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">PowerShell</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">PS&gt; </span><code>irm https://tanuj24.github.io/mimir/install.ps1 | iex</code></pre>
+    </div>
+    <h3>Start your local cloud</h3>
     <div class="term">
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
-      <pre><span class="prompt">$ </span><code>mimir start</code></pre>
+      <pre class="one"><span class="prompt">$ </span><code>goku start</code></pre>
     </div>
-    <p>Open <strong>http://localhost:8080</strong> for the console. Your AWS CLI, SDKs and apps talk to <strong>http://localhost:4566</strong> with access key <code>mimir</code>, secret key <code>mimir</code>, region <code>us-east-1</code>.</p>
+    <p><code>goku start</code> downloads the image on first run, starts Goku and opens the web console at <strong>http://localhost:8080</strong>. Your AWS CLI, SDKs and apps talk to <strong>http://localhost:4566</strong> — <a href="#env">point them at it</a> with one command.</p>
     <div class="table-card">
-      <table>
+      <table class="cmd-table">
         <tr><th>Command</th><th>What it does</th></tr>
-        <tr><td><code>mimir start</code></td><td>Starts the local cloud (first run downloads the image, ~1&nbsp;GB).</td></tr>
-        <tr><td><code>mimir stop</code></td><td>Stops the container. All resources are kept.</td></tr>
-        <tr><td><code>mimir status</code></td><td>Shows whether Mimir is running and on which ports.</td></tr>
-        <tr><td><code>mimir logs</code></td><td>Streams container logs.</td></tr>
-        <tr><td><code>mimir restart</code></td><td>Stop and start again — resources are kept.</td></tr>
-        <tr><td><code>mimir update</code></td><td>Pulls the latest image and restarts on it.</td></tr>
-        <tr><td><code>mimir open</code></td><td>Opens the web console in your browser.</td></tr>
-        <tr><td><code>mimir doctor</code></td><td>Checks your container runtime, ports and setup, and suggests fixes.</td></tr>
-        <tr><td><code>mimir uninstall --purge</code></td><td>Removes Mimir; <code>--purge</code> also deletes the <code>mimir-data</code> volume and every stored resource.</td></tr>
+        <tr><td><code>goku start</code></td><td>Downloads the image on first run, starts Goku and opens the console.</td></tr>
+        <tr><td><code>goku status</code></td><td>Shows what's running — also for a Goku started another way.</td></tr>
+        <tr><td><code>goku stop</code></td><td>Stops Goku. State is saved automatically.</td></tr>
+        <tr><td><code>goku logs -f</code></td><td>Follows the container logs.</td></tr>
+        <tr><td><code>goku update</code></td><td>Upgrades to the newest version. Your resources are preserved.</td></tr>
+        <tr><td><code>goku open</code></td><td>Opens the console, or a page in it: <code>goku open sqs</code>, <code>goku open lambda my-fn</code>.</td></tr>
+        <tr><td><code>goku env</code></td><td>Prints the endpoint and credential variables for your AWS CLI and SDKs.</td></tr>
+        <tr><td><code>goku doctor</code></td><td>Checks Docker, ports, saved state, curl and the backend's features.</td></tr>
+        <tr><td><code>goku uninstall</code></td><td>Removes Goku; add <code>--purge</code> to also delete saved state.</td></tr>
       </table>
     </div>
-    <div class="callout"><strong>mimir update never loses resources.</strong> Updates are lossless — your buckets, tables, functions, databases and every other resource are always preserved across updates.</div>
+    <p>The CLI also drives a running Goku: <code>goku services</code>, <code>goku ready</code>, <code>goku snapshot</code>, <code>goku chaos</code>, <code>goku iam</code> and <code>goku lambda debug</code>. Run <code>goku help &lt;command&gt;</code> for the details.</p>
+  </section>
+
+  <section class="wrap" id="env">
+    <div class="kicker">Connect your tools</div>
+    <h2>Point your AWS CLI and SDKs at Goku</h2>
+    <p><code>goku env</code> sets <code>AWS_ENDPOINT_URL</code>, <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code> (<code>test</code> / <code>test</code>) and <code>AWS_REGION</code>, so the AWS CLI v2 and every AWS SDK talk to Goku with no code changes.</p>
+    <h3>macOS and Linux</h3>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">$ </span><code>eval "$(goku env)"</code></pre>
+    </div>
+    <h3>Windows (PowerShell)</h3>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">PowerShell</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">PS&gt; </span><code>goku env --shell powershell | Invoke-Expression</code></pre>
+    </div>
+    <p>Then <code>aws s3 ls</code> lists your local buckets. On macOS and Linux, <code>eval "$(goku env --unset)"</code> switches back to real AWS. To configure a tool by hand, use the endpoint <strong>http://localhost:4566</strong>, region <strong>us-east-1</strong> and any local credentials such as <strong>test</strong> / <strong>test</strong>.</p>
   </section>
 
   <section class="wrap" id="docker">
     <div class="kicker">Option 2</div>
-    <h2>Docker — any platform, including Windows</h2>
-    <p>If you already have Docker, run the image directly:</p>
+    <h2>Docker without the CLI</h2>
+    <p>Already have Docker? Run the image directly — it's the same image the CLI runs.</p>
+    <h3>macOS and Linux (bash)</h3>
     <div class="term">
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
       <pre><span class="prompt">$ </span><code>docker run -d --name mimir \
@@ -197,14 +245,17 @@
   -v /tmp/mimir-glue:/tmp/mimir-glue \
   tanujsoni027/mimir-aws:latest</code></pre>
     </div>
-    <p>The web console is at <strong>http://localhost:8080</strong> and the AWS-compatible endpoint at <strong>http://localhost:4566</strong>. Credentials: access key <code>mimir</code>, secret key <code>mimir</code>, region <code>us-east-1</code>.</p>
-    <div class="callout"><strong>State persists automatically.</strong> Mimir stores everything in a <code>mimir-data</code> Docker volume it manages for you — no volume flags needed. Your resources survive stops, container removal and image updates.</div>
-  </section>
-
-  <section class="wrap" id="homebrew">
-    <div class="kicker">Option 3</div>
-    <h2>Homebrew</h2>
-    <p>Coming soon. Until then, use the install script above — it does the same thing in one command.</p>
+    <h3>Windows (PowerShell)</h3>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">PowerShell</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">PS&gt; </span><code>docker run -d --name mimir `
+  -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 `
+  -v /var/run/docker.sock:/var/run/docker.sock `
+  -v /tmp/mimir-glue:/tmp/mimir-glue `
+  tanujsoni027/mimir-aws:latest</code></pre>
+    </div>
+    <p>The web console is at <strong>http://localhost:8080</strong> and the AWS-compatible endpoint at <strong>http://localhost:4566</strong>. Add <code>-e GOKU_SERVICES=all</code> to start with every service subscribed, and <code>-p 2000:2000/udp</code> to send X-Ray segments from apps on your host.</p>
+    <div class="callout"><strong>State persists automatically.</strong> Goku keeps everything in a <code>mimir-data</code> Docker volume it manages for you — no volume flags needed. Your resources survive stops, container removal and image updates. The image, container and volume keep their names from before the rename, so existing installs, scripts and data carry over unchanged.</div>
   </section>
 
   <section class="wrap" id="requirements">
@@ -213,19 +264,39 @@
     <div class="cards">
       <div class="card">
         <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v10"/></svg></div>
-        <strong>A container runtime</strong>
-        Docker Desktop, Docker Engine, or colima. That's the only prerequisite for every install method.
+        <strong>Docker</strong>
+        Docker Desktop on macOS and Windows; Docker Engine or Docker Desktop on Linux. Lambda, EC2, ECS, RDS, Glue and friends run as sibling containers, so Goku needs access to the Docker socket.
       </div>
       <div class="card">
-        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v10"/><path d="M8 9l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
-        <strong>~1 GB first download</strong>
-        The image is multi-arch (linux/amd64 + linux/arm64, Apple Silicon native).
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg></div>
+        <strong>Any modern machine</strong>
+        The image is multi-arch (linux/amd64 + linux/arm64), so it runs natively on Apple Silicon, Intel and AMD machines and Linux CI.
       </div>
       <div class="card">
         <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 7.7-7 9.5-4-1.8-7-4.9-7-9.5V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
         <strong>No AWS account, ever</strong>
-        Core services work offline once pulled; container-backed engines (Glue, RDS, EKS) download their engine images on first use.
+        Once the image and any runtime images your services need are pulled, everything runs on your machine. The first Glue or Spark run pulls a large runtime image — give it a minute.
       </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="rename">
+    <div class="kicker">After the rename</div>
+    <h2>Upgrading an existing install</h2>
+    <p>Goku (formerly Mimir) is the same product with a new name. Your install, commands and data carry over:</p>
+    <ul class="list">
+      <li><strong>The installer upgrades an existing install in place</strong> and installs both commands, <code>goku</code> and <code>mimir</code>. Every example on this site uses <code>goku</code>.</li>
+      <li><strong>The <code>mimir</code> command is deprecated and will be removed in a future release.</strong> Until then it keeps working: it runs <code>goku</code> and prints a short note on stderr asking you to switch. Set <code>GOKU_NO_DEPRECATION_NOTICE=1</code> to silence the note.</li>
+      <li><strong>Same image, container and data:</strong> the CLI still runs the <code>tanujsoni027/mimir-aws</code> image in the container named <code>mimir</code> and keeps your state in the <code>mimir-data</code> volume.</li>
+      <li><strong>Your settings still work:</strong> every <code>MIMIR_*</code> variable is still read under its former name; when both are set, the <code>GOKU_*</code> one wins.</li>
+    </ul>
+    <div class="table-card">
+      <table>
+        <tr><th>Before</th><th>Now</th></tr>
+        <tr><td><code>mimir start</code>, <code>mimir update</code>, …</td><td><code>goku start</code>, <code>goku update</code>, …</td></tr>
+        <tr><td><code>MIMIR_CONSOLE_PORT</code>, <code>MIMIR_EDGE_PORT</code>, …</td><td><code>GOKU_CONSOLE_PORT</code>, <code>GOKU_EDGE_PORT</code>, …</td></tr>
+        <tr><td><code>/_mimir/…</code> API paths</td><td><code>/_goku/…</code> (the old paths keep working)</td></tr>
+      </table>
     </div>
   </section>
 
@@ -233,45 +304,61 @@
     <div class="kicker">Maintenance</div>
     <h2>Updating &amp; uninstalling</h2>
     <h3>Updating</h3>
-    <p>CLI users: run <code>mimir update</code>. It is lossless — resources are always preserved.</p>
-    <p>Docker users: pull the new image and recreate the container. Because state lives in the <code>mimir-data</code> volume, nothing is lost:</p>
+    <p>CLI users: run <code>goku update</code>. Your resources are preserved.</p>
+    <p>Docker users: pull the new image, remove the container and run the <a href="#docker">docker run command</a> again. Because state lives in the <code>mimir-data</code> volume, nothing is lost:</p>
     <div class="term">
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
       <pre><span class="prompt">$ </span><code>docker pull tanujsoni027/mimir-aws:latest
-docker rm -f mimir
-docker run -d --name mimir \
-  -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /tmp/mimir-glue:/tmp/mimir-glue \
-  tanujsoni027/mimir-aws:latest</code></pre>
+docker rm -f mimir</code></pre>
     </div>
     <h3>Uninstalling</h3>
-    <p><code>mimir uninstall</code> removes the CLI and container but keeps the <code>mimir-data</code> volume, so a later reinstall finds your resources intact. Add <code>--purge</code> to also delete the volume and every stored resource.</p>
+    <p><code>goku uninstall</code> removes Goku — its container and only the engine containers of this installation — and keeps your saved state, so a later reinstall finds your resources intact. Add <code>--purge</code> to also delete the saved state.</p>
   </section>
 
   <section class="wrap" id="troubleshooting">
     <div class="kicker">When things break</div>
     <h2>Troubleshooting</h2>
-    <p>Start with the built-in checkup:</p>
+    <p>Start with the built-in checkup — it checks Docker, ports, saved state, curl and the backend's features, and tells you what's missing:</p>
     <div class="term">
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
-      <pre><span class="prompt">$ </span><code>mimir doctor</code></pre>
+      <pre class="one"><span class="prompt">$ </span><code>goku doctor</code></pre>
     </div>
-    <p>It verifies your container runtime, port availability and setup, and tells you exactly what to fix.</p>
+
+    <div class="os-block">
+      <h3>macOS</h3>
+      <p><strong>Docker isn't running.</strong> Start Docker Desktop, wait until it reports that it is running, then run <code>goku start</code> again.</p>
+      <p><strong><code>goku</code>: command not found.</strong> The installer puts <code>goku</code> in <code>/usr/local/bin</code>, or in <code>~/.local/bin</code> when it can't use sudo. Make sure that directory is on your <code>PATH</code>, or pick another one with <code>GOKU_INSTALL_DIR</code> when you install.</p>
+    </div>
+    <div class="os-block">
+      <h3>Linux</h3>
+      <p><strong>Permission denied on <code>/var/run/docker.sock</code>.</strong> Your user can't reach the Docker daemon. Add it to the <code>docker</code> group with <code>sudo usermod -aG docker "$USER"</code>, then log out and back in.</p>
+      <p><strong><code>goku</code>: command not found.</strong> Without sudo, the installer uses <code>~/.local/bin</code>. Add it to your <code>PATH</code>, or pick another directory with <code>GOKU_INSTALL_DIR</code>.</p>
+    </div>
+    <div class="os-block">
+      <h3>Windows</h3>
+      <p><strong>Docker isn't running.</strong> Start Docker Desktop and keep it on Linux containers (its default), then run <code>goku start</code> again.</p>
+      <p><strong><code>goku</code> is not recognized.</strong> Open a new PowerShell window after installing, so it picks up the updated <code>PATH</code>.</p>
+    </div>
+
     <h3>Port conflicts</h3>
-    <p>If something already uses port 8080 or 4566, set <code>MIMIR_CONSOLE_PORT</code> and/or <code>MIMIR_EDGE_PORT</code> before starting:</p>
+    <p>If something already uses port 8080 or 4566, pick other ports with <code>GOKU_CONSOLE_PORT</code> and <code>GOKU_EDGE_PORT</code>:</p>
     <div class="term">
-      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
-      <pre><span class="prompt">$ </span><code>MIMIR_CONSOLE_PORT=9090 MIMIR_EDGE_PORT=4567 mimir start</code></pre>
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">macOS / Linux</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">$ </span><code>GOKU_CONSOLE_PORT=9090 GOKU_EDGE_PORT=4567 goku start</code></pre>
     </div>
-    <p>Data endpoints live in a dedicated 5500–5550 range (RDS, ElastiCache and Neptune via the published 5500–5524 ports; the rest bind automatically), so they won't clash with a local Redis, Postgres or Elasticsearch.</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">PowerShell</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">PS&gt; </span><code>$env:GOKU_CONSOLE_PORT = "9090"; $env:GOKU_EDGE_PORT = "4567"; goku start</code></pre>
+    </div>
+    <p>Data endpoints live in a dedicated 5500–5659 range (RDS, ElastiCache and Neptune through the published 5500–5524 ports; the rest bind automatically), so they won't clash with a local Redis, Postgres or Elasticsearch.</p>
     <h3>Still stuck?</h3>
-    <p>Open an issue at <a href="https://github.com/tanuj24/mimir/issues">github.com/tanuj24/mimir/issues</a> — include the output of <code>mimir doctor</code> and <code>mimir logs</code>.</p>
+    <p>Open an issue at <a href="https://github.com/tanuj24/mimir/issues">github.com/tanuj24/mimir/issues</a> — include the output of <code>goku doctor</code> and <code>goku logs</code>.</p>
   </section>
 
   <footer class="wrap">
-    <p><a href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a> · <a href="https://github.com/tanuj24/mimir/issues">Support</a></p>
-    <p class="disclaimer">Mimir is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
+    <p class="signoff">See your cloud, before you ship your cloud.</p>
+    <p><a href="index.html">Home</a> · <a href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a> · <a href="https://github.com/tanuj24/mimir/issues">Support</a></p>
+    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
   </footer>
 
   <script>
