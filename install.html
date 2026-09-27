@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1120">
-  <title>Install Goku (formerly Mimir) — Run AWS Locally on macOS, Linux and Windows</title>
-  <meta name="description" content="Install Goku, the local AWS cloud formerly called Mimir: one command on macOS, Linux or Windows, or one Docker command. 73 AWS-compatible services and a 60-service web console. Free, no account.">
+  <title>Install Goku — Run Local AWS on macOS, Linux &amp; Windows</title>
+  <meta name="description" content="Install Goku, the free local AWS emulator formerly called Mimir, with one command on macOS, Linux or Windows, or one Docker command. 73 services, 60 consoles.">
   <link rel="canonical" href="https://tanuj24.github.io/goku/install.html">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta property="og:type" content="website">
@@ -13,9 +13,25 @@
   <meta property="og:title" content="Install Goku (formerly Mimir) — Run AWS Locally in One Command">
   <meta property="og:description" content="Install a local AWS cloud: one command on macOS, Linux or Windows, or one Docker command. 73 AWS-compatible services, a 60-service web console, state that persists automatically. Free.">
   <meta property="og:url" content="https://tanuj24.github.io/goku/install.html">
-  <meta property="og:image" content="https://tanuj24.github.io/goku/screenshots/goku-console-home-aws-services.png">
-  <meta property="og:image:alt" content="The Goku web console home with local AWS services">
+  <meta property="og:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta property="og:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Install Goku (formerly Mimir) — Run AWS Locally in One Command">
+  <meta name="twitter:description" content="Install a local AWS cloud: one command on macOS, Linux or Windows, or one Docker command. 73 AWS-compatible services, a 60-service web console, state that persists automatically. Free.">
+  <meta name="twitter:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta name="twitter:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://tanuj24.github.io/goku/" },
+      { "@type": "ListItem", "position": 2, "name": "Install", "item": "https://tanuj24.github.io/goku/install.html" }
+    ]
+  }
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -147,6 +163,8 @@
 
     footer, footer.wrap { padding-top: 44px; padding-bottom: 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
     footer .signoff { color: var(--ink); font-weight: 600; margin-bottom: 8px; }
+    footer p { margin-bottom: 8px; }
+    .footer-guides span { color: var(--ink); font-weight: 600; }
     .disclaimer { font-size: 0.8rem; margin-top: 12px; }
   </style>
 </head>
@@ -156,6 +174,7 @@
       <a class="wordmark" href="index.html"><img src="assets/goku-logo-bar.svg" alt="" width="74" height="32">Goku<span>.</span></a>
       <a class="navlink" href="index.html">Home</a>
       <a class="navlink nav-wide" href="index.html#whats-new">What's new</a>
+      <a class="navlink nav-wide" href="index.html#guides">Guides</a>
       <a class="navlink active" href="install.html" aria-current="page">Install</a>
       <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a>
     </div>
@@ -232,6 +251,7 @@
       <pre class="one"><span class="prompt">PS&gt; </span><code>goku env --shell powershell | Invoke-Expression</code></pre>
     </div>
     <p>Then <code>aws s3 ls</code> lists your local buckets. On macOS and Linux, <code>eval "$(goku env --unset)"</code> switches back to real AWS. To configure a tool by hand, use the endpoint <strong>http://localhost:4566</strong>, region <strong>us-east-1</strong> and any local credentials such as <strong>test</strong> / <strong>test</strong>.</p>
+    <p>Next, create your first bucket, table, queue and function with the <a href="run-aws-locally.html">run AWS locally guide</a>, or <a href="localstack-alternative.html">switch over from LocalStack</a>.</p>
   </section>
 
   <section class="wrap" id="docker">
@@ -405,7 +425,8 @@ docker pull tanujsoni027/goku:latest</code></pre>
   <footer class="wrap">
     <p class="signoff">See your cloud, before you ship your cloud.</p>
     <p><a href="index.html">Home</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
-    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
+    <p class="footer-guides"><span>Guides:</span> <a href="localstack-alternative.html">LocalStack alternative</a> · <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a></p>
+    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services or LocalStack. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
   </footer>
 
   <script>

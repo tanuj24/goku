@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1120">
+  <title>Test AWS Lambda Locally: Run, Invoke and Debug | Goku</title>
+  <meta name="description" content="Test AWS Lambda locally for free: create and invoke functions with the AWS CLI, read CloudWatch logs, and step through handlers in VS Code or JetBrains IDEs.">
+  <link rel="canonical" href="https://tanuj24.github.io/goku/test-aws-lambda-locally.html">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Goku">
+  <meta property="og:title" content="Test AWS Lambda locally: run, invoke and debug">
+  <meta property="og:description" content="Test AWS Lambda locally for free: create and invoke functions with the AWS CLI, read CloudWatch logs, and step through handlers in VS Code or JetBrains IDEs.">
+  <meta property="og:url" content="https://tanuj24.github.io/goku/test-aws-lambda-locally.html">
+  <meta property="og:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta property="og:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <meta property="article:published_time" content="2026-09-27">
+  <meta property="article:modified_time" content="2026-09-27">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Test AWS Lambda locally: run, invoke and debug">
+  <meta name="twitter:description" content="Test AWS Lambda locally for free: create and invoke functions with the AWS CLI, read CloudWatch logs, and step through handlers in VS Code or JetBrains IDEs.">
+  <meta name="twitter:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta name="twitter:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Test AWS Lambda locally: run, invoke and debug",
+  "description": "Test AWS Lambda locally for free: create and invoke functions with the AWS CLI, read CloudWatch logs, and step through handlers in VS Code or JetBrains IDEs.",
+  "url": "https://tanuj24.github.io/goku/test-aws-lambda-locally.html",
+  "mainEntityOfPage": "https://tanuj24.github.io/goku/test-aws-lambda-locally.html",
+  "image": "https://tanuj24.github.io/goku/screenshots/goku-console-home-aws-services.png",
+  "inLanguage": "en",
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "author": {
+    "@type": "Person",
+    "name": "Tanuj Soni"
+  },
+  "about": {
+    "@id": "https://tanuj24.github.io/goku/#software",
+    "name": "Goku"
+  },
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "Docker"
+    },
+    {
+      "@type": "HowToTool",
+      "name": "AWS CLI v2"
+    },
+    {
+      "@type": "HowToTool",
+      "name": "VS Code or a JetBrains IDE (for debugging)"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Start Goku",
+      "text": "Install the goku CLI, run goku start, then eval \"$(goku env)\" so the AWS CLI uses http://localhost:4566.",
+      "url": "https://tanuj24.github.io/goku/test-aws-lambda-locally.html#step-1"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Create and invoke a function",
+      "text": "Zip a handler, create it with aws lambda create-function --runtime nodejs22.x --handler index.handler --zip-file fileb://function.zip, then run aws lambda invoke with --cli-binary-format raw-in-base64-out.",
+      "url": "https://tanuj24.github.io/goku/test-aws-lambda-locally.html#step-2"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Read the logs",
+      "text": "Follow the function's CloudWatch Logs with aws logs tail /aws/lambda/my-function --follow or goku logs --lambda my-function --follow.",
+      "url": "https://tanuj24.github.io/goku/test-aws-lambda-locally.html#step-3"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": "Debug with breakpoints",
+      "text": "Run goku lambda debug my-function --wait --launch-json > .vscode/launch.json, start the configuration in your IDE, then invoke the function with --cli-read-timeout 0.",
+      "url": "https://tanuj24.github.io/goku/test-aws-lambda-locally.html#step-4"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Which Lambda runtimes can I test locally?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Every runtime AWS Lambda supports today: Node.js, Python, Java, .NET, Ruby and provided.al2023, on arm64 and x86_64. Container-image functions work too."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I set breakpoints in a Lambda handler running locally?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, for Node.js, Python, Java, Ruby and Go. Turn on debug mode with goku lambda debug or the console's Debug tab, then attach VS Code, IntelliJ IDEA, WebStorm, PyCharm or GoLand to the port it shows."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need AWS SAM to run Lambda functions locally?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Goku runs the functions itself. You can create them with the AWS CLI, the SDKs, the console, Terraform, CDK or CloudFormation, SAM templates included."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is the first invocation slower?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The first invocation of a runtime pulls its AWS Lambda runtime image and starts a container. After that, warm containers are reused, as on AWS."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where do console.log and print output go?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To CloudWatch Logs in /aws/lambda/<function-name>. Read them with aws logs tail, goku logs --lambda or the function's Logs tab in the console."
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://tanuj24.github.io/goku/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://tanuj24.github.io/goku/#guides"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Test Lambda locally",
+      "item": "https://tanuj24.github.io/goku/test-aws-lambda-locally.html"
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #101a2c;
+      --surface2: #0d1424;
+      --line: #1e2b40;
+      --ink: #e6ecf5;
+      --muted: #93a1b7;
+      --teal: #14b8a6;
+      --teal-deep: #0d9488;
+      --cyan: #4cc9f0;
+      --glow: rgba(20,184,166,0.13);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { color-scheme: dark; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); font-size: 1.05rem; line-height: 1.7; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    a { color: var(--cyan); }
+
+    nav { position: sticky; top: 0; z-index: 50; background: rgba(11,17,32,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    nav .wrap { display: flex; align-items: center; gap: 22px; height: 56px; }
+    .wordmark { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; margin-right: auto; }
+    .wordmark img { height: 32px; width: auto; display: block; }
+    .wordmark span { color: var(--teal); }
+    nav a.navlink { color: var(--muted); text-decoration: none; font-size: 0.95rem; padding: 4px 2px; white-space: nowrap; }
+    nav a.navlink:hover { color: var(--ink); }
+    nav a.navlink.active { color: var(--teal); font-weight: 600; }
+    @media (max-width: 640px) { nav .wrap { gap: 16px; } .nav-wide { display: none; } }
+
+    nav.crumbs { position: static; z-index: auto; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; }
+    header.article { padding: 26px 0 40px; background: radial-gradient(900px 420px at 50% -80px, var(--glow), transparent 70%); }
+    .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 26px; }
+    .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 8px; }
+    .crumbs li + li::before { content: "/"; margin-right: 8px; color: var(--line); }
+    .crumbs a { color: var(--muted); text-decoration: none; }
+    .crumbs a:hover { color: var(--ink); }
+    .crumbs [aria-current] { color: var(--ink); }
+    h1 { font-size: clamp(2rem, 4.6vw, 2.9rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+    .grad { background: linear-gradient(90deg, #14b8a6, #4cc9f0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lede { font-size: 1.15rem; color: var(--muted); max-width: 800px; margin-bottom: 12px; }
+    .lede strong { color: var(--ink); }
+    .meta { font-size: 0.85rem; color: var(--muted); }
+    .rename-note { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 12px 16px; color: var(--muted); font-size: 0.93rem; margin-top: 20px; max-width: 800px; }
+    .rename-note strong { color: var(--ink); }
+    .toc { margin-top: 22px; font-size: 0.93rem; color: var(--muted); }
+    .toc strong { color: var(--ink); margin-right: 6px; }
+    .toc a { color: var(--muted); }
+    .toc a:hover { color: var(--ink); }
+
+    section, section.wrap { padding-top: 44px; padding-bottom: 44px; border-top: 1px solid var(--line); scroll-margin-top: 70px; }
+    .kicker { text-transform: uppercase; letter-spacing: .1em; font-size: 0.78rem; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
+    h2 { font-size: 1.6rem; letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 14px; }
+    h3 { font-size: 1.1rem; line-height: 1.4; margin: 24px 0 6px; }
+    p { color: var(--muted); margin-bottom: 12px; }
+    p strong, li strong { color: var(--ink); }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    td code, p code, li code, .card code, .callout code, .rename-note code, h3 code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; font-size: 0.88em; color: var(--ink); overflow-wrap: anywhere; }
+    ul.list, ol.list { margin: 8px 0 14px; }
+    ul.list { list-style: none; }
+    ul.list li { color: var(--muted); padding-left: 20px; position: relative; margin-bottom: 8px; }
+    ul.list li::before { content: ""; position: absolute; left: 4px; top: 0.72em; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+    ol.list { padding-left: 22px; }
+    ol.list li { color: var(--muted); margin-bottom: 8px; padding-left: 4px; }
+    ol.list li::marker { color: var(--teal); font-weight: 700; }
+
+    .term { background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin: 14px 0 20px; text-align: left; }
+    .term-bar { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #febc2e; }
+    .dot.g { background: #28c840; }
+    .term-title { color: var(--muted); font-size: 0.78rem; margin-left: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .term .copy { margin-left: auto; flex: none; background: var(--surface); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 3px 12px; font-size: 0.75rem; font-family: inherit; cursor: pointer; transition: color .15s ease, border-color .15s ease; }
+    .term .copy:hover { color: var(--teal); border-color: var(--teal); }
+    .term .copy:focus-visible { outline: 2px solid var(--cyan); outline-offset: 1px; }
+    .term pre { margin: 0; padding: 16px 18px; overflow-x: auto; font-size: 0.88rem; line-height: 1.55; color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .prompt { color: var(--teal); user-select: none; -webkit-user-select: none; }
+    .cmt { color: #6b7a90; }
+    @media (max-width: 640px) { .term pre.one { white-space: pre-wrap; overflow-wrap: anywhere; } .term pre { font-size: 0.82rem; padding: 14px; } }
+
+    .table-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 18px; overflow-x: auto; margin: 18px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: left; text-transform: uppercase; letter-spacing: .06em; font-size: 0.75rem; color: var(--muted); padding: 12px; border-bottom: 1px solid var(--line); }
+    td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--muted); vertical-align: top; }
+    td.goku { color: var(--teal); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    .table-note { font-size: 0.85rem; }
+    @media (max-width: 640px) {
+      .table-card { padding: 2px 8px;
+        background:
+          linear-gradient(to right, var(--surface) 30%, rgba(16,26,44,0)) left / 32px 100% no-repeat local,
+          linear-gradient(to left, var(--surface) 30%, rgba(16,26,44,0)) right / 32px 100% no-repeat local,
+          radial-gradient(farthest-side at 0 50%, rgba(20,184,166,0.35), transparent) left / 10px 100% no-repeat scroll,
+          radial-gradient(farthest-side at 100% 50%, rgba(20,184,166,0.35), transparent) right / 10px 100% no-repeat scroll,
+          var(--surface); }
+      th, td { padding: 9px 8px; }
+      table { font-size: 0.88rem; }
+      td code { white-space: nowrap; overflow-wrap: normal; }
+    }
+
+    .callout { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 14px 16px; color: var(--muted); margin: 16px 0; }
+    .callout strong { color: var(--ink); }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 20px 0; }
+    .card { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; color: var(--muted); text-decoration: none; font-size: 0.95rem; transition: border-color .15s ease, box-shadow .15s ease; }
+    a.card:hover { border-color: var(--teal); box-shadow: 0 8px 30px rgba(20,184,166,0.08); }
+    .card strong { color: var(--ink); display: block; margin-bottom: 6px; font-size: 1rem; }
+    a.card strong { color: var(--cyan); }
+
+    figure.shot { margin: 18px 0 26px; }
+    figure.shot picture { display: block; }
+    figure.shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); }
+    figure.shot figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 10px; }
+
+    .faq h3 { font-size: 1.08rem; color: var(--ink); margin: 22px 0 6px; }
+
+    footer, footer.wrap { padding-top: 44px; padding-bottom: 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    footer .signoff { color: var(--ink); font-weight: 600; margin-bottom: 8px; }
+    footer p { margin-bottom: 8px; }
+    .footer-guides span { color: var(--ink); font-weight: 600; }
+    .disclaimer { font-size: 0.8rem; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <nav aria-label="Main">
+    <div class="wrap">
+      <a class="wordmark" href="index.html"><img src="assets/goku-logo-bar.svg" alt="" width="74" height="32">Goku<span>.</span></a>
+      <a class="navlink" href="index.html">Home</a>
+      <a class="navlink nav-wide" href="index.html#whats-new">What's new</a>
+      <a class="navlink nav-wide active" href="index.html#guides">Guides</a>
+      <a class="navlink" href="install.html">Install</a>
+      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a>
+    </div>
+  </nav>
+
+  <header class="article">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#guides">Guides</a></li>
+          <li><span aria-current="page">Test Lambda locally</span></li>
+        </ol>
+      </nav>
+      <div class="kicker">Guide · Serverless</div>
+      <h1><span class="grad">Test AWS Lambda locally</span>: run, invoke and debug</h1>
+      <p class="lede">Deploying to AWS just to see whether a handler works is a slow loop. With Goku, a free local AWS emulator, Lambda functions run on your machine in <strong>real runtime containers</strong>, with logs, triggers, versions and aliases, and you can stop on a breakpoint in VS Code, IntelliJ, PyCharm or GoLand.</p>
+      <p class="meta">Updated 27 September 2026 · Goku 4.0.0 · Free, no AWS account</p>
+      <p class="rename-note"><strong>Goku was formerly called Mimir.</strong> Same product, new name: the image is now <code>tanujsoni027/goku</code> (it was <code>tanujsoni027/mimir-aws</code>) and the command is <code>goku</code>. See <a href="install.html#names">old and new names</a>.</p>
+      <p class="toc"><strong>On this page:</strong> <a href="#how">How it runs</a> · <a href="#step-1">Start</a> · <a href="#step-2">Create and invoke</a> · <a href="#step-3">Logs</a> · <a href="#triggers">Triggers</a> · <a href="#iterate">Hot reload</a> · <a href="#step-4">Debug</a> · <a href="#ci">CI</a> · <a href="#faq">FAQ</a></p>
+    </div>
+  </header>
+
+  <section class="wrap" id="how">
+    <div class="kicker">How it works</div>
+    <h2>How Lambda runs in Goku</h2>
+    <p>Each function runs in a Docker container built from the official AWS Lambda runtime image for its language, and gets its events through the Lambda Runtime API, which Goku serves. Goku supports every runtime AWS Lambda supports today, on arm64 and x86_64, and deprecated runtimes follow AWS's lifecycle dates:</p>
+    <div class="table-card">
+      <table>
+        <tr><th>Language</th><th>Runtimes</th></tr>
+        <tr><td>Node.js</td><td><code>nodejs24.x</code>, <code>nodejs22.x</code> (<code>nodejs26.x</code> in preview)</td></tr>
+        <tr><td>Python</td><td><code>python3.14</code> down to <code>python3.10</code> (<code>python3.15</code> in preview)</td></tr>
+        <tr><td>Java</td><td><code>java25</code>, <code>java21</code>, <code>java17</code>, <code>java11</code>, <code>java8.al2</code></td></tr>
+        <tr><td>.NET</td><td><code>dotnet10</code>, <code>dotnet8</code></td></tr>
+        <tr><td>Ruby</td><td><code>ruby4.0</code>, <code>ruby3.4</code>, <code>ruby3.3</code></td></tr>
+        <tr><td>OS-only</td><td><code>provided.al2023</code>, for Go and other compiled languages</td></tr>
+      </table>
+    </div>
+    <p>Also supported: container-image functions, versions and aliases, function URLs, provisioned concurrency, SnapStart, response streaming, and event source mappings for SQS, Kinesis and DynamoDB Streams.</p>
+  </section>
+
+  <section class="wrap" id="step-1">
+    <div class="kicker">Step 1</div>
+    <h2>Start Goku</h2>
+    <p>Install the <code>goku</code> CLI (see <a href="install.html">Install</a>), start Goku and point the AWS CLI at it. Lambda is one of the core services, so it is on from the first start:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>goku start
+eval "$(goku env)"</code></pre>
+    </div>
+    <p>Goku needs access to the Docker socket to start runtime containers. The CLI and the <code>docker run</code> command on the install page both mount it.</p>
+  </section>
+
+  <section class="wrap" id="step-2">
+    <div class="kicker">Step 2</div>
+    <h2>Create and invoke a function with the AWS CLI</h2>
+    <p>Package a small Node.js handler and deploy it the same way you would on AWS:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>cat &gt; index.mjs &lt;&lt; 'EOF'
+export const handler = async (event) =&gt; {
+  console.log("Event:", JSON.stringify(event));
+  return { statusCode: 200, body: JSON.stringify({ hello: "world" }) };
+};
+EOF
+zip function.zip index.mjs
+
+aws lambda create-function \
+  --function-name my-function \
+  --runtime nodejs22.x \
+  --role arn:aws:iam::000000000000:role/lambda-role \
+  --handler index.handler \
+  --zip-file fileb://function.zip</code></pre>
+    </div>
+    <p>Invoke it synchronously and read the result, or asynchronously with <code>--invocation-type Event</code>:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>aws lambda invoke \
+  --function-name my-function \
+  --payload '{"key":"value"}' \
+  --cli-binary-format raw-in-base64-out \
+  response.json
+cat response.json
+
+aws lambda invoke \
+  --function-name my-function \
+  --invocation-type Event \
+  --payload '{"key":"value"}' \
+  --cli-binary-format raw-in-base64-out \
+  /dev/null</code></pre>
+    </div>
+    <p>After a code change, zip it again and run <code>aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip</code>. The next invocation runs the new code.</p>
+  </section>
+
+  <section class="wrap" id="step-3">
+    <div class="kicker">Step 3</div>
+    <h2>Read the logs</h2>
+    <p>Every invocation writes the <code>START</code>, <code>END</code> and <code>REPORT</code> lines (duration, billed duration, memory used) and your function's output to CloudWatch Logs, in the log group <code>/aws/lambda/my-function</code>, as on AWS. Follow them from a terminal:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>aws logs tail /aws/lambda/my-function --follow
+goku logs --lambda my-function --follow</code></pre>
+    </div>
+    <p>Or get the last 4 KB of an invocation's log in the response itself with <code>--log-type Tail</code>:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>aws lambda invoke --function-name my-function \
+  --payload '{"key":"value"}' --cli-binary-format raw-in-base64-out \
+  --log-type Tail --query LogResult --output text response.json | base64 --decode</code></pre>
+    </div>
+  </section>
+
+  <section class="wrap" id="triggers">
+    <div class="kicker">Events</div>
+    <h2>Trigger it the way production does</h2>
+    <p>Functions can be triggered by real events, not only direct invokes. Connect an SQS queue with an event source mapping, and every message sent to the queue invokes the function:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>aws sqs create-queue --queue-name orders
+QUEUE_ARN=$(aws sqs get-queue-attributes \
+  --queue-url $AWS_ENDPOINT_URL/000000000000/orders \
+  --attribute-names QueueArn \
+  --query Attributes.QueueArn --output text)
+
+aws lambda create-event-source-mapping \
+  --function-name my-function \
+  --event-source-arn $QUEUE_ARN \
+  --batch-size 10</code></pre>
+    </div>
+    <p>S3 notifications, SNS, EventBridge rules, API Gateway routes, function URLs and Step Functions Task states invoke local functions too. In the console, each function's page has code, configuration, test events, logs, versions, aliases and triggers.</p>
+    <figure class="shot">
+      <picture><source type="image/webp" srcset="screenshots/services/lambda.webp"><img src="screenshots/services/lambda.png" width="1440" height="860" alt="AWS Lambda functions list in the Goku console with Python and Node.js runtimes, memory, timeout and code size" loading="lazy" decoding="async"></picture>
+      <figcaption>The Lambda console in Goku lists your local functions with their runtime, memory and timeout.</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap" id="iterate">
+    <div class="kicker">Inner loop</div>
+    <h2>Iterate without redeploying</h2>
+    <p>Two features shorten the edit-and-invoke loop:</p>
+    <ul class="list">
+      <li><strong>Reactive S3 sync.</strong> Create a function from an S3 object (<code>--code S3Bucket=my-bucket,S3Key=function.zip</code>). When you upload a new zip to that key, the next invocation runs it. You don't need to call <code>update-function-code</code>.</li>
+      <li><strong>Hot reload from a folder.</strong> Start the Goku container with <code>-e GOKU_SERVICES_LAMBDA_HOT_RELOAD_ENABLED=true</code> and create the function with <code>--code S3Bucket=hot-reload,S3Key=/absolute/path/to/your/code</code>. The folder is mounted into the runtime, so every invocation runs the files as they are on disk.</li>
+    </ul>
+  </section>
+
+  <section class="wrap" id="step-4">
+    <div class="kicker">Step 4</div>
+    <h2>Step-through debugging in VS Code and JetBrains IDEs</h2>
+    <p>Debug mode runs a function under its language's debugger and publishes the debugger port on your machine, on <code>127.0.0.1</code> in the range 5640&ndash;5659. Trigger the function any way you like and your IDE stops on the breakpoint with the real event in scope. While you're paused, the function timeout is raised to 15 minutes, so the invocation doesn't fail with <code>Task timed out</code>.</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>goku lambda debug my-function --wait --launch-json &gt; .vscode/launch.json
+aws lambda invoke --function-name my-function \
+  --payload '{"id": 42}' --cli-binary-format raw-in-base64-out \
+  --cli-read-timeout 0 out.json</code></pre>
+    </div>
+    <p>The first command turns debug mode on and writes a VS Code launch configuration with the right port. It replaces an existing <code>launch.json</code>, so merge it by hand if you have one. <code>--wait</code> holds each invocation until a debugger is attached, and <code>--cli-read-timeout 0</code> stops the AWS CLI from retrying while you step. You can also switch debug mode on in the function's <strong>Debug</strong> tab in the console, which shows ready-made launch configurations for VS Code and the JetBrains IDEs.</p>
+    <div class="table-card">
+      <table>
+        <tr><th>Runtime</th><th>Debugger</th><th>Attach from</th></tr>
+        <tr><td>Node.js 18&ndash;24</td><td>V8 inspector</td><td>VS Code, IntelliJ IDEA Ultimate / WebStorm (Attach to Node.js/Chrome)</td></tr>
+        <tr><td>Python 3.9&ndash;3.14</td><td>debugpy, added by Goku</td><td>VS Code, PyCharm 2026.1+ (Attach to DAP)</td></tr>
+        <tr><td>Java 8&ndash;25</td><td>JDWP</td><td>IntelliJ IDEA (Remote JVM Debug), VS Code</td></tr>
+        <tr><td>Ruby 3.2&ndash;3.4</td><td>rdbg</td><td>VS Code (rdbg extension)</td></tr>
+        <tr><td>Go on <code>provided.al2023</code></td><td>Delve</td><td>GoLand (Go Remote), VS Code</td></tr>
+      </table>
+    </div>
+    <p>Nothing is added to your deployment package. .NET, Rust and C++ custom runtimes and Go container images can't be debugged this way. For Go, debug the function as a zip function on <code>provided.al2023</code>. <code>goku lambda debug my-function --off</code> turns debug mode off.</p>
+  </section>
+
+  <section class="wrap" id="ci">
+    <div class="kicker">Automation</div>
+    <h2>Lambda tests in CI</h2>
+    <p>The same image runs in CI. Turn persistence off for a throwaway environment, wait until the services your tests need are ready, then run the tests with the <code>goku env</code> variables. In a GitHub Actions step on <code>ubuntu-latest</code>:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">.github/workflows/test.yml (step)</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>- name: Lambda integration tests
+  run: |
+    curl -fsSL https://tanuj24.github.io/goku/install.sh | sh
+    docker run -d --name goku -p 4566:4566 -e GOKU_AUTO_PERSIST=off -e GOKU_SERVICES=all \
+      -v /var/run/docker.sock:/var/run/docker.sock tanujsoni027/goku:latest
+    goku ready --services lambda,sqs --wait 180
+    eval "$(goku env)" &amp;&amp; npm test</code></pre>
+    </div>
+    <p><code>goku ready</code> exits with 0 once Goku and the listed services are ready, so it can follow <code>docker run</code> directly. To start every run from the same data, export a snapshot once and restore it in CI with <code>goku snapshot import ci/baseline.tar.gz --restore</code>.</p>
+  </section>
+
+  <section class="wrap faq" id="faq">
+    <div class="kicker">FAQ</div>
+    <h2>Frequently asked questions</h2>
+    <h3>Which Lambda runtimes can I test locally?</h3>
+    <p>Every runtime AWS Lambda supports today: Node.js, Python, Java, .NET, Ruby and <code>provided.al2023</code>, on arm64 and x86_64. Container-image functions work too.</p>
+    <h3>Can I set breakpoints in a Lambda handler running locally?</h3>
+    <p>Yes, for Node.js, Python, Java, Ruby and Go. Turn on debug mode with <code>goku lambda debug</code> or the console's Debug tab, then attach VS Code, IntelliJ IDEA, WebStorm, PyCharm or GoLand to the port it shows.</p>
+    <h3>Do I need AWS SAM to run Lambda functions locally?</h3>
+    <p>No. Goku runs the functions itself. You can create them with the AWS CLI, the SDKs, the console, Terraform, CDK or CloudFormation, SAM templates included.</p>
+    <h3>Why is the first invocation slower?</h3>
+    <p>The first invocation of a runtime pulls its AWS Lambda runtime image and starts a container. After that, warm containers are reused, as on AWS.</p>
+    <h3>Where do console.log and print output go?</h3>
+    <p>To CloudWatch Logs in <code>/aws/lambda/&lt;function-name&gt;</code>. Read them with <code>aws logs tail</code>, <code>goku logs --lambda</code> or the function's Logs tab in the console.</p>
+  </section>
+
+  <section class="wrap" id="related">
+    <div class="kicker">Keep going</div>
+    <h2>More Goku guides</h2>
+    <div class="cards">
+      <a class="card" href="localstack-alternative.html"><strong>Free LocalStack alternative</strong>Same endpoint on port 4566 and the same AWS CLI and SDK setup, with a 60-service console and every feature free. What changes and how to switch.</a>
+      <a class="card" href="run-aws-locally.html"><strong>Run AWS locally without an account</strong>Install Goku, point the AWS CLI at localhost:4566 and create S3 buckets, DynamoDB tables, SQS queues and Lambda functions on your machine.</a>
+      <a class="card" href="dynamodb-local.html"><strong>DynamoDB on your machine</strong>Tables, items, GSI queries, PartiQL, Streams and vector search on localhost, with your data kept between restarts.</a>
+      <a class="card" href="aws-glue-locally.html"><strong>Run AWS Glue jobs locally</strong>Glue 6.0 and 5.1 jobs and notebooks on real Spark with the awsglue libraries, a local Data Catalog and S3.</a>
+      <a class="card" href="install.html"><strong>Install Goku</strong>Every install option: the goku CLI on macOS, Linux and Windows, or a single Docker command.</a>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <p class="signoff">See your cloud, before you ship your cloud.</p>
+    <p><a href="index.html">Home</a> · <a href="install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
+    <p class="footer-guides"><span>Guides:</span> <a href="localstack-alternative.html">LocalStack alternative</a> · <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a></p>
+    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services or LocalStack. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.term .copy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var code = btn.closest('.term').querySelector('code').textContent;
+        function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(code).then(done);
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = code; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

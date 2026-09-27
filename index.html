@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1120">
-  <title>Goku (formerly Mimir) — Local AWS Cloud Emulator | Free LocalStack Alternative</title>
-  <meta name="description" content="Goku, formerly Mimir: run AWS locally with 73 AWS-compatible services including S3, Lambda, DynamoDB, RDS and Step Functions, plus a 60-service web console. Free, no AWS account.">
+  <title>Goku — Free Local AWS Emulator &amp; LocalStack Alternative</title>
+  <meta name="description" content="Goku (formerly Mimir) runs AWS locally: 73 AWS-compatible services such as S3, Lambda, DynamoDB and RDS, plus a web console for 60 services. Free, no account.">
   <link rel="canonical" href="https://tanuj24.github.io/goku/">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta property="og:type" content="website">
@@ -13,13 +13,20 @@
   <meta property="og:title" content="Goku (formerly Mimir) — Your Local AWS Cloud">
   <meta property="og:description" content="Free local AWS cloud emulator: 73 AWS-compatible services, a 60-service web console, real Postgres/Redis/Kubernetes engines and automatic persistence. No AWS account, no bill.">
   <meta property="og:url" content="https://tanuj24.github.io/goku/">
-  <meta property="og:image" content="https://tanuj24.github.io/goku/screenshots/goku-console-home-aws-services.png">
-  <meta property="og:image:alt" content="The Goku web console home with local AWS services">
+  <meta property="og:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta property="og:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Goku (formerly Mimir) — Your Local AWS Cloud">
+  <meta name="twitter:description" content="Free local AWS cloud emulator: 73 AWS-compatible services, a 60-service web console, real Postgres/Redis/Kubernetes engines and automatic persistence. No AWS account, no bill.">
+  <meta name="twitter:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta name="twitter:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
+    "@id": "https://tanuj24.github.io/goku/#software",
     "name": "Goku",
     "alternateName": "Mimir",
     "operatingSystem": "macOS, Linux, Windows",
@@ -27,10 +34,31 @@
     "description": "Goku (formerly Mimir) is a local AWS cloud emulator in one Docker image: 73 AWS-compatible services including S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway and Glue, with a web console covering 60 services. Free LocalStack alternative.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "softwareVersion": "4.0.0",
+    "datePublished": "2026-09-27",
+    "dateModified": "2026-09-27",
     "url": "https://tanuj24.github.io/goku/",
     "downloadUrl": "https://tanuj24.github.io/goku/install.html",
     "installUrl": "https://tanuj24.github.io/goku/install.html",
     "image": "https://tanuj24.github.io/goku/screenshots/goku-console-home-aws-services.png",
+    "screenshot": [
+      "https://tanuj24.github.io/goku/screenshots/goku-console-home-aws-services.png",
+      "https://tanuj24.github.io/goku/screenshots/step-functions-workflow-graph-live-execution.png",
+      "https://tanuj24.github.io/goku/screenshots/api-gateway-rest-api-local-invoke.png",
+      "https://tanuj24.github.io/goku/screenshots/rds-local-postgresql-container.png"
+    ],
+    "featureList": [
+      "73 AWS-compatible services on one endpoint, http://localhost:4566",
+      "Web console for 60 services on http://localhost:8080",
+      "Real engines: PostgreSQL, MySQL and MariaDB for RDS, Redis and Valkey for ElastiCache, k3s for EKS",
+      "Lambda in real runtime containers for every runtime AWS Lambda supports today",
+      "Lambda step-through debugging from VS Code, IntelliJ, PyCharm and GoLand",
+      "AWS Glue 6.0 and 5.1 jobs and notebooks on real Spark",
+      "DynamoDB vector search, PartiQL and Streams",
+      "IAM Policy Lab",
+      "Environment snapshots and fault injection",
+      "Everything kept in a data folder on your disk",
+      "goku CLI for macOS, Linux and Windows"
+    ],
     "author": { "@type": "Person", "name": "Tanuj Soni" }
   }
   </script>
@@ -230,11 +258,18 @@
     td { color: var(--muted); }
     td.goku { color: var(--teal); font-weight: 600; }
 
+    /* Guides */
+    a.guide { display: block; text-decoration: none; color: inherit; }
+    a.guide h3 { color: var(--cyan); }
+
     /* FAQ */
     .faq h3 { font-size: 1.08rem; font-weight: 700; color: var(--ink); margin: 22px 0 6px; }
 
+    picture { display: block; }
     footer, footer.wrap { padding-top: 44px; padding-bottom: 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
     footer .signoff { color: var(--ink); font-weight: 600; margin-bottom: 8px; }
+    footer p { margin-bottom: 8px; }
+    .footer-guides span { color: var(--ink); font-weight: 600; }
     .disclaimer { font-size: 0.8rem; margin-top: 12px; }
   </style>
 </head>
@@ -244,6 +279,7 @@
       <a class="wordmark" href="index.html"><img src="assets/goku-logo-bar.svg" alt="" width="74" height="32">Goku<span>.</span></a>
       <a class="navlink active" href="index.html" aria-current="page">Home</a>
       <a class="navlink nav-wide" href="#whats-new">What's new</a>
+      <a class="navlink nav-wide" href="#guides">Guides</a>
       <a class="navlink" href="install.html">Install</a>
       <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a>
     </div>
@@ -382,7 +418,7 @@
         <li><strong>Request journeys:</strong> every hop across S3, SNS, EventBridge, SQS, Lambda and DynamoDB as one timeline, with replay and dead-letter queue redrive.</li>
         <li><strong>Clone staging locally:</strong> copy a real account's configuration read-only, with every ARN rewritten and a plan to review first.</li>
         <li><strong>Step Functions testing:</strong> the <code>TestState</code> API, mock configurations and test suites with JUnit reports.</li>
-        <li><strong>In CI:</strong> a backend-only image ready in about a second, a readiness API, a GitHub Action and Testcontainers modules for Java, Node, Python and Go.</li>
+        <li><strong>In CI:</strong> the same image runs in any CI with Docker, and a readiness API waits until the services you need are up.</li>
         <li><strong>Terraform, CDK and Pulumi</strong> support, plus a pre-deploy review that prices a change and reviews its IAM as a pull-request check.</li>
         <li><strong>Operation coverage map:</strong> every AWS SDK operation classified as implemented, partial or missing, on a Service coverage page.</li>
         <li><strong>The <code>goku</code> CLI and a VS Code extension:</strong> services, readiness, snapshots, fault injection, IAM and Lambda debugging from your terminal or editor.</li>
@@ -395,7 +431,7 @@
     <span class="kicker">Live execution</span>
     <h2>Watch Step Functions run — locally</h2>
     <p>A real-time workflow graph: states color in as the execution progresses, Choice branches show their conditions, and Task nodes deep-link to the local resources they invoke.</p>
-    <img class="shot modal" src="screenshots/step-functions-workflow-graph-live-execution.png" width="768" height="901" alt="AWS Step Functions running locally with a live workflow graph in the Goku console" loading="lazy">
+    <picture><source type="image/webp" srcset="screenshots/step-functions-workflow-graph-live-execution.webp"><img class="shot modal" src="screenshots/step-functions-workflow-graph-live-execution.png" width="768" height="901" alt="AWS Step Functions running locally with a live workflow graph in the Goku console" loading="lazy" decoding="async"></picture>
   </section>
 
   <section class="wrap" id="service-explorer">
@@ -489,7 +525,7 @@
       </div>
       <div class="svc-stage">
         <div class="svc-shot">
-          <img id="svc-img" src="screenshots/services/s3.png" alt="S3 console in Goku — local AWS S3 emulation" loading="lazy" width="1440" height="860">
+          <picture><source id="svc-src" type="image/webp" srcset="screenshots/services/s3.webp"><img id="svc-img" src="screenshots/services/s3.png" alt="S3 console in Goku — local AWS S3 emulation" loading="lazy" decoding="async" width="1440" height="860"></picture>
         </div>
         <p class="svc-caption" id="svc-caption" aria-live="polite">Storage · <strong>S3</strong> console in Goku</p>
       </div>
@@ -500,7 +536,7 @@
     <span class="kicker">Console</span>
     <h2>60 AWS service consoles, one image</h2>
     <p>The bundled web console covers 60 services, and every service page has a one-click &ldquo;Load sample data&rdquo; button, so you can explore a populated cloud in under a minute.</p>
-    <img class="shot" src="screenshots/goku-console-home-aws-services.png" width="1440" height="860" alt="Goku web console home with local AWS services: S3, DynamoDB, Lambda, SQS, SNS, CloudWatch, EC2, ECS, EKS, Glue and more" loading="lazy">
+    <picture><source type="image/webp" srcset="screenshots/goku-console-home-aws-services.webp"><img class="shot" src="screenshots/goku-console-home-aws-services.png" width="1440" height="860" alt="Goku web console home with local AWS services: S3, DynamoDB, Lambda, SQS, SNS, CloudWatch, EC2, ECS, EKS, Glue and more" loading="lazy" decoding="async"></picture>
   </section>
 
   <section class="wrap">
@@ -559,7 +595,35 @@
         </table>
       </div>
     </div>
-    <p>If you need byte-exact AWS parity across hundreds of edge cases, use the real cloud for the last mile. If you want a fast, free, visual local AWS sandbox — that's Goku.</p>
+    <p>If you need byte-exact AWS parity across hundreds of edge cases, use the real cloud for the last mile. If you want a fast, free, visual local AWS sandbox — that's Goku. Switching? See <a href="localstack-alternative.html">how to move from LocalStack to Goku</a>.</p>
+  </section>
+
+  <section class="wrap" id="guides">
+    <span class="kicker">Guides</span>
+    <h2>Guides: run and test AWS locally</h2>
+    <p class="section-lede">Step-by-step walkthroughs with commands you can paste, for the things developers most often run locally.</p>
+    <div class="cards">
+      <a class="card guide" href="run-aws-locally.html">
+        <h3>Run AWS locally without an account</h3>
+        <p>Install Goku, point the AWS CLI at localhost:4566 and create S3 buckets, DynamoDB tables, SQS queues and Lambda functions on your machine.</p>
+      </a>
+      <a class="card guide" href="localstack-alternative.html">
+        <h3>A free LocalStack alternative</h3>
+        <p>The same endpoint on port 4566 and the same AWS CLI and SDK setup, with a 60-service console and every feature free. What changes and how to switch.</p>
+      </a>
+      <a class="card guide" href="test-aws-lambda-locally.html">
+        <h3>Test AWS Lambda locally</h3>
+        <p>Create, invoke and debug functions in real runtime containers, read their CloudWatch logs and stop on breakpoints in VS Code or JetBrains IDEs.</p>
+      </a>
+      <a class="card guide" href="dynamodb-local.html">
+        <h3>DynamoDB on your machine</h3>
+        <p>Tables, items, GSI queries, PartiQL, Streams and vector search on localhost, with your data kept between restarts.</p>
+      </a>
+      <a class="card guide" href="aws-glue-locally.html">
+        <h3>Run AWS Glue jobs locally</h3>
+        <p>Glue 6.0 and 5.1 jobs and notebooks on real Spark with the awsglue libraries, a local Data Catalog and S3.</p>
+      </a>
+    </div>
   </section>
 
   <section class="wrap faq">
@@ -568,11 +632,11 @@
     <h3>Goku was formerly Mimir. What changed?</h3>
     <p>Only the name. Goku is the same product, renamed in Goku 4.0, where every name became Goku: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, <code>GOKU_*</code> settings, <code>/_goku</code> paths and <code>goku.local</code> hostnames. Existing installs move over automatically, and the old Mimir names keep working for now, so <strong>start using the goku names</strong>. See <a href="install.html#names">old and new names</a>.</p>
     <h3>How do I run AWS locally without an AWS account?</h3>
-    <p>Install Goku and point your AWS CLI or SDK at http://localhost:4566, region <strong>us-east-1</strong>, with any local credentials such as <strong>test</strong> / <strong>test</strong> — <code>goku env</code> sets these for you. No account and no sign-up. Once the image and any runtime images your services need are pulled, everything runs on your machine without internet access.</p>
+    <p>Install Goku and point your AWS CLI or SDK at http://localhost:4566, region <strong>us-east-1</strong>, with any local credentials such as <strong>test</strong> / <strong>test</strong> — <code>goku env</code> sets these for you. No account and no sign-up. Once the image and any runtime images your services need are pulled, everything runs on your machine without internet access. Walkthrough: <a href="run-aws-locally.html">how to run AWS locally</a>.</p>
     <h3>Is Goku a free alternative to LocalStack?</h3>
-    <p>Yes — everything in Goku is free, including services LocalStack gates behind paid tiers: RDS, ECS, EKS, Cognito, Athena and Glue job execution, plus a web console covering 60 services.</p>
+    <p>Yes — everything in Goku is free, including services LocalStack gates behind paid tiers: RDS, ECS, EKS, Cognito, Athena and Glue job execution, plus a web console covering 60 services. See <a href="localstack-alternative.html">Goku as a LocalStack alternative</a>.</p>
     <h3>Can I test and debug Lambda functions locally?</h3>
-    <p>Yes. Functions run in real runtime containers for every runtime AWS Lambda supports today, with logs, versions, aliases, function URLs and event source mappings. Step through a handler from VS Code, IntelliJ, PyCharm or GoLand.</p>
+    <p>Yes. Functions run in real runtime containers for every runtime AWS Lambda supports today, with logs, versions, aliases, function URLs and event source mappings. Step through a handler from VS Code, IntelliJ, PyCharm or GoLand. See <a href="test-aws-lambda-locally.html">testing AWS Lambda locally</a>.</p>
     <h3>Does my data survive restarts and updates?</h3>
     <p>Yes. Everything Goku keeps, databases included, lives in a data folder on your disk (<code>~/.goku/data</code>, or <code>%LOCALAPPDATA%\Goku\data</code> on Windows). It survives stops, updates, reinstalls and Docker resets. Environment snapshots can save and restore the whole local cloud.</p>
     <h3>Does Goku run on Windows and Apple Silicon?</h3>
@@ -586,7 +650,8 @@
   <footer class="wrap">
     <p class="signoff">See your cloud, before you ship your cloud.</p>
     <p><a href="install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
-    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
+    <p class="footer-guides"><span>Guides:</span> <a href="localstack-alternative.html">LocalStack alternative</a> · <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a></p>
+    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services or LocalStack. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
   </footer>
 
   <script>
@@ -669,12 +734,14 @@
       var explorer = document.getElementById('service-explorer');
       if (!explorer) return;
       var img = document.getElementById('svc-img');
+      var src = document.getElementById('svc-src');
       var caption = document.getElementById('svc-caption');
       var buttons = explorer.querySelectorAll('.svc-btn');
       function select(btn) {
         var s = services[btn.getAttribute('data-svc')];
         if (!s) return;
         var kind = s.page ? ' page in Goku' : ' console in Goku';
+        if (src) src.srcset = 'screenshots/services/' + s.file.replace(/\.png$/, '.webp');
         img.src = 'screenshots/services/' + s.file;
         img.alt = s.page ? s.name + kind : s.name + ' console in Goku — local AWS ' + s.name + ' emulation';
         caption.innerHTML = '';

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1120">
+  <title>Run AWS Glue Jobs Locally with Spark and Glue 6.0 | Goku</title>
+  <meta name="description" content="Run AWS Glue jobs and notebooks locally on Glue 6.0 or 5.1 with real Spark and the awsglue libraries, a local Data Catalog and S3. Free, no AWS account needed.">
+  <link rel="canonical" href="https://tanuj24.github.io/goku/aws-glue-locally.html">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Goku">
+  <meta property="og:title" content="Run AWS Glue jobs and notebooks locally with Goku">
+  <meta property="og:description" content="Run AWS Glue jobs and notebooks locally on Glue 6.0 or 5.1 with real Spark and the awsglue libraries, a local Data Catalog and S3. Free, no AWS account needed.">
+  <meta property="og:url" content="https://tanuj24.github.io/goku/aws-glue-locally.html">
+  <meta property="og:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta property="og:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <meta property="article:published_time" content="2026-09-27">
+  <meta property="article:modified_time" content="2026-09-27">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Run AWS Glue jobs and notebooks locally with Goku">
+  <meta name="twitter:description" content="Run AWS Glue jobs and notebooks locally on Glue 6.0 or 5.1 with real Spark and the awsglue libraries, a local Data Catalog and S3. Free, no AWS account needed.">
+  <meta name="twitter:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta name="twitter:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Run AWS Glue jobs locally",
+  "description": "Run AWS Glue jobs and notebooks locally on Glue 6.0 or 5.1 with real Spark and the awsglue libraries, a local Data Catalog and S3. Free, no AWS account needed.",
+  "url": "https://tanuj24.github.io/goku/aws-glue-locally.html",
+  "mainEntityOfPage": "https://tanuj24.github.io/goku/aws-glue-locally.html",
+  "image": "https://tanuj24.github.io/goku/screenshots/goku-console-home-aws-services.png",
+  "inLanguage": "en",
+  "datePublished": "2026-09-27",
+  "dateModified": "2026-09-27",
+  "author": {
+    "@type": "Person",
+    "name": "Tanuj Soni"
+  },
+  "about": {
+    "@id": "https://tanuj24.github.io/goku/#software",
+    "name": "Goku"
+  },
+  "proficiencyLevel": "Beginner",
+  "keywords": "AWS Glue locally, run Glue jobs locally, Glue 6.0, Glue 5.1, local Spark, Glue Data Catalog"
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I run AWS Glue jobs locally without an AWS account?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Goku runs Glue jobs and notebooks in Docker on your machine against a local Data Catalog and local S3. It needs Docker, not an AWS account."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which AWS Glue versions can I run locally?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Glue 6.0, 5.1 (the default), 5.0, 4.0, 3.0 and 2.0, chosen per job or notebook. 5.1 and older use AWS's published runtime images; 6.0 is built locally the first time you use it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is the first Glue run slow?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The first run of a version pulls its runtime image, which is 5 to 7 GB, or for Glue 6.0 builds one once (about 1 GB to download, roughly 3 minutes on a fast connection). Later runs start straight away."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use GlueContext, DynamicFrame and from_catalog locally?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Jobs run with the real awsglue libraries from the Glue runtime, and from_catalog reads tables from Goku's local Data Catalog."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do Glue interactive notebooks work locally?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Notebooks in the console start an interactive session with a live Spark or Python kernel on the Glue version you pick."
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://tanuj24.github.io/goku/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://tanuj24.github.io/goku/#guides"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "AWS Glue locally",
+      "item": "https://tanuj24.github.io/goku/aws-glue-locally.html"
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #101a2c;
+      --surface2: #0d1424;
+      --line: #1e2b40;
+      --ink: #e6ecf5;
+      --muted: #93a1b7;
+      --teal: #14b8a6;
+      --teal-deep: #0d9488;
+      --cyan: #4cc9f0;
+      --glow: rgba(20,184,166,0.13);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { color-scheme: dark; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); font-size: 1.05rem; line-height: 1.7; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    a { color: var(--cyan); }
+
+    nav { position: sticky; top: 0; z-index: 50; background: rgba(11,17,32,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    nav .wrap { display: flex; align-items: center; gap: 22px; height: 56px; }
+    .wordmark { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; margin-right: auto; }
+    .wordmark img { height: 32px; width: auto; display: block; }
+    .wordmark span { color: var(--teal); }
+    nav a.navlink { color: var(--muted); text-decoration: none; font-size: 0.95rem; padding: 4px 2px; white-space: nowrap; }
+    nav a.navlink:hover { color: var(--ink); }
+    nav a.navlink.active { color: var(--teal); font-weight: 600; }
+    @media (max-width: 640px) { nav .wrap { gap: 16px; } .nav-wide { display: none; } }
+
+    nav.crumbs { position: static; z-index: auto; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; }
+    header.article { padding: 26px 0 40px; background: radial-gradient(900px 420px at 50% -80px, var(--glow), transparent 70%); }
+    .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 26px; }
+    .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 8px; }
+    .crumbs li + li::before { content: "/"; margin-right: 8px; color: var(--line); }
+    .crumbs a { color: var(--muted); text-decoration: none; }
+    .crumbs a:hover { color: var(--ink); }
+    .crumbs [aria-current] { color: var(--ink); }
+    h1 { font-size: clamp(2rem, 4.6vw, 2.9rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+    .grad { background: linear-gradient(90deg, #14b8a6, #4cc9f0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lede { font-size: 1.15rem; color: var(--muted); max-width: 800px; margin-bottom: 12px; }
+    .lede strong { color: var(--ink); }
+    .meta { font-size: 0.85rem; color: var(--muted); }
+    .rename-note { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 12px 16px; color: var(--muted); font-size: 0.93rem; margin-top: 20px; max-width: 800px; }
+    .rename-note strong { color: var(--ink); }
+    .toc { margin-top: 22px; font-size: 0.93rem; color: var(--muted); }
+    .toc strong { color: var(--ink); margin-right: 6px; }
+    .toc a { color: var(--muted); }
+    .toc a:hover { color: var(--ink); }
+
+    section, section.wrap { padding-top: 44px; padding-bottom: 44px; border-top: 1px solid var(--line); scroll-margin-top: 70px; }
+    .kicker { text-transform: uppercase; letter-spacing: .1em; font-size: 0.78rem; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
+    h2 { font-size: 1.6rem; letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 14px; }
+    h3 { font-size: 1.1rem; line-height: 1.4; margin: 24px 0 6px; }
+    p { color: var(--muted); margin-bottom: 12px; }
+    p strong, li strong { color: var(--ink); }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    td code, p code, li code, .card code, .callout code, .rename-note code, h3 code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; font-size: 0.88em; color: var(--ink); overflow-wrap: anywhere; }
+    ul.list, ol.list { margin: 8px 0 14px; }
+    ul.list { list-style: none; }
+    ul.list li { color: var(--muted); padding-left: 20px; position: relative; margin-bottom: 8px; }
+    ul.list li::before { content: ""; position: absolute; left: 4px; top: 0.72em; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+    ol.list { padding-left: 22px; }
+    ol.list li { color: var(--muted); margin-bottom: 8px; padding-left: 4px; }
+    ol.list li::marker { color: var(--teal); font-weight: 700; }
+
+    .term { background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin: 14px 0 20px; text-align: left; }
+    .term-bar { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #febc2e; }
+    .dot.g { background: #28c840; }
+    .term-title { color: var(--muted); font-size: 0.78rem; margin-left: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .term .copy { margin-left: auto; flex: none; background: var(--surface); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 3px 12px; font-size: 0.75rem; font-family: inherit; cursor: pointer; transition: color .15s ease, border-color .15s ease; }
+    .term .copy:hover { color: var(--teal); border-color: var(--teal); }
+    .term .copy:focus-visible { outline: 2px solid var(--cyan); outline-offset: 1px; }
+    .term pre { margin: 0; padding: 16px 18px; overflow-x: auto; font-size: 0.88rem; line-height: 1.55; color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .prompt { color: var(--teal); user-select: none; -webkit-user-select: none; }
+    .cmt { color: #6b7a90; }
+    @media (max-width: 640px) { .term pre.one { white-space: pre-wrap; overflow-wrap: anywhere; } .term pre { font-size: 0.82rem; padding: 14px; } }
+
+    .table-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 18px; overflow-x: auto; margin: 18px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: left; text-transform: uppercase; letter-spacing: .06em; font-size: 0.75rem; color: var(--muted); padding: 12px; border-bottom: 1px solid var(--line); }
+    td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--muted); vertical-align: top; }
+    td.goku { color: var(--teal); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    .table-note { font-size: 0.85rem; }
+    @media (max-width: 640px) {
+      .table-card { padding: 2px 8px;
+        background:
+          linear-gradient(to right, var(--surface) 30%, rgba(16,26,44,0)) left / 32px 100% no-repeat local,
+          linear-gradient(to left, var(--surface) 30%, rgba(16,26,44,0)) right / 32px 100% no-repeat local,
+          radial-gradient(farthest-side at 0 50%, rgba(20,184,166,0.35), transparent) left / 10px 100% no-repeat scroll,
+          radial-gradient(farthest-side at 100% 50%, rgba(20,184,166,0.35), transparent) right / 10px 100% no-repeat scroll,
+          var(--surface); }
+      th, td { padding: 9px 8px; }
+      table { font-size: 0.88rem; }
+      td code { white-space: nowrap; overflow-wrap: normal; }
+    }
+
+    .callout { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 14px 16px; color: var(--muted); margin: 16px 0; }
+    .callout strong { color: var(--ink); }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 20px 0; }
+    .card { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; color: var(--muted); text-decoration: none; font-size: 0.95rem; transition: border-color .15s ease, box-shadow .15s ease; }
+    a.card:hover { border-color: var(--teal); box-shadow: 0 8px 30px rgba(20,184,166,0.08); }
+    .card strong { color: var(--ink); display: block; margin-bottom: 6px; font-size: 1rem; }
+    a.card strong { color: var(--cyan); }
+
+    figure.shot { margin: 18px 0 26px; }
+    figure.shot picture { display: block; }
+    figure.shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); }
+    figure.shot figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 10px; }
+
+    .faq h3 { font-size: 1.08rem; color: var(--ink); margin: 22px 0 6px; }
+
+    footer, footer.wrap { padding-top: 44px; padding-bottom: 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    footer .signoff { color: var(--ink); font-weight: 600; margin-bottom: 8px; }
+    footer p { margin-bottom: 8px; }
+    .footer-guides span { color: var(--ink); font-weight: 600; }
+    .disclaimer { font-size: 0.8rem; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <nav aria-label="Main">
+    <div class="wrap">
+      <a class="wordmark" href="index.html"><img src="assets/goku-logo-bar.svg" alt="" width="74" height="32">Goku<span>.</span></a>
+      <a class="navlink" href="index.html">Home</a>
+      <a class="navlink nav-wide" href="index.html#whats-new">What's new</a>
+      <a class="navlink nav-wide active" href="index.html#guides">Guides</a>
+      <a class="navlink" href="install.html">Install</a>
+      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a>
+    </div>
+  </nav>
+
+  <header class="article">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#guides">Guides</a></li>
+          <li><span aria-current="page">AWS Glue locally</span></li>
+        </ol>
+      </nav>
+      <div class="kicker">Guide · Analytics</div>
+      <h1>Run <span class="grad">AWS Glue jobs locally</span></h1>
+      <p class="lede">Waiting for a cloud job run to find a typo in a Glue script is a slow way to work. Goku, a free local AWS emulator, runs Glue code on your machine: <strong>ETL jobs and interactive notebooks on real Spark</strong> with the real <code>awsglue</code> libraries (<code>GlueContext</code>, <code>DynamicFrame</code>, <code>Job</code>), against a local Data Catalog and local S3.</p>
+      <p class="meta">Updated 27 September 2026 · Goku 4.0.0 · Free, no AWS account</p>
+      <p class="rename-note"><strong>Goku was formerly called Mimir.</strong> Same product, new name: the image is now <code>tanujsoni027/goku</code> (it was <code>tanujsoni027/mimir-aws</code>) and the command is <code>goku</code>. See <a href="install.html#names">old and new names</a>.</p>
+      <p class="toc"><strong>On this page:</strong> <a href="#versions">Glue versions</a> · <a href="#start">Start</a> · <a href="#job">Run a job</a> · <a href="#console">Console and notebooks</a> · <a href="#catalog">Data Catalog and Athena</a> · <a href="#options">Libraries and formats</a> · <a href="#limits">Differences</a> · <a href="#faq">FAQ</a></p>
+    </div>
+  </header>
+
+  <section class="wrap" id="versions">
+    <div class="kicker">Runtimes</div>
+    <h2>Glue versions you can run locally</h2>
+    <p>Pick the Glue version per job or per notebook, as in the AWS console. Every run happens in Docker on a real Glue runtime:</p>
+    <div class="table-card">
+      <table>
+        <tr><th>Glue version</th><th>Spark</th><th>Python</th><th>Java</th><th>Runtime image</th></tr>
+        <tr><td><strong>6.0</strong></td><td>4.1.1</td><td>3.13</td><td>17</td><td>Built locally on first use</td></tr>
+        <tr><td><strong>5.1</strong> (default)</td><td>3.5.6</td><td>3.11</td><td>17</td><td>AWS's published image</td></tr>
+        <tr><td>5.0</td><td>3.5.4</td><td>3.11</td><td>17</td><td>AWS's published image</td></tr>
+        <tr><td>4.0</td><td>3.3.0</td><td>3.10</td><td>8</td><td>AWS's published image</td></tr>
+        <tr><td>3.0 / 2.0</td><td>3.1.1 / 2.4.3</td><td>3.7</td><td>8 / &ndash;</td><td>AWS's published images</td></tr>
+      </table>
+    </div>
+    <p>New jobs default to 5.1, which is what AWS uses for jobs created without a Glue version. The published images are pulled the first time you use a version, and they are large (5 to 7 GB each), so the first run takes a while. AWS publishes no Glue 6.0 image, so the first 6.0 job or notebook builds one from the official Glue 6.0 pieces. It downloads about 1 GB and takes roughly 3 minutes on a fast connection, and it only happens once.</p>
+    <p>Glue 6.0 behaves like Glue 6.0 on AWS: ANSI SQL mode is on, Python is 3.13, <code>--extra-jars</code> must be built for Scala 2.13, and <code>getResolvedOptions</code> rejects abbreviated argument names.</p>
+  </section>
+
+  <section class="wrap" id="start">
+    <div class="kicker">Step 1</div>
+    <h2>Start Goku and turn on Glue</h2>
+    <p>Install the <code>goku</code> CLI (see <a href="install.html">Install</a>) and start Goku. The CLI mounts the Docker socket and the <code>/tmp/goku-glue</code> work folder that Glue runs need. Glue and Athena are not part of the core services, so subscribe to them once:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>goku start
+goku services subscribe glue athena
+eval "$(goku env)"</code></pre>
+    </div>
+    <p>You can also subscribe on the console's <strong>Services</strong> page, where the <em>Data &amp; analytics</em> preset turns on Glue, Athena and related services together.</p>
+  </section>
+
+  <section class="wrap" id="job">
+    <div class="kicker">Step 2</div>
+    <h2>Run a Glue job from the AWS CLI</h2>
+    <p>Jobs in Goku are real Glue resources, so the AWS CLI, boto3, Terraform and Step Functions all see the same jobs and runs. Start with a small CSV file in local S3:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>aws s3 mb s3://my-bucket
+printf 'customer,amount\nalice,20\nbob,5\nalice,7\n' &gt; orders.csv
+aws s3 cp orders.csv s3://my-bucket/raw/orders/orders.csv</code></pre>
+    </div>
+    <p>Then a Glue script that totals the amounts per customer and writes Parquet back to S3:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">etl.py</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>import sys
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+from awsglue.utils import getResolvedOptions
+
+args = getResolvedOptions(sys.argv, ["JOB_NAME"])
+glue_context = GlueContext(SparkContext.getOrCreate())
+spark = glue_context.spark_session
+job = Job(glue_context)
+job.init(args["JOB_NAME"], args)
+
+orders = spark.read.option("header", True).option("inferSchema", True).csv("s3://my-bucket/raw/orders/")
+totals = orders.groupBy("customer").sum("amount").withColumnRenamed("sum(amount)", "total")
+totals.show()
+totals.write.mode("overwrite").parquet("s3://my-bucket/curated/totals/")
+
+job.commit()</code></pre>
+    </div>
+    <p>Upload the script, create the job and run it. The run log goes to CloudWatch Logs, as on AWS:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>aws s3 cp etl.py s3://my-bucket/scripts/etl.py
+aws glue create-job --name etl --role GlueRole --glue-version 5.1 \
+  --command Name=glueetl,ScriptLocation=s3://my-bucket/scripts/etl.py \
+  --worker-type G.1X --number-of-workers 2
+RUN=$(aws glue start-job-run --job-name etl --query JobRunId --output text)
+aws glue get-job-run --job-name etl --run-id $RUN --query JobRun.JobRunState
+aws logs get-log-events --log-group-name /aws-glue/jobs/output --log-stream-name $RUN
+aws s3 ls s3://my-bucket/curated/totals/</code></pre>
+    </div>
+    <p>Run <code>get-job-run</code> again until the state is <code>SUCCEEDED</code>. The run goes through <code>STARTING</code> (where the image pull or the 6.0 build shows), then <code>RUNNING</code>. Errors land in <code>/aws-glue/jobs/error</code>. To try Glue 6.0, create the job with <code>--glue-version 6.0</code>.</p>
+  </section>
+
+  <section class="wrap" id="console">
+    <div class="kicker">Step 3</div>
+    <h2>Or build it in the console, with notebooks</h2>
+    <p>Open <strong>Glue</strong> in the console at <strong>http://localhost:8080</strong>. Under <strong>ETL jobs</strong>, <strong>Create job</strong> gives you a script editor, the Glue version picker, job parameters and run history with live logs. Under <strong>Notebooks</strong>, a new notebook starts an interactive session with a live, stateful kernel where <code>spark</code> and <code>sc</code> are already defined, which is the fastest way to explore data before writing a job.</p>
+    <figure class="shot">
+      <picture><source type="image/webp" srcset="screenshots/services/glue.webp"><img src="screenshots/services/glue.png" width="1440" height="860" alt="AWS Glue ETL jobs in the Goku console: Spark and Python shell jobs running locally on the official Glue runtime image" loading="lazy" decoding="async"></picture>
+      <figcaption>Glue in the Goku console: jobs, notebooks, the Data Catalog, and crawlers, triggers and workflows.</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap" id="catalog">
+    <div class="kicker">Step 4</div>
+    <h2>The Data Catalog, crawlers and Athena</h2>
+    <p>Goku emulates the Glue Data Catalog: databases, tables and partitions. Create them with the AWS CLI, or point a crawler at a prefix in local S3. Crawlers classify CSV, JSON, Parquet, Avro and ORC files and turn <code>key=value</code> folders into partitions.</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>aws glue create-database --database-input '{"Name": "analytics"}'
+aws glue create-table \
+  --database-name analytics \
+  --table-input '{
+    "Name": "totals",
+    "StorageDescriptor": {
+      "Location": "s3://my-bucket/curated/totals/",
+      "InputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat",
+      "SerdeInfo": {
+        "SerializationLibrary": "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
+      },
+      "Columns": [
+        {"Name": "customer", "Type": "string"},
+        {"Name": "total",    "Type": "bigint"}
+      ]
+    }
+  }'</code></pre>
+    </div>
+    <p>With the job parameter <code>--enable-glue-datacatalog</code> (the console sets it for new Spark jobs, and notebooks use it by default), <code>spark.sql("SELECT ... FROM analytics.totals")</code>, <code>CREATE TABLE</code>, <code>INSERT INTO</code> and <code>glue_context.create_dynamic_frame.from_catalog</code> read and write the local catalog. Athena uses the same catalog, so you can query a job's output with SQL in the console's query editor.</p>
+    <figure class="shot">
+      <picture><source type="image/webp" srcset="screenshots/services/athena.webp"><img src="screenshots/services/athena.png" width="1440" height="860" alt="Amazon Athena query editor in the Goku console running SQL against Glue Data Catalog tables" loading="lazy" decoding="async"></picture>
+      <figcaption>Athena in Goku runs SQL over your Glue catalog tables and the S3 data behind them.</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap" id="options">
+    <div class="kicker">Real-world jobs</div>
+    <h2>Libraries, data lake formats and orchestration</h2>
+    <ul class="list">
+      <li><strong>Scripts and libraries from S3.</strong> <code>ScriptLocation</code>, <code>--extra-py-files</code> (modules and <code>.whl</code> files), <code>--extra-jars</code> and <code>--extra-files</code> are fetched at run time, and <code>--additional-python-modules</code> is installed with pip.</li>
+      <li><strong>Hudi, Delta Lake and Iceberg.</strong> Set <code>--datalake-formats</code> to <code>hudi</code>, <code>delta</code> or <code>iceberg</code> and Goku adds the framework jars and Spark settings for your Glue version.</li>
+      <li><strong>Python shell jobs</strong> run Python 3.9 with AWS's <code>analytics</code> library set.</li>
+      <li><strong>Orchestration.</strong> Triggers (on-demand, scheduled, conditional and event), workflows, bookmarks, retries and concurrency limits work, and Step Functions can run a job with <code>arn:aws:states:::glue:startJobRun.sync</code>.</li>
+    </ul>
+  </section>
+
+  <section class="wrap" id="limits">
+    <div class="kicker">Know the limits</div>
+    <h2>Differences from AWS Glue</h2>
+    <p>Goku is a local sandbox, so a few things behave differently:</p>
+    <ul class="list">
+      <li>Ray jobs (<code>glueray</code>) are accepted, but their runs fail because Ray isn't available locally.</li>
+      <li>Job bookmarks advance after each successful run, but the Glue library doesn't skip already-processed input locally.</li>
+      <li>On Glue 6.0, Spark Connect and Spark Declarative Pipelines are not wired up, and the Snowflake JDBC driver is not bundled.</li>
+      <li>JDBC, DynamoDB and MongoDB crawler targets are not crawled; S3 targets are.</li>
+    </ul>
+  </section>
+
+  <section class="wrap faq" id="faq">
+    <div class="kicker">FAQ</div>
+    <h2>Frequently asked questions</h2>
+    <h3>Can I run AWS Glue jobs locally without an AWS account?</h3>
+    <p>Yes. Goku runs Glue jobs and notebooks in Docker on your machine against a local Data Catalog and local S3. It needs Docker, not an AWS account.</p>
+    <h3>Which AWS Glue versions can I run locally?</h3>
+    <p>Glue 6.0, 5.1 (the default), 5.0, 4.0, 3.0 and 2.0, chosen per job or notebook. 5.1 and older use AWS's published runtime images; 6.0 is built locally the first time you use it.</p>
+    <h3>Why is the first Glue run slow?</h3>
+    <p>The first run of a version pulls its runtime image, which is 5 to 7 GB, or for Glue 6.0 builds one once (about 1 GB to download, roughly 3 minutes on a fast connection). Later runs start straight away.</p>
+    <h3>Can I use GlueContext, DynamicFrame and from_catalog locally?</h3>
+    <p>Yes. Jobs run with the real <code>awsglue</code> libraries from the Glue runtime, and <code>from_catalog</code> reads tables from Goku's local Data Catalog.</p>
+    <h3>Do Glue interactive notebooks work locally?</h3>
+    <p>Yes. Notebooks in the console start an interactive session with a live Spark or Python kernel on the Glue version you pick.</p>
+  </section>
+
+  <section class="wrap" id="related">
+    <div class="kicker">Keep going</div>
+    <h2>More Goku guides</h2>
+    <div class="cards">
+      <a class="card" href="localstack-alternative.html"><strong>Free LocalStack alternative</strong>Same endpoint on port 4566 and the same AWS CLI and SDK setup, with a 60-service console and every feature free. What changes and how to switch.</a>
+      <a class="card" href="run-aws-locally.html"><strong>Run AWS locally without an account</strong>Install Goku, point the AWS CLI at localhost:4566 and create S3 buckets, DynamoDB tables, SQS queues and Lambda functions on your machine.</a>
+      <a class="card" href="test-aws-lambda-locally.html"><strong>Test AWS Lambda locally</strong>Create, invoke and debug Lambda functions in real runtime containers, read their CloudWatch logs and stop on breakpoints in VS Code or JetBrains IDEs.</a>
+      <a class="card" href="dynamodb-local.html"><strong>DynamoDB on your machine</strong>Tables, items, GSI queries, PartiQL, Streams and vector search on localhost, with your data kept between restarts.</a>
+      <a class="card" href="install.html"><strong>Install Goku</strong>Every install option: the goku CLI on macOS, Linux and Windows, or a single Docker command.</a>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <p class="signoff">See your cloud, before you ship your cloud.</p>
+    <p><a href="index.html">Home</a> · <a href="install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
+    <p class="footer-guides"><span>Guides:</span> <a href="localstack-alternative.html">LocalStack alternative</a> · <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a></p>
+    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services or LocalStack. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.term .copy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var code = btn.closest('.term').querySelector('code').textContent;
+        function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(code).then(done);
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = code; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

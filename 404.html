@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1120">
+  <meta name="robots" content="noindex">
+  <title>Page not found | Goku</title>
+  <meta name="description" content="This page doesn't exist. Go to the Goku home page, the install page or the guides to run AWS locally.">
+  <link rel="icon" type="image/svg+xml" href="/goku/assets/favicon.svg">
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #101a2c;
+      --surface2: #0d1424;
+      --line: #1e2b40;
+      --ink: #e6ecf5;
+      --muted: #93a1b7;
+      --teal: #14b8a6;
+      --teal-deep: #0d9488;
+      --cyan: #4cc9f0;
+      --glow: rgba(20,184,166,0.13);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { color-scheme: dark; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); font-size: 1.05rem; line-height: 1.7; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    a { color: var(--cyan); }
+
+    nav { position: sticky; top: 0; z-index: 50; background: rgba(11,17,32,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    nav .wrap { display: flex; align-items: center; gap: 22px; height: 56px; }
+    .wordmark { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; margin-right: auto; }
+    .wordmark img { height: 32px; width: auto; display: block; }
+    .wordmark span { color: var(--teal); }
+    nav a.navlink { color: var(--muted); text-decoration: none; font-size: 0.95rem; padding: 4px 2px; white-space: nowrap; }
+    nav a.navlink:hover { color: var(--ink); }
+    nav a.navlink.active { color: var(--teal); font-weight: 600; }
+    @media (max-width: 640px) { nav .wrap { gap: 16px; } .nav-wide { display: none; } }
+
+    nav.crumbs { position: static; z-index: auto; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; }
+    header.article { padding: 26px 0 40px; background: radial-gradient(900px 420px at 50% -80px, var(--glow), transparent 70%); }
+    .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 26px; }
+    .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 8px; }
+    .crumbs li + li::before { content: "/"; margin-right: 8px; color: var(--line); }
+    .crumbs a { color: var(--muted); text-decoration: none; }
+    .crumbs a:hover { color: var(--ink); }
+    .crumbs [aria-current] { color: var(--ink); }
+    h1 { font-size: clamp(2rem, 4.6vw, 2.9rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+    .grad { background: linear-gradient(90deg, #14b8a6, #4cc9f0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lede { font-size: 1.15rem; color: var(--muted); max-width: 800px; margin-bottom: 12px; }
+    .lede strong { color: var(--ink); }
+    .meta { font-size: 0.85rem; color: var(--muted); }
+    .rename-note { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 12px 16px; color: var(--muted); font-size: 0.93rem; margin-top: 20px; max-width: 800px; }
+    .rename-note strong { color: var(--ink); }
+    .toc { margin-top: 22px; font-size: 0.93rem; color: var(--muted); }
+    .toc strong { color: var(--ink); margin-right: 6px; }
+    .toc a { color: var(--muted); }
+    .toc a:hover { color: var(--ink); }
+
+    section, section.wrap { padding-top: 44px; padding-bottom: 44px; border-top: 1px solid var(--line); scroll-margin-top: 70px; }
+    .kicker { text-transform: uppercase; letter-spacing: .1em; font-size: 0.78rem; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
+    h2 { font-size: 1.6rem; letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 14px; }
+    h3 { font-size: 1.1rem; line-height: 1.4; margin: 24px 0 6px; }
+    p { color: var(--muted); margin-bottom: 12px; }
+    p strong, li strong { color: var(--ink); }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    td code, p code, li code, .card code, .callout code, .rename-note code, h3 code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; font-size: 0.88em; color: var(--ink); overflow-wrap: anywhere; }
+    ul.list, ol.list { margin: 8px 0 14px; }
+    ul.list { list-style: none; }
+    ul.list li { color: var(--muted); padding-left: 20px; position: relative; margin-bottom: 8px; }
+    ul.list li::before { content: ""; position: absolute; left: 4px; top: 0.72em; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+    ol.list { padding-left: 22px; }
+    ol.list li { color: var(--muted); margin-bottom: 8px; padding-left: 4px; }
+    ol.list li::marker { color: var(--teal); font-weight: 700; }
+
+    .term { background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin: 14px 0 20px; text-align: left; }
+    .term-bar { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #febc2e; }
+    .dot.g { background: #28c840; }
+    .term-title { color: var(--muted); font-size: 0.78rem; margin-left: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .term .copy { margin-left: auto; flex: none; background: var(--surface); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 3px 12px; font-size: 0.75rem; font-family: inherit; cursor: pointer; transition: color .15s ease, border-color .15s ease; }
+    .term .copy:hover { color: var(--teal); border-color: var(--teal); }
+    .term .copy:focus-visible { outline: 2px solid var(--cyan); outline-offset: 1px; }
+    .term pre { margin: 0; padding: 16px 18px; overflow-x: auto; font-size: 0.88rem; line-height: 1.55; color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .prompt { color: var(--teal); user-select: none; -webkit-user-select: none; }
+    .cmt { color: #6b7a90; }
+    @media (max-width: 640px) { .term pre.one { white-space: pre-wrap; overflow-wrap: anywhere; } .term pre { font-size: 0.82rem; padding: 14px; } }
+
+    .table-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 18px; overflow-x: auto; margin: 18px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: left; text-transform: uppercase; letter-spacing: .06em; font-size: 0.75rem; color: var(--muted); padding: 12px; border-bottom: 1px solid var(--line); }
+    td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--muted); vertical-align: top; }
+    td.goku { color: var(--teal); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    .table-note { font-size: 0.85rem; }
+    @media (max-width: 640px) {
+      .table-card { padding: 2px 8px;
+        background:
+          linear-gradient(to right, var(--surface) 30%, rgba(16,26,44,0)) left / 32px 100% no-repeat local,
+          linear-gradient(to left, var(--surface) 30%, rgba(16,26,44,0)) right / 32px 100% no-repeat local,
+          radial-gradient(farthest-side at 0 50%, rgba(20,184,166,0.35), transparent) left / 10px 100% no-repeat scroll,
+          radial-gradient(farthest-side at 100% 50%, rgba(20,184,166,0.35), transparent) right / 10px 100% no-repeat scroll,
+          var(--surface); }
+      th, td { padding: 9px 8px; }
+      table { font-size: 0.88rem; }
+      td code { white-space: nowrap; overflow-wrap: normal; }
+    }
+
+    .callout { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 14px 16px; color: var(--muted); margin: 16px 0; }
+    .callout strong { color: var(--ink); }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 20px 0; }
+    .card { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; color: var(--muted); text-decoration: none; font-size: 0.95rem; transition: border-color .15s ease, box-shadow .15s ease; }
+    a.card:hover { border-color: var(--teal); box-shadow: 0 8px 30px rgba(20,184,166,0.08); }
+    .card strong { color: var(--ink); display: block; margin-bottom: 6px; font-size: 1rem; }
+    a.card strong { color: var(--cyan); }
+
+    figure.shot { margin: 18px 0 26px; }
+    figure.shot picture { display: block; }
+    figure.shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); }
+    figure.shot figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 10px; }
+
+    .faq h3 { font-size: 1.08rem; color: var(--ink); margin: 22px 0 6px; }
+
+    footer, footer.wrap { padding-top: 44px; padding-bottom: 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    footer .signoff { color: var(--ink); font-weight: 600; margin-bottom: 8px; }
+    footer p { margin-bottom: 8px; }
+    .footer-guides span { color: var(--ink); font-weight: 600; }
+    .disclaimer { font-size: 0.8rem; margin-top: 12px; }
+
+    header.article { text-align: center; padding: 64px 0 40px; }
+    header.article .lede { margin-left: auto; margin-right: auto; }
+    .actions { margin-top: 22px; }
+    .btn-primary, .btn-ghost { display: inline-block; padding: 12px 24px; border-radius: 10px; font-weight: 700; text-decoration: none; margin: 6px; }
+    .btn-primary { background: var(--teal); color: #04211c; }
+    .btn-primary:hover { background: var(--teal-deep); }
+    .btn-ghost { border: 1.5px solid var(--line); color: var(--ink); font-weight: 600; }
+    .btn-ghost:hover { border-color: var(--teal); }
+  </style>
+</head>
+<body>
+  <nav aria-label="Main">
+    <div class="wrap">
+      <a class="wordmark" href="/goku/index.html"><img src="/goku/assets/goku-logo-bar.svg" alt="" width="74" height="32">Goku<span>.</span></a>
+      <a class="navlink" href="/goku/index.html">Home</a>
+      <a class="navlink nav-wide" href="/goku/index.html#whats-new">What's new</a>
+      <a class="navlink nav-wide" href="/goku/index.html#guides">Guides</a>
+      <a class="navlink" href="/goku/install.html">Install</a>
+      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a>
+    </div>
+  </nav>
+
+  <header class="article">
+    <div class="wrap">
+      <div class="kicker">Error 404</div>
+      <h1>This page <span class="grad">isn't here</span></h1>
+      <p class="lede">The link may be old or mistyped. Goku was formerly called Mimir, and its site moved from <code>tanuj24.github.io/mimir</code> to <code>tanuj24.github.io/goku</code>, so some older links point to pages that have moved.</p>
+      <p class="actions"><a class="btn-primary" href="/goku/">Go to the home page</a><a class="btn-ghost" href="/goku/install.html">Install Goku</a></p>
+    </div>
+  </header>
+
+  <section class="wrap" id="guides">
+    <div class="kicker">Guides</div>
+    <h2>Looking for one of these?</h2>
+    <div class="cards">
+      <a class="card" href="/goku/localstack-alternative.html"><strong>Free LocalStack alternative</strong>Same endpoint on port 4566 and the same AWS CLI and SDK setup, with a 60-service console and every feature free. What changes and how to switch.</a>
+      <a class="card" href="/goku/run-aws-locally.html"><strong>Run AWS locally without an account</strong>Install Goku, point the AWS CLI at localhost:4566 and create S3 buckets, DynamoDB tables, SQS queues and Lambda functions on your machine.</a>
+      <a class="card" href="/goku/test-aws-lambda-locally.html"><strong>Test AWS Lambda locally</strong>Create, invoke and debug Lambda functions in real runtime containers, read their CloudWatch logs and stop on breakpoints in VS Code or JetBrains IDEs.</a>
+      <a class="card" href="/goku/dynamodb-local.html"><strong>DynamoDB on your machine</strong>Tables, items, GSI queries, PartiQL, Streams and vector search on localhost, with your data kept between restarts.</a>
+      <a class="card" href="/goku/aws-glue-locally.html"><strong>Run AWS Glue jobs locally</strong>Glue 6.0 and 5.1 jobs and notebooks on real Spark with the awsglue libraries, a local Data Catalog and S3.</a>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <p class="signoff">See your cloud, before you ship your cloud.</p>
+    <p><a href="/goku/index.html">Home</a> · <a href="/goku/install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
+    <p class="footer-guides"><span>Guides:</span> <a href="/goku/localstack-alternative.html">LocalStack alternative</a> · <a href="/goku/run-aws-locally.html">Run AWS locally</a> · <a href="/goku/test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="/goku/dynamodb-local.html">DynamoDB local</a> · <a href="/goku/aws-glue-locally.html">AWS Glue locally</a></p>
+    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services or LocalStack. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
+  </footer>
+</body>
+</html>
