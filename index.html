@@ -42,7 +42,7 @@
       {
         "@type": "Question",
         "name": "Goku was formerly Mimir. What changed?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Only the name. Goku is the same product, renamed in 4.0. From 4.1 every name is Goku: the image tanujsoni027/goku, the goku container and command, GOKU_* settings, /_goku paths and goku.local hostnames. Existing installs move over automatically, and the old Mimir names keep working for now, so start using the goku names." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Only the name. Goku is the same product, renamed in Goku 4.0, where every name became Goku: the image tanujsoni027/goku, the goku container and command, GOKU_* settings, /_goku paths and goku.local hostnames. Existing installs move over automatically, and the old Mimir names keep working for now, so start using the goku names." }
       },
       {
         "@type": "Question",
@@ -253,14 +253,14 @@
     <div class="wrap">
       <div class="announce" role="note" aria-label="Product rename">
         <span class="announce-tag">New name</span>
-        <p><strong>Mimir is now Goku, everywhere.</strong> From 4.1 every name is Goku: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, and <code>GOKU_*</code> settings. Existing installs move over automatically and the old names keep working for now, so start using the goku names.</p>
-        <a href="#whats-new">What's new in 4.1 &rarr;</a>
+        <p><strong>Mimir is now Goku, everywhere.</strong> Every name is Goku now: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, and <code>GOKU_*</code> settings. Existing installs move over automatically and the old names keep working for now, so start using the goku names.</p>
+        <a href="#whats-new">What's new in Goku 4.0 &rarr;</a>
       </div>
       <img class="hero-logo" src="assets/goku-logo.svg" width="660" height="240" alt="Goku logo: a terminal prompt surfing a golden cloud, with the tagline See your cloud, before you ship your cloud">
       <h1>Goku — Your <span class="grad">Local AWS Cloud</span></h1>
       <p class="tagline"><strong>Goku</strong> (formerly Mimir) is a local AWS cloud emulator: 73 AWS-compatible services — S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway, Glue and more — on <strong>localhost:4566</strong>, with a web console for 60 services on <strong>localhost:8080</strong>, real container-backed engines, and zero AWS account. Free.</p>
       <a class="btn btn-primary" href="install.html">Install Goku</a>
-      <a class="btn btn-ghost" href="#whats-new">What's new in 4.1</a>
+      <a class="btn btn-ghost" href="#whats-new">What's new in 4.0</a>
       <div class="terminal">
         <div class="term-bar">
           <span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span>
@@ -285,13 +285,13 @@
   </div>
 
   <section class="wrap" id="whats-new">
-    <span class="kicker">Release notes · 4.1.0</span>
-    <h2>What's new in Goku 4.1</h2>
-    <p class="section-lede">Mimir is now Goku everywhere. Goku now tells you when a new version is out and updates itself from the console, and everything it keeps, including your databases, lives in a folder on your disk.</p>
+    <span class="kicker">Release notes · 4.0.0</span>
+    <h2>What's new in Goku 4.0</h2>
+    <p class="section-lede">Mimir is now Goku, everywhere. Goku tells you when a new version is out and updates itself from the console, and everything it keeps, including your databases, lives in a folder on your disk. It also adds AWS Glue 6.0, DynamoDB vector search, AWS Lambda runtime parity, a rebuilt ECS, the IAM Policy Lab, a lightweight start with per-service subscriptions, a Resource Center, real engines behind a dozen more services, and console pages for 33 more services — 60 in total, on a backend of 73.</p>
 
     <div class="rename">
       <h3>Mimir is now Goku, everywhere. Start using the goku names.</h3>
-      <p>From 4.1 every name is Goku: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, <code>GOKU_*</code> settings, <code>/_goku</code> paths, <code>goku.local</code> host names and the <code>goku-ca.pem</code> file. The site moved to <code>tanuj24.github.io/goku</code>.</p>
+      <p>Every name is Goku now: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, <code>GOKU_*</code> settings, <code>/_goku</code> paths, <code>goku.local</code> host names and the <code>goku-ca.pem</code> file. The site moved to <code>tanuj24.github.io/goku</code>.</p>
       <ul>
         <li><strong>Existing installs move over by themselves:</strong> <code>goku update</code>, or <strong>Update now</strong> in the console, renames your <code>mimir</code> container to <code>goku</code> and moves it to the new image, and your data into the data folder.</li>
         <li><strong>The old names keep working for now</strong> and will be removed in a future release. Goku prints a note whenever it meets one, such as a <code>MIMIR_*</code> setting, with the new name to use.</li>
@@ -318,24 +318,8 @@
     </div>
 
     <div class="rename">
-      <h3>Coming from Mimir v3 or Goku 4.0?</h3>
+      <h3>Coming from Mimir?</h3>
       <p>Install the CLI and run <code>goku update</code>: it saves your state, moves it into the data folder, renames your <code>mimir</code> container to <code>goku</code> and starts the newest Goku on the same ports. Your old <code>mimir-data</code> volume stays as a backup. Using plain Docker? See <a href="install.html#upgrade">upgrading an existing install</a>.</p>
-    </div>
-  </section>
-
-  <section class="wrap" id="whats-new-4-0">
-    <span class="kicker">Release notes · 4.0.0</span>
-    <h2>What's new in Goku 4.0</h2>
-    <p class="section-lede">Goku 4.0 adds AWS Glue 6.0, DynamoDB vector search, AWS Lambda runtime parity, a rebuilt ECS, the IAM Policy Lab, a lightweight start with per-service subscriptions, a Resource Center, real engines behind a dozen more services, and console pages for 33 more services — 60 in total, on a backend of 73.</p>
-
-    <div class="rename">
-      <h3>Mimir is now Goku.</h3>
-      <p>This is a change of name only: the platform, its capabilities and your data all continue under Goku.</p>
-      <ul>
-        <li><strong>New name everywhere:</strong> the console, documentation, API messages, logs, the startup banner and the tools. Settings are documented as <code>GOKU_*</code> variables and Goku's own API lives under <code>/_goku/</code>.</li>
-        <li><strong>Everything you have keeps working:</strong> every <code>MIMIR_*</code> variable (when both are set, <code>GOKU_*</code> wins), every <code>/_mimir/</code> endpoint and your existing state. The <code>mimir</code> command still works as a deprecated alias of <code>goku</code>.</li>
-        <li><strong>Names kept in 4.0,</strong> so upgrades kept their data: the image <code>tanujsoni027/mimir-aws</code>, the <code>mimir</code> container and the <code>mimir-data</code> volume. From 4.1 these are Goku too, and existing installs move over automatically.</li>
-      </ul>
     </div>
 
     <div class="cards">
@@ -582,7 +566,7 @@
     <span class="kicker">FAQ</span>
     <h2>FAQ</h2>
     <h3>Goku was formerly Mimir. What changed?</h3>
-    <p>Only the name. Goku is the same product, renamed in 4.0. From 4.1 every name is Goku: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, <code>GOKU_*</code> settings, <code>/_goku</code> paths and <code>goku.local</code> hostnames. Existing installs move over automatically, and the old Mimir names keep working for now, so <strong>start using the goku names</strong>. See <a href="install.html#names">old and new names</a>.</p>
+    <p>Only the name. Goku is the same product, renamed in Goku 4.0, where every name became Goku: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, <code>GOKU_*</code> settings, <code>/_goku</code> paths and <code>goku.local</code> hostnames. Existing installs move over automatically, and the old Mimir names keep working for now, so <strong>start using the goku names</strong>. See <a href="install.html#names">old and new names</a>.</p>
     <h3>How do I run AWS locally without an AWS account?</h3>
     <p>Install Goku and point your AWS CLI or SDK at http://localhost:4566, region <strong>us-east-1</strong>, with any local credentials such as <strong>test</strong> / <strong>test</strong> — <code>goku env</code> sets these for you. No account and no sign-up. Once the image and any runtime images your services need are pulled, everything runs on your machine without internet access.</p>
     <h3>Is Goku a free alternative to LocalStack?</h3>

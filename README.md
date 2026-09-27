@@ -9,7 +9,7 @@ running on your machine — with a web console for 60 services. Free. No AWS acc
 
 ---
 
-**Mimir is now Goku, everywhere.** From 4.1 every name is Goku: the image `tanujsoni027/goku`, the `goku`
+**Mimir is now Goku, everywhere.** Every name is Goku now: the image `tanujsoni027/goku`, the `goku`
 container and command, `GOKU_*` settings, `/_goku` paths and `goku.local` host names. Existing installs move over
 automatically (`goku update`, or **Update now** in the console) and the old names keep working for now, so start
 using the goku names. See [old and new names](https://tanuj24.github.io/goku/install.html#names).

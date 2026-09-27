@@ -562,7 +562,7 @@ run_container() {
   set -- -p "${CONSOLE_PORT}:80" -p "${EDGE_PORT}:4566"
   case "$ENGINE_PORTS" in off|none|"") ;; *) set -- "$@" -p "${ENGINE_PORTS}:${ENGINE_PORTS}" ;; esac
   # The container is configured with the GOKU_* names: every 4.x image understands them. The volume
-  # is always named: Goku 4.1+ would otherwise use goku-data.
+  # is always named: Goku 4.0 would otherwise use goku-data.
   [ -n "$AUTO_PERSIST" ] && set -- "$@" -e "GOKU_AUTO_PERSIST=${AUTO_PERSIST}"
   set -- "$@" -e "GOKU_DATA_VOLUME=${VOLUME}"
   docker run -d --name "$NAME" "$@" \
@@ -732,7 +732,7 @@ cmd_uninstall() {
   purge=false
   [ "${1:-}" = "--purge" ] && purge=true
   # Engine containers (databases, Lambda environments…) carry the label goku.instance=<id of this
-  # installation>, or mimir.instance on those of Goku 4.0; only those are removed — never other Goku
+  # installation>, or mimir.instance on those of Mimir; only those are removed — never other Goku
   # stacks on the same Docker daemon.
   _iid=""
   if container_running && API_SOFT=true API_TIMEOUT=3 api GET /_mimir/health; then _iid=$(jget instanceId); fi

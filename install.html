@@ -287,7 +287,7 @@ docker run -d --name goku `
   </section>
 
   <section class="wrap" id="upgrade">
-    <div class="kicker">Mimir v3 or Goku 4.0</div>
+    <div class="kicker">Coming from Mimir</div>
     <h2>Upgrading an existing install</h2>
     <p>Everything you created carries over. The easiest way is the CLI: install it (the commands <a href="#cli">above</a>), then run</p>
     <div class="term">
@@ -312,13 +312,13 @@ docker run -d --name goku \
   tanujsoni027/goku:latest</code></pre>
     </div>
     <p>On Windows, use <code>"$env:LOCALAPPDATA\Goku\data"</code> as the folder, as in the <a href="#docker">Docker commands</a> above. Check that the folder holds your data (for example an <code>s3</code> folder) before the <code>docker rm</code>; your <code>mimir-data</code> volume, if you have one, is left untouched as a backup. Starting the new image on an empty folder also works: it copies the state kept in the <code>mimir-data</code> volume into the folder by itself.</p>
-    <p>From Goku 4.1 on, the console tells you when a new version is out and updates itself with <strong>Update now</strong>.</p>
+    <p>From Goku 4.0 on, the console tells you when a new version is out and updates itself with <strong>Update now</strong>.</p>
   </section>
 
   <section class="wrap" id="rename">
     <div class="kicker">After the rename</div>
     <h2 id="names">Old and new names</h2>
-    <p>Goku (formerly Mimir) is the same product with a new name, and from 4.1 every name is Goku. <strong>Start using the goku names.</strong> The old names keep working for now, existing installs move over automatically, and the old names will be removed in a future release.</p>
+    <p>Goku (formerly Mimir) is the same product with a new name, and every name is Goku now. <strong>Start using the goku names.</strong> The old names keep working for now, existing installs move over automatically, and the old names will be removed in a future release.</p>
     <ul class="list">
       <li><strong>The installer upgrades an existing install in place</strong> and installs both commands, <code>goku</code> and <code>mimir</code>. Every example on this site uses <code>goku</code>.</li>
       <li><strong>The <code>mimir</code> command is deprecated and will be removed in a future release.</strong> Until then it keeps working: it runs <code>goku</code> and prints a short note on stderr asking you to switch. Set <code>GOKU_NO_DEPRECATION_NOTICE=1</code> to silence the note.</li>

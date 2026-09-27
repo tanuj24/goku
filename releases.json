@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "goku": {
-    "version": "4.1.0",
+    "version": "4.0.0",
     "image": "tanujsoni027/goku",
-    "tag": "4.1.0",
+    "tag": "4.0.0",
     "released": "2026-09-27",
     "notes": "https://tanuj24.github.io/goku/#whats-new",
     "summary": "Mimir is now Goku everywhere. Update from the console, and keep every piece of state, databases included, in a folder on your disk."
