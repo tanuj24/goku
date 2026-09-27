@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#0b1120">
   <title>Goku (formerly Mimir) — Local AWS Cloud Emulator | Free LocalStack Alternative</title>
   <meta name="description" content="Goku, formerly Mimir: run AWS locally with 73 AWS-compatible services including S3, Lambda, DynamoDB, RDS and Step Functions, plus a 60-service web console. Free, no AWS account.">
-  <link rel="canonical" href="https://tanuj24.github.io/mimir/">
+  <link rel="canonical" href="https://tanuj24.github.io/goku/">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Goku">
   <meta property="og:title" content="Goku (formerly Mimir) — Your Local AWS Cloud">
   <meta property="og:description" content="Free local AWS cloud emulator: 73 AWS-compatible services, a 60-service web console, real Postgres/Redis/Kubernetes engines and automatic persistence. No AWS account, no bill.">
-  <meta property="og:url" content="https://tanuj24.github.io/mimir/">
-  <meta property="og:image" content="https://tanuj24.github.io/mimir/screenshots/goku-console-home-aws-services.png">
+  <meta property="og:url" content="https://tanuj24.github.io/goku/">
+  <meta property="og:image" content="https://tanuj24.github.io/goku/screenshots/goku-console-home-aws-services.png">
   <meta property="og:image:alt" content="The Goku web console home with local AWS services">
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">
@@ -27,10 +27,10 @@
     "description": "Goku (formerly Mimir) is a local AWS cloud emulator in one Docker image: 73 AWS-compatible services including S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway and Glue, with a web console covering 60 services. Free LocalStack alternative.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "softwareVersion": "4.0.0",
-    "url": "https://tanuj24.github.io/mimir/",
-    "downloadUrl": "https://tanuj24.github.io/mimir/install.html",
-    "installUrl": "https://tanuj24.github.io/mimir/install.html",
-    "image": "https://tanuj24.github.io/mimir/screenshots/goku-console-home-aws-services.png",
+    "url": "https://tanuj24.github.io/goku/",
+    "downloadUrl": "https://tanuj24.github.io/goku/install.html",
+    "installUrl": "https://tanuj24.github.io/goku/install.html",
+    "image": "https://tanuj24.github.io/goku/screenshots/goku-console-home-aws-services.png",
     "author": { "@type": "Person", "name": "Tanuj Soni" }
   }
   </script>
@@ -42,7 +42,7 @@
       {
         "@type": "Question",
         "name": "Goku was formerly Mimir. What changed?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Only the name. Goku is the same product, renamed in the 4.0.0 release. Existing installs, commands and data carry over: the image tanujsoni027/mimir-aws, the mimir container and the mimir-data volume keep their names, MIMIR_* settings still work, and the mimir command keeps working as a deprecated alias of goku." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Only the name. Goku is the same product, renamed in 4.0. From 4.1 every name is Goku: the image tanujsoni027/goku, the goku container and command, GOKU_* settings, /_goku paths and goku.local hostnames. Existing installs move over automatically, and the old Mimir names keep working for now, so start using the goku names." }
       },
       {
         "@type": "Question",
@@ -62,7 +62,7 @@
       {
         "@type": "Question",
         "name": "Does my data survive restarts and updates?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. State persists automatically in the mimir-data Docker volume with no flags needed. It survives stops, container removal and image updates, and goku update preserves your resources. Environment snapshots can also save and restore the whole local cloud." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Everything Goku keeps, databases included, lives in a data folder on your disk (~/.goku/data, or %LOCALAPPDATA%\\Goku\\data on Windows). It survives stops, updates, reinstalls and Docker resets. Environment snapshots can also save and restore the whole local cloud." }
       },
       {
         "@type": "Question",
@@ -245,7 +245,7 @@
       <a class="navlink active" href="index.html" aria-current="page">Home</a>
       <a class="navlink nav-wide" href="#whats-new">What's new</a>
       <a class="navlink" href="install.html">Install</a>
-      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a>
+      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a>
     </div>
   </nav>
 
@@ -253,24 +253,24 @@
     <div class="wrap">
       <div class="announce" role="note" aria-label="Product rename">
         <span class="announce-tag">New name</span>
-        <p><strong>Mimir is now Goku.</strong> It's the same product with a new name: existing installs, commands and data carry over, and the <code>mimir</code> command keeps working as a deprecated alias of <code>goku</code>.</p>
-        <a href="#whats-new">What's new in 4.0 &rarr;</a>
+        <p><strong>Mimir is now Goku, everywhere.</strong> From 4.1 every name is Goku: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, and <code>GOKU_*</code> settings. Existing installs move over automatically and the old names keep working for now, so start using the goku names.</p>
+        <a href="#whats-new">What's new in 4.1 &rarr;</a>
       </div>
       <img class="hero-logo" src="assets/goku-logo.svg" width="660" height="240" alt="Goku logo: a terminal prompt surfing a golden cloud, with the tagline See your cloud, before you ship your cloud">
       <h1>Goku — Your <span class="grad">Local AWS Cloud</span></h1>
       <p class="tagline"><strong>Goku</strong> (formerly Mimir) is a local AWS cloud emulator: 73 AWS-compatible services — S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway, Glue and more — on <strong>localhost:4566</strong>, with a web console for 60 services on <strong>localhost:8080</strong>, real container-backed engines, and zero AWS account. Free.</p>
       <a class="btn btn-primary" href="install.html">Install Goku</a>
-      <a class="btn btn-ghost" href="#whats-new">What's new in 4.0</a>
+      <a class="btn btn-ghost" href="#whats-new">What's new in 4.1</a>
       <div class="terminal">
         <div class="term-bar">
           <span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span>
           <div class="os-tabs" role="tablist" aria-label="Operating system">
-            <button class="os-tab" type="button" role="tab" id="tab-unix" aria-selected="true" aria-controls="install-panel" data-cmd="curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh" data-prompt="$ ">macOS / Linux</button>
-            <button class="os-tab" type="button" role="tab" id="tab-win" aria-selected="false" aria-controls="install-panel" data-cmd="irm https://tanuj24.github.io/mimir/install.ps1 | iex" data-prompt="PS&gt; ">Windows</button>
+            <button class="os-tab" type="button" role="tab" id="tab-unix" aria-selected="true" aria-controls="install-panel" data-cmd="curl -fsSL https://tanuj24.github.io/goku/install.sh | sh" data-prompt="$ ">macOS / Linux</button>
+            <button class="os-tab" type="button" role="tab" id="tab-win" aria-selected="false" aria-controls="install-panel" data-cmd="irm https://tanuj24.github.io/goku/install.ps1 | iex" data-prompt="PS&gt; ">Windows</button>
           </div>
           <button class="copy-btn" type="button" id="copy-install">Copy</button>
         </div>
-        <pre id="install-panel" role="tabpanel" aria-labelledby="tab-unix"><code><span class="prompt" id="install-prompt">$ </span><span id="install-cmd">curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh</span></code></pre>
+        <pre id="install-panel" role="tabpanel" aria-labelledby="tab-unix"><code><span class="prompt" id="install-prompt">$ </span><span id="install-cmd">curl -fsSL https://tanuj24.github.io/goku/install.sh | sh</span></code></pre>
       </div>
       <p class="install-caption">Then run <strong>goku start</strong> and open <strong>http://localhost:8080</strong> — click &ldquo;Load sample data&rdquo; on any console page to explore a populated cloud.<br>
       Or run it with Docker directly — <a href="install.html">see all install options</a>. Needs Docker Desktop on macOS and Windows, or Docker Engine or Docker Desktop on Linux.</p>
@@ -285,6 +285,45 @@
   </div>
 
   <section class="wrap" id="whats-new">
+    <span class="kicker">Release notes · 4.1.0</span>
+    <h2>What's new in Goku 4.1</h2>
+    <p class="section-lede">Mimir is now Goku everywhere. Goku now tells you when a new version is out and updates itself from the console, and everything it keeps, including your databases, lives in a folder on your disk.</p>
+
+    <div class="rename">
+      <h3>Mimir is now Goku, everywhere. Start using the goku names.</h3>
+      <p>From 4.1 every name is Goku: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, <code>GOKU_*</code> settings, <code>/_goku</code> paths, <code>goku.local</code> host names and the <code>goku-ca.pem</code> file. The site moved to <code>tanuj24.github.io/goku</code>.</p>
+      <ul>
+        <li><strong>Existing installs move over by themselves:</strong> <code>goku update</code>, or <strong>Update now</strong> in the console, renames your <code>mimir</code> container to <code>goku</code> and moves it to the new image, and your data into the data folder.</li>
+        <li><strong>The old names keep working for now</strong> and will be removed in a future release. Goku prints a note whenever it meets one, such as a <code>MIMIR_*</code> setting, with the new name to use.</li>
+        <li>The full table is in <a href="install.html#names">old and new names</a>.</li>
+      </ul>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 4-4 4 4M12 8v8"/></svg></div>
+        <h3>Update now, from the console</h3>
+        <p>The console shows when a new version is out. One click downloads it and replaces the running Goku with the same ports, settings and data; if the new version doesn't come up healthy within 3 minutes, Goku rolls back to the one you had. The check is one download of a static file, with nothing about you sent; <code>GOKU_UPDATE_CHECK=off</code> turns it off.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        <h3>Everything in a folder on disk</h3>
+        <p>Buckets, tables, functions and the data of every engine (RDS PostgreSQL databases, OpenSearch, MSK, ECR, DocumentDB, MemoryDB, Amazon MQ and Redshift) live in <code>~/.goku/data</code> (<code>%LOCALAPPDATA%\Goku\data</code> on Windows). Reset Docker, update or reinstall: start Goku with the same folder and resume where you left off. Existing data moves in by itself.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg></div>
+        <h3>goku CLI 0.4</h3>
+        <p><code>goku update</code> moves your install to the data folder on the way; <code>goku update --cli</code> updates the CLI itself, verified against its published checksums; <code>goku data</code> shows, opens or migrates the folder. The CLI tells you, at most once a day, when a new Goku or CLI is out.</p>
+      </div>
+    </div>
+
+    <div class="rename">
+      <h3>Coming from Mimir v3 or Goku 4.0?</h3>
+      <p>Install the CLI and run <code>goku update</code>: it saves your state, moves it into the data folder, renames your <code>mimir</code> container to <code>goku</code> and starts the newest Goku on the same ports. Your old <code>mimir-data</code> volume stays as a backup. Using plain Docker? See <a href="install.html#upgrade">upgrading an existing install</a>.</p>
+    </div>
+  </section>
+
+  <section class="wrap" id="whats-new-4-0">
     <span class="kicker">Release notes · 4.0.0</span>
     <h2>What's new in Goku 4.0</h2>
     <p class="section-lede">Goku 4.0 adds AWS Glue 6.0, DynamoDB vector search, AWS Lambda runtime parity, a rebuilt ECS, the IAM Policy Lab, a lightweight start with per-service subscriptions, a Resource Center, real engines behind a dozen more services, and console pages for 33 more services — 60 in total, on a backend of 73.</p>
@@ -295,7 +334,7 @@
       <ul>
         <li><strong>New name everywhere:</strong> the console, documentation, API messages, logs, the startup banner and the tools. Settings are documented as <code>GOKU_*</code> variables and Goku's own API lives under <code>/_goku/</code>.</li>
         <li><strong>Everything you have keeps working:</strong> every <code>MIMIR_*</code> variable (when both are set, <code>GOKU_*</code> wins), every <code>/_mimir/</code> endpoint and your existing state. The <code>mimir</code> command still works as a deprecated alias of <code>goku</code>.</li>
-        <li><strong>Names kept on purpose,</strong> so upgrades keep their data and deployments keep working: the image <code>tanujsoni027/mimir-aws</code>, the <code>mimir</code> container and the <code>mimir-data</code> volume.</li>
+        <li><strong>Names kept in 4.0,</strong> so upgrades kept their data: the image <code>tanujsoni027/mimir-aws</code>, the <code>mimir</code> container and the <code>mimir-data</code> volume. From 4.1 these are Goku too, and existing installs move over automatically.</li>
       </ul>
     </div>
 
@@ -501,8 +540,8 @@
       </div>
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-        <h3>Automatic persistence</h3>
-        <p>Your buckets, tables, functions and jobs persist automatically in the <code>mimir-data</code> Docker volume — surviving stops, container removal and image updates. No flags needed.</p>
+        <h3>Everything on disk</h3>
+        <p>Your buckets, tables, functions and jobs, and the data of every database and broker, live in a folder on your disk. Stop, update, reinstall or reset Docker: start Goku with the same folder and carry on.</p>
       </div>
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/></svg></div>
@@ -543,7 +582,7 @@
     <span class="kicker">FAQ</span>
     <h2>FAQ</h2>
     <h3>Goku was formerly Mimir. What changed?</h3>
-    <p>Only the name. Goku is the same product, renamed in the 4.0.0 release. Existing installs, commands and data carry over: the image <code>tanujsoni027/mimir-aws</code>, the <code>mimir</code> container and the <code>mimir-data</code> volume keep their names, <code>MIMIR_*</code> settings still work, and the <code>mimir</code> command keeps working as a deprecated alias of <code>goku</code>.</p>
+    <p>Only the name. Goku is the same product, renamed in 4.0. From 4.1 every name is Goku: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, <code>GOKU_*</code> settings, <code>/_goku</code> paths and <code>goku.local</code> hostnames. Existing installs move over automatically, and the old Mimir names keep working for now, so <strong>start using the goku names</strong>. See <a href="install.html#names">old and new names</a>.</p>
     <h3>How do I run AWS locally without an AWS account?</h3>
     <p>Install Goku and point your AWS CLI or SDK at http://localhost:4566, region <strong>us-east-1</strong>, with any local credentials such as <strong>test</strong> / <strong>test</strong> — <code>goku env</code> sets these for you. No account and no sign-up. Once the image and any runtime images your services need are pulled, everything runs on your machine without internet access.</p>
     <h3>Is Goku a free alternative to LocalStack?</h3>
@@ -551,7 +590,7 @@
     <h3>Can I test and debug Lambda functions locally?</h3>
     <p>Yes. Functions run in real runtime containers for every runtime AWS Lambda supports today, with logs, versions, aliases, function URLs and event source mappings. Step through a handler from VS Code, IntelliJ, PyCharm or GoLand.</p>
     <h3>Does my data survive restarts and updates?</h3>
-    <p>Yes. State persists automatically in the <code>mimir-data</code> Docker volume — no flags needed. It survives stops, container removal and image updates, and <code>goku update</code> preserves your resources. Environment snapshots can save and restore the whole local cloud.</p>
+    <p>Yes. Everything Goku keeps, databases included, lives in a data folder on your disk (<code>~/.goku/data</code>, or <code>%LOCALAPPDATA%\Goku\data</code> on Windows). It survives stops, updates, reinstalls and Docker resets. Environment snapshots can save and restore the whole local cloud.</p>
     <h3>Does Goku run on Windows and Apple Silicon?</h3>
     <p>Yes. The <code>goku</code> CLI installs natively on macOS, Linux and Windows and runs Goku in Docker. The image is multi-arch (arm64 + amd64), so it runs natively on Apple Silicon.</p>
     <h3>What do I need to run Goku?</h3>
@@ -562,7 +601,7 @@
 
   <footer class="wrap">
     <p class="signoff">See your cloud, before you ship your cloud.</p>
-    <p><a href="install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a> · <a href="https://github.com/tanuj24/mimir/issues">Support</a></p>
+    <p><a href="install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
     <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
   </footer>
 

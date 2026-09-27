@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#0b1120">
   <title>Install Goku (formerly Mimir) — Run AWS Locally on macOS, Linux and Windows</title>
   <meta name="description" content="Install Goku, the local AWS cloud formerly called Mimir: one command on macOS, Linux or Windows, or one Docker command. 73 AWS-compatible services and a 60-service web console. Free, no account.">
-  <link rel="canonical" href="https://tanuj24.github.io/mimir/install.html">
+  <link rel="canonical" href="https://tanuj24.github.io/goku/install.html">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Goku">
   <meta property="og:title" content="Install Goku (formerly Mimir) — Run AWS Locally in One Command">
   <meta property="og:description" content="Install a local AWS cloud: one command on macOS, Linux or Windows, or one Docker command. 73 AWS-compatible services, a 60-service web console, state that persists automatically. Free.">
-  <meta property="og:url" content="https://tanuj24.github.io/mimir/install.html">
-  <meta property="og:image" content="https://tanuj24.github.io/mimir/screenshots/goku-console-home-aws-services.png">
+  <meta property="og:url" content="https://tanuj24.github.io/goku/install.html">
+  <meta property="og:image" content="https://tanuj24.github.io/goku/screenshots/goku-console-home-aws-services.png">
   <meta property="og:image:alt" content="The Goku web console home with local AWS services">
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">
@@ -34,7 +34,7 @@
       {
         "@type": "HowToStep",
         "name": "Install the goku CLI",
-        "text": "On macOS or Linux, run: curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh. On Windows, in PowerShell, run: irm https://tanuj24.github.io/mimir/install.ps1 | iex. This installs the goku command, plus mimir, its former name, as a deprecated alias."
+        "text": "On macOS or Linux, run: curl -fsSL https://tanuj24.github.io/goku/install.sh | sh. On Windows, in PowerShell, run: irm https://tanuj24.github.io/goku/install.ps1 | iex. This installs the goku command, plus mimir, its former name, as a deprecated alias."
       },
       {
         "@type": "HowToStep",
@@ -44,12 +44,12 @@
       {
         "@type": "HowToStep",
         "name": "Point your AWS tools at Goku",
-        "text": "On macOS or Linux, run: eval \"$(goku env)\". On Windows, run: goku env --shell powershell | Invoke-Expression. The AWS CLI and every AWS SDK then use the AWS-compatible endpoint http://localhost:4566. State persists automatically in the mimir-data Docker volume."
+        "text": "On macOS or Linux, run: eval \"$(goku env)\". On Windows, run: goku env --shell powershell | Invoke-Expression. The AWS CLI and every AWS SDK then use the AWS-compatible endpoint http://localhost:4566. Everything Goku keeps, databases included, is saved in a data folder on your disk (~/.goku/data, or %LOCALAPPDATA%\\Goku\\data on Windows)."
       },
       {
         "@type": "HowToStep",
         "name": "Or run the Docker image without the CLI",
-        "text": "On any platform, run: docker run -d --name mimir -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/mimir-glue:/tmp/mimir-glue tanujsoni027/mimir-aws:latest"
+        "text": "On macOS or Linux, run: mkdir -p ~/.goku/data, then docker run -d --name goku -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 -v /var/run/docker.sock:/var/run/docker.sock -v ~/.goku/data:/app/data -v /tmp/goku-glue:/tmp/goku-glue tanujsoni027/goku:latest"
       }
     ]
   }
@@ -157,7 +157,7 @@
       <a class="navlink" href="index.html">Home</a>
       <a class="navlink nav-wide" href="index.html#whats-new">What's new</a>
       <a class="navlink active" href="install.html" aria-current="page">Install</a>
-      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a>
+      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a>
     </div>
   </nav>
 
@@ -168,7 +168,7 @@
       Install a local AWS cloud with one command on macOS, Linux or Windows, or run one Docker command. 73 AWS-compatible services on <strong>localhost:4566</strong> and a web console for 60 services on <strong>localhost:8080</strong> — free, no AWS account needed.</p>
       <a class="btn-primary" href="#cli">Install the CLI</a>
       <a class="btn-ghost" href="#docker">Use Docker instead</a>
-      <p class="hero-note">Goku was formerly Mimir. <a href="#rename">Upgrading an existing install?</a> Your install, commands and data carry over.</p>
+      <p class="hero-note">Goku was formerly Mimir. <a href="#upgrade">Upgrading an existing install?</a> Your install, commands and data carry over.</p>
       <div class="stats">
         <div class="stat"><b>73</b><span>AWS-compatible services</span></div>
         <div class="stat"><b>60</b><span>console services</span></div>
@@ -185,12 +185,12 @@
     <h3>macOS and Linux</h3>
     <div class="term">
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
-      <pre class="one"><span class="prompt">$ </span><code>curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh</code></pre>
+      <pre class="one"><span class="prompt">$ </span><code>curl -fsSL https://tanuj24.github.io/goku/install.sh | sh</code></pre>
     </div>
     <h3>Windows (PowerShell)</h3>
     <div class="term">
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">PowerShell</span><button class="copy" type="button">Copy</button></div>
-      <pre class="one"><span class="prompt">PS&gt; </span><code>irm https://tanuj24.github.io/mimir/install.ps1 | iex</code></pre>
+      <pre class="one"><span class="prompt">PS&gt; </span><code>irm https://tanuj24.github.io/goku/install.ps1 | iex</code></pre>
     </div>
     <h3>Start your local cloud</h3>
     <div class="term">
@@ -203,13 +203,15 @@
         <tr><th>Command</th><th>What it does</th></tr>
         <tr><td><code>goku start</code></td><td>Downloads the image on first run, starts Goku and opens the console.</td></tr>
         <tr><td><code>goku status</code></td><td>Shows what's running — also for a Goku started another way.</td></tr>
-        <tr><td><code>goku stop</code></td><td>Stops Goku. State is saved automatically.</td></tr>
+        <tr><td><code>goku stop</code></td><td>Stops Goku. Everything is saved in your data folder.</td></tr>
         <tr><td><code>goku logs -f</code></td><td>Follows the container logs.</td></tr>
         <tr><td><code>goku update</code></td><td>Upgrades to the newest version. Your resources are preserved.</td></tr>
+        <tr><td><code>goku update --cli</code></td><td>Updates the <code>goku</code> command itself, verified against its published checksums.</td></tr>
+        <tr><td><code>goku data</code></td><td>Shows where your data lives and how big it is; <code>goku data open</code> opens the folder, <code>goku data migrate</code> moves an older install's volume into it.</td></tr>
         <tr><td><code>goku open</code></td><td>Opens the console, or a page in it: <code>goku open sqs</code>, <code>goku open lambda my-fn</code>.</td></tr>
         <tr><td><code>goku env</code></td><td>Prints the endpoint and credential variables for your AWS CLI and SDKs.</td></tr>
         <tr><td><code>goku doctor</code></td><td>Checks Docker, ports, saved state, curl and the backend's features.</td></tr>
-        <tr><td><code>goku uninstall</code></td><td>Removes Goku; add <code>--purge</code> to also delete saved state.</td></tr>
+        <tr><td><code>goku uninstall</code></td><td>Removes Goku and keeps your data folder; add <code>--purge</code> to delete it too.</td></tr>
       </table>
     </div>
     <p>The CLI also drives a running Goku: <code>goku services</code>, <code>goku ready</code>, <code>goku snapshot</code>, <code>goku chaos</code>, <code>goku iam</code> and <code>goku lambda debug</code>. Run <code>goku help &lt;command&gt;</code> for the details.</p>
@@ -239,23 +241,27 @@
     <h3>macOS and Linux (bash)</h3>
     <div class="term">
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
-      <pre><span class="prompt">$ </span><code>docker run -d --name mimir \
+      <pre><span class="prompt">$ </span><code>mkdir -p ~/.goku/data
+docker run -d --name goku \
   -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /tmp/mimir-glue:/tmp/mimir-glue \
-  tanujsoni027/mimir-aws:latest</code></pre>
+  -v ~/.goku/data:/app/data \
+  -v /tmp/goku-glue:/tmp/goku-glue \
+  tanujsoni027/goku:latest</code></pre>
     </div>
     <h3>Windows (PowerShell)</h3>
     <div class="term">
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">PowerShell</span><button class="copy" type="button">Copy</button></div>
-      <pre><span class="prompt">PS&gt; </span><code>docker run -d --name mimir `
+      <pre><span class="prompt">PS&gt; </span><code>New-Item -ItemType Directory -Force "$env:LOCALAPPDATA\Goku\data" | Out-Null
+docker run -d --name goku `
   -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 `
   -v /var/run/docker.sock:/var/run/docker.sock `
-  -v /tmp/mimir-glue:/tmp/mimir-glue `
-  tanujsoni027/mimir-aws:latest</code></pre>
+  -v "$env:LOCALAPPDATA\Goku\data:/app/data" `
+  -v /tmp/goku-glue:/tmp/goku-glue `
+  tanujsoni027/goku:latest</code></pre>
     </div>
     <p>The web console is at <strong>http://localhost:8080</strong> and the AWS-compatible endpoint at <strong>http://localhost:4566</strong>. Add <code>-e GOKU_SERVICES=all</code> to start with every service subscribed, and <code>-p 2000:2000/udp</code> to send X-Ray segments from apps on your host.</p>
-    <div class="callout"><strong>State persists automatically.</strong> Goku keeps everything in a <code>mimir-data</code> Docker volume it manages for you — no volume flags needed. Your resources survive stops, container removal and image updates. The image, container and volume keep their names from before the rename, so existing installs, scripts and data carry over unchanged.</div>
+    <div class="callout"><strong>Everything lives in your data folder.</strong> Goku keeps every bucket, table, function and job in the folder you mount at <code>/app/data</code>, and the data of its engines too: RDS PostgreSQL databases, OpenSearch, MSK, ECR, DocumentDB, MemoryDB, Amazon MQ and Redshift. Stop Goku, update it or reset Docker, then start it with the same folder and you resume where you left off. Leave the <code>-v</code> for the folder out and Goku keeps its state in a <code>goku-data</code> Docker volume instead. RDS MySQL and MariaDB data stays in a Docker volume on macOS and Windows.</div>
   </section>
 
   <section class="wrap" id="requirements">
@@ -280,22 +286,59 @@
     </div>
   </section>
 
+  <section class="wrap" id="upgrade">
+    <div class="kicker">Mimir v3 or Goku 4.0</div>
+    <h2>Upgrading an existing install</h2>
+    <p>Everything you created carries over. The easiest way is the CLI: install it (the commands <a href="#cli">above</a>), then run</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">$ </span><code>goku update</code></pre>
+    </div>
+    <p><code>goku update</code> stops your <code>mimir</code> container gracefully so it saves its state, moves that state into your data folder (<code>~/.goku/data</code>, or <code>%LOCALAPPDATA%\Goku\data</code> on Windows) and starts the newest Goku, now named <code>goku</code> and running <code>tanujsoni027/goku</code>, on the same ports. Your old <code>mimir-data</code> volume is kept as a backup. Engine data (databases, search domains, brokers, the ECR registry) moves into the folder by itself when each engine next starts.</p>
+    <h3>With plain Docker</h3>
+    <p>Stop the old <code>mimir</code> container gracefully, copy its data into a folder, then start the new image on that folder as <code>goku</code>. <code>docker cp</code> works with every Mimir version, including early v3 builds that kept state only inside the container:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>docker stop -t 60 mimir
+mkdir -p ~/.goku/data
+docker cp mimir:/app/data/. ~/.goku/data/
+docker rm mimir
+docker pull tanujsoni027/goku:latest
+docker run -d --name goku \
+  -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v ~/.goku/data:/app/data \
+  -v /tmp/goku-glue:/tmp/goku-glue \
+  tanujsoni027/goku:latest</code></pre>
+    </div>
+    <p>On Windows, use <code>"$env:LOCALAPPDATA\Goku\data"</code> as the folder, as in the <a href="#docker">Docker commands</a> above. Check that the folder holds your data (for example an <code>s3</code> folder) before the <code>docker rm</code>; your <code>mimir-data</code> volume, if you have one, is left untouched as a backup. Starting the new image on an empty folder also works: it copies the state kept in the <code>mimir-data</code> volume into the folder by itself.</p>
+    <p>From Goku 4.1 on, the console tells you when a new version is out and updates itself with <strong>Update now</strong>.</p>
+  </section>
+
   <section class="wrap" id="rename">
     <div class="kicker">After the rename</div>
-    <h2>Upgrading an existing install</h2>
-    <p>Goku (formerly Mimir) is the same product with a new name. Your install, commands and data carry over:</p>
+    <h2 id="names">Old and new names</h2>
+    <p>Goku (formerly Mimir) is the same product with a new name, and from 4.1 every name is Goku. <strong>Start using the goku names.</strong> The old names keep working for now, existing installs move over automatically, and the old names will be removed in a future release.</p>
     <ul class="list">
       <li><strong>The installer upgrades an existing install in place</strong> and installs both commands, <code>goku</code> and <code>mimir</code>. Every example on this site uses <code>goku</code>.</li>
       <li><strong>The <code>mimir</code> command is deprecated and will be removed in a future release.</strong> Until then it keeps working: it runs <code>goku</code> and prints a short note on stderr asking you to switch. Set <code>GOKU_NO_DEPRECATION_NOTICE=1</code> to silence the note.</li>
-      <li><strong>Same image, container and data:</strong> the CLI still runs the <code>tanujsoni027/mimir-aws</code> image in the container named <code>mimir</code> and keeps your state in the <code>mimir-data</code> volume.</li>
-      <li><strong>Your settings still work:</strong> every <code>MIMIR_*</code> variable is still read under its former name; when both are set, the <code>GOKU_*</code> one wins.</li>
+      <li><strong>Your install moves over by itself:</strong> <code>goku update</code> (or <strong>Update now</strong> in the console) renames the <code>mimir</code> container to <code>goku</code>, moves it to the <code>tanujsoni027/goku</code> image and your state into the data folder, and keeps the <code>mimir-data</code> volume as a backup.</li>
+      <li><strong>Your settings still work:</strong> every <code>MIMIR_*</code> variable is still read, and Goku prints a note for each one, asking you to rename it to <code>GOKU_*</code>. When both are set, the <code>GOKU_*</code> one wins.</li>
     </ul>
     <div class="table-card">
       <table>
-        <tr><th>Before</th><th>Now</th></tr>
+        <tr><th>Before (Mimir)</th><th>Now (Goku)</th></tr>
         <tr><td><code>mimir start</code>, <code>mimir update</code>, …</td><td><code>goku start</code>, <code>goku update</code>, …</td></tr>
-        <tr><td><code>MIMIR_CONSOLE_PORT</code>, <code>MIMIR_EDGE_PORT</code>, …</td><td><code>GOKU_CONSOLE_PORT</code>, <code>GOKU_EDGE_PORT</code>, …</td></tr>
-        <tr><td><code>/_mimir/…</code> API paths</td><td><code>/_goku/…</code> (the old paths keep working)</td></tr>
+        <tr><td>Image <code>tanujsoni027/mimir-aws</code></td><td><code>tanujsoni027/goku</code> (the old name gets the same releases for now)</td></tr>
+        <tr><td>Container <code>mimir</code></td><td><code>goku</code>: <code>docker logs goku</code>, <code>docker exec goku …</code></td></tr>
+        <tr><td>Volume <code>mimir-data</code></td><td>The data folder <code>~/.goku/data</code> (<code>%LOCALAPPDATA%\Goku\data</code> on Windows)</td></tr>
+        <tr><td><code>MIMIR_CONSOLE_PORT</code>, <code>MIMIR_SERVICES</code>, …</td><td><code>GOKU_CONSOLE_PORT</code>, <code>GOKU_SERVICES</code>, …</td></tr>
+        <tr><td><code>/_mimir/…</code> API paths</td><td><code>/_goku/…</code></td></tr>
+        <tr><td><code>*.mimir.local</code> host names</td><td><code>*.goku.local</code></td></tr>
+        <tr><td>CA file <code>mimir-ca.pem</code></td><td><code>goku-ca.pem</code> (the same CA: nothing to re-trust)</td></tr>
+        <tr><td>Engine containers <code>mimir-rds-…</code>, <code>mimir-ec2-…</code></td><td><code>goku-rds-…</code>, <code>goku-ec2-…</code></td></tr>
+        <tr><td>Glue folder <code>/tmp/mimir-glue</code></td><td><code>/tmp/goku-glue</code></td></tr>
+        <tr><td><code>tanuj24.github.io/mimir</code>, <code>github.com/tanuj24/mimir</code></td><td><code>tanuj24.github.io/goku</code>, <code>github.com/tanuj24/goku</code></td></tr>
       </table>
     </div>
   </section>
@@ -304,15 +347,19 @@
     <div class="kicker">Maintenance</div>
     <h2>Updating &amp; uninstalling</h2>
     <h3>Updating</h3>
-    <p>CLI users: run <code>goku update</code>. Your resources are preserved.</p>
-    <p>Docker users: pull the new image, remove the container and run the <a href="#docker">docker run command</a> again. Because state lives in the <code>mimir-data</code> volume, nothing is lost:</p>
+    <p><strong>From the console:</strong> when a new version is out, the console shows a banner; <strong>Update now</strong> downloads it and replaces the running Goku with the same ports, settings and data. If the new version doesn't come up healthy within 3 minutes, Goku rolls back to the version you had. The version menu in the top bar has <strong>Check for updates</strong>.</p>
+    <p><strong>From a terminal:</strong> <code>goku update</code> updates Goku, and <code>goku update --cli</code> updates the CLI. The CLI mentions new versions at most once a day.</p>
+    <p><strong>With plain Docker:</strong> stop the container gracefully, pull the new image and run the <a href="#docker">docker run command</a> again with the same data folder:</p>
     <div class="term">
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
-      <pre><span class="prompt">$ </span><code>docker pull tanujsoni027/mimir-aws:latest
-docker rm -f mimir</code></pre>
+      <pre><span class="prompt">$ </span><code>docker stop -t 60 goku &amp;&amp; docker rm goku
+docker pull tanujsoni027/goku:latest</code></pre>
     </div>
+    <p><strong>How update checks work:</strong> Goku downloads one small static file, <a href="releases.json"><code>releases.json</code></a>, from this site. Nothing about you or your setup is sent. Set <code>GOKU_UPDATE_CHECK=off</code> to turn the checks off.</p>
+    <h3>Backing up and moving</h3>
+    <p>Stop Goku and copy the data folder; that is the whole backup. Copy it to another machine and start Goku there with the same folder to carry on. On Linux, engine folders belong to the users their engines run as, so copy them as root to keep their owners.</p>
     <h3>Uninstalling</h3>
-    <p><code>goku uninstall</code> removes Goku — its container and only the engine containers of this installation — and keeps your saved state, so a later reinstall finds your resources intact. Add <code>--purge</code> to also delete the saved state.</p>
+    <p><code>goku uninstall</code> removes Goku — its container and only the engine containers of this installation — and keeps your data folder, so a later reinstall finds your resources intact. Add <code>--purge</code> to also delete the data folder.</p>
   </section>
 
   <section class="wrap" id="troubleshooting">
@@ -352,12 +399,12 @@ docker rm -f mimir</code></pre>
     </div>
     <p>Data endpoints live in a dedicated 5500–5659 range (RDS, ElastiCache and Neptune through the published 5500–5524 ports; the rest bind automatically), so they won't clash with a local Redis, Postgres or Elasticsearch.</p>
     <h3>Still stuck?</h3>
-    <p>Open an issue at <a href="https://github.com/tanuj24/mimir/issues">github.com/tanuj24/mimir/issues</a> — include the output of <code>goku doctor</code> and <code>goku logs</code>.</p>
+    <p>Open an issue at <a href="https://github.com/tanuj24/goku/issues">github.com/tanuj24/goku/issues</a> — include the output of <code>goku doctor</code> and <code>goku logs</code>.</p>
   </section>
 
   <footer class="wrap">
     <p class="signoff">See your cloud, before you ship your cloud.</p>
-    <p><a href="index.html">Home</a> · <a href="https://hub.docker.com/r/tanujsoni027/mimir-aws">Docker Hub</a> · <a href="https://github.com/tanuj24/mimir/issues">Support</a></p>
+    <p><a href="index.html">Home</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
     <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
   </footer>
 

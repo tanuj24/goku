@@ -1,13 +1,13 @@
 #!/bin/sh
-# Goku installer for macOS and Linux (formerly Mimir) — https://github.com/tanuj24/mimir
+# Goku installer for macOS and Linux (formerly Mimir) — https://tanuj24.github.io/goku/
 #
-#   curl -fsSL https://tanuj24.github.io/mimir/install.sh | sh
+#   curl -fsSL https://tanuj24.github.io/goku/install.sh | sh
 #
 # Installs the goku CLI, a native binary for macOS and Linux on x86_64 and arm64, verified against the
 # release's SHA-256 checksums, to /usr/local/bin (or ~/.local/bin without sudo), plus `mimir`, the
 # command's former name (deprecated), as a link to it. An existing goku or mimir install is upgraded in
 # place. Platforms without a prebuilt binary get the goku shell script instead.
-# (Windows: irm https://tanuj24.github.io/mimir/install.ps1 | iex)
+# (Windows: irm https://tanuj24.github.io/goku/install.ps1 | iex)
 #
 #   GOKU_VERSION        install this release (e.g. 0.3.0) instead of the latest
 #   GOKU_DOWNLOAD_BASE  where the release files are (goku_<os>_<arch>, checksums.txt); default: the
@@ -16,8 +16,8 @@
 #   GOKU_CLI_URL        install the file at this URL as goku, as it is (former name: MIMIR_CLI_URL)
 set -eu
 
-SITE="https://tanuj24.github.io/mimir"
-RELEASES="https://github.com/tanuj24/mimir/releases"
+SITE="https://tanuj24.github.io/goku"
+RELEASES="https://github.com/tanuj24/goku/releases"
 CLI_URL="${GOKU_CLI_URL:-${MIMIR_CLI_URL:-}}"
 SYSTEM_DIR=/usr/local/bin
 USER_DIR="$HOME/.local/bin"
@@ -97,12 +97,8 @@ else
   for tool in curl awk sed grep; do
     command -v "$tool" >/dev/null 2>&1 || die "$tool is required"
   done
-  got=false
-  # The site serves the script as /goku and, for installers of the former name, as /mimir.
-  for url in "$SITE/goku" "$SITE/mimir"; do
-    if download "$url" "$file" 2>/dev/null; then got=true; break; fi
-  done
-  $got || die "download failed ($SITE/goku)"
+  # The site serves the script as /goku.
+  download "$SITE/goku" "$file" 2>/dev/null || die "download failed ($SITE/goku)"
   head -2 "$file" | grep -q -e goku -e mimir || die "downloaded file doesn't look right; aborting"
   kind="shell script"
 fi
@@ -192,3 +188,10 @@ say "Get started:"
 say "  goku start                  # run the local cloud"
 say "  eval \"\$(goku env)\"          # point the AWS CLI / SDKs at it"
 say "  goku help                   # snapshots, chaos, iam, lambda debug, logs…"
+say ""
+if [ "$kind" = "shell script" ]; then
+  say "Goku keeps what it saves in the mimir-data Docker volume."
+else
+  say "Goku keeps everything it saves in ~/.goku/data ('goku data' shows it; GOKU_DATA_DIR moves it)."
+  say "Update later with 'goku update' (Goku) and 'goku update --cli' (this command)."
+fi

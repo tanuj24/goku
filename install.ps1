@@ -1,6 +1,6 @@
-# Goku installer for Windows (formerly Mimir) - https://github.com/tanuj24/mimir
+# Goku installer for Windows (formerly Mimir) - https://tanuj24.github.io/goku/
 #
-#   irm https://tanuj24.github.io/mimir/install.ps1 | iex
+#   irm https://tanuj24.github.io/goku/install.ps1 | iex
 #
 # Installs the goku CLI (goku.exe, verified against the release's SHA-256 checksums) and mimir.exe,
 # the command's former name (deprecated), next to it, in %LOCALAPPDATA%\Programs\Goku\bin, and adds
@@ -17,7 +17,7 @@
 function Install-Goku {
     $ErrorActionPreference = 'Stop'
 
-    $releases = 'https://github.com/tanuj24/mimir/releases'
+    $releases = 'https://github.com/tanuj24/goku/releases'
 
     # --- which binary ---------------------------------------------------------------------------
     $arch = $null
@@ -164,6 +164,10 @@ function Install-Goku {
     Write-Host '  goku start                          # run the local cloud'
     Write-Host '  goku env | Invoke-Expression        # point the AWS CLI / SDKs at it'
     Write-Host '  goku help                           # snapshots, chaos, iam, lambda debug, logs...'
+    Write-Host ''
+    $dataDir = Join-Path $env:LOCALAPPDATA 'Goku\data'
+    Write-Host "Goku keeps everything it saves in $dataDir ('goku data' shows it; GOKU_DATA_DIR moves it)."
+    Write-Host "Update later with 'goku update' (Goku) and 'goku update --cli' (this command)."
 }
 
 # Get-GokuFile downloads a URL (https:// or file://) to a file.

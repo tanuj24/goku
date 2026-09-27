@@ -1,7 +1,7 @@
 #!/bin/sh
 # goku (formerly mimir): the Go program in cli/cmd/goku is the implementation; this script is its feature-frozen fallback.
 # goku (formerly mimir) — run a local AWS cloud on your machine.
-# https://github.com/tanuj24/mimir
+# https://tanuj24.github.io/goku/
 #
 # Manages the Goku all-in-one container so you never write a docker command,
 # and drives a running Goku from the terminal: services and readiness,
@@ -13,15 +13,22 @@
 #
 # Installed as `goku`, with `mimir` (the former name) as a link to it that behaves the same.
 # Settings are read from GOKU_* environment variables, then from the former MIMIR_* names.
-# Names that existing installs depend on stay as they were: the image tanujsoni027/mimir-aws, the
-# container `mimir`, the volume `mimir-data`, the mimir.* labels, the /_mimir/... HTTP paths and the
-# MIMIR_* variables passed into the container (every image understands those).
+# Mimir is now Goku: the image is tanujsoni027/goku and the container goku, configured with GOKU_*
+# variables (every 4.x image understands them). A container named mimir that runs a Goku image
+# (tanujsoni027/mimir-aws, the image's former name, included) is adopted when there is no goku
+# container: start renames it goku, update creates it again as goku. The state stays in the
+# mimir-data volume this script always used; the /_mimir/... HTTP paths stay (every Goku serves them).
 set -u
 
 GOKU_CLI_VERSION="0.2.0"
-IMAGE="${GOKU_IMAGE:-${MIMIR_IMAGE:-tanujsoni027/mimir-aws:latest}}"
-NAME="${GOKU_CONTAINER:-${MIMIR_CONTAINER:-mimir}}"
+DEFAULT_NAME="goku"
+LEGACY_NAME="mimir"
+IMAGE="${GOKU_IMAGE:-${MIMIR_IMAGE:-tanujsoni027/goku:latest}}"
+NAME="${GOKU_CONTAINER:-${MIMIR_CONTAINER:-$DEFAULT_NAME}}"
 VOLUME="${GOKU_DATA_VOLUME:-${MIMIR_DATA_VOLUME:-mimir-data}}"
+IMAGE_SET=false; [ -n "${GOKU_IMAGE:-${MIMIR_IMAGE:-}}" ] && IMAGE_SET=true
+NAME_SET=false; [ -n "${GOKU_CONTAINER:-${MIMIR_CONTAINER:-}}" ] && NAME_SET=true
+LEGACY=false
 CONSOLE_PORT="${GOKU_CONSOLE_PORT:-${MIMIR_CONSOLE_PORT:-8080}}"
 EDGE_PORT="${GOKU_EDGE_PORT:-${MIMIR_EDGE_PORT:-4566}}"
 ENGINE_PORTS="${GOKU_ENGINE_PORTS:-${MIMIR_ENGINE_PORTS:-5500-5524}}"
@@ -492,6 +499,42 @@ need_docker() {
   Linux:  https://docs.docker.com/engine/install/"
   docker info >/dev/null 2>&1 || die "Docker is installed but the daemon isn't running.
   Start Docker Desktop (or 'colima start' / 'sudo systemctl start docker') and retry."
+  adopt_legacy
+}
+
+# is_goku_image REF: tanujsoni027/goku, its former name tanujsoni027/mimir-aws, or the configured image.
+is_goku_image() {
+  case "${1%@*}" in
+    mimir-aws|mimir-aws:*|*/mimir-aws|*/mimir-aws:*|tanujsoni027/goku|tanujsoni027/goku:*|*/tanujsoni027/goku|*/tanujsoni027/goku:*) return 0 ;;
+  esac
+  [ -n "$1" ] && [ "${1%:*}" = "${IMAGE%:*}" ]
+}
+
+# is_legacy_image REF: the image under its former name, tanujsoni027/mimir-aws.
+is_legacy_image() {
+  case "${1%@*}" in mimir-aws|mimir-aws:*|*/mimir-aws|*/mimir-aws:*) return 0 ;; esac
+  return 1
+}
+
+# adopt_legacy: Mimir is now Goku. With no container named goku (and no GOKU_CONTAINER), a container
+# named mimir that runs a Goku image is this installation's; one of any other image is never touched.
+adopt_legacy() {
+  { $NAME_SET || $LEGACY || [ "$NAME" != "$DEFAULT_NAME" ]; } && return 0
+  docker inspect "$NAME" >/dev/null 2>&1 && return 0
+  _li=$(docker inspect -f '{{.Config.Image}}' "$LEGACY_NAME" 2>/dev/null) || return 0
+  is_goku_image "$_li" || return 0
+  NAME=$LEGACY_NAME; LEGACY=true
+}
+
+# rename_legacy: start renames an adopted container goku, and says so.
+rename_legacy() {
+  $LEGACY || return 0
+  if docker rename "$NAME" "$DEFAULT_NAME" >/dev/null 2>&1; then
+    say "renamed container $NAME → $DEFAULT_NAME (Mimir is now Goku)"
+    NAME=$DEFAULT_NAME; LEGACY=false
+  else
+    err "could not rename the container $NAME to $DEFAULT_NAME; it keeps its former name for now."
+  fi
 }
 
 container_exists()  { docker inspect "$NAME" >/dev/null 2>&1; }
@@ -518,27 +561,39 @@ wait_healthy() {
 run_container() {
   set -- -p "${CONSOLE_PORT}:80" -p "${EDGE_PORT}:4566"
   case "$ENGINE_PORTS" in off|none|"") ;; *) set -- "$@" -p "${ENGINE_PORTS}:${ENGINE_PORTS}" ;; esac
-  # The container is configured with the MIMIR_* names: every image understands them.
-  [ -n "$AUTO_PERSIST" ] && set -- "$@" -e "MIMIR_AUTO_PERSIST=${AUTO_PERSIST}"
-  [ "$VOLUME" != "mimir-data" ] && set -- "$@" -e "MIMIR_DATA_VOLUME=${VOLUME}"
+  # The container is configured with the GOKU_* names: every 4.x image understands them. The volume
+  # is always named: Goku 4.1+ would otherwise use goku-data.
+  [ -n "$AUTO_PERSIST" ] && set -- "$@" -e "GOKU_AUTO_PERSIST=${AUTO_PERSIST}"
+  set -- "$@" -e "GOKU_DATA_VOLUME=${VOLUME}"
   docker run -d --name "$NAME" "$@" \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /tmp/mimir-glue:/tmp/mimir-glue \
+    -v /tmp/goku-glue:/tmp/goku-glue \
     "$IMAGE" >/dev/null
 }
 
 cmd_start() {
   for _a in "$@"; do case "$_a" in --no-open) NO_BROWSER=1 ;; *) usage_die "unknown option: $_a" ;; esac; done
   need_docker
-  if container_exists && [ "$(docker inspect -f '{{.Config.Image}}' "$NAME" 2>/dev/null)" != "$IMAGE" ]; then
-    say "found an existing Goku container on a different image — recreating on $IMAGE."
-    say "(your saved state is preserved)"
-    docker rm -f "$NAME" >/dev/null 2>&1 || true
+  _note=""
+  if container_exists; then
+    rename_legacy
+    _ci=$(docker inspect -f '{{.Config.Image}}' "$NAME" 2>/dev/null)
+    # A Goku container on another tag or the image's former name starts as it is (update moves it);
+    # GOKU_IMAGE, or an image that is not Goku, has it created again.
+    if [ "$_ci" != "$IMAGE" ] && { $IMAGE_SET || ! is_goku_image "$_ci"; }; then
+      say "found an existing Goku container on a different image — recreating on $IMAGE."
+      say "(your saved state is preserved)"
+      docker rm -f "$NAME" >/dev/null 2>&1 || true
+    elif is_legacy_image "$_ci" && ! is_legacy_image "$IMAGE"; then
+      _note="note: Goku runs $_ci, the image's former name — run goku update to move to ${IMAGE%:*}"
+    fi
   fi
   if container_running; then
     say "Goku is already running — console: http://localhost:${CONSOLE_PORT}"
+    [ -n "$_note" ] && say "$_note"
     exit 0
   fi
+  [ -n "$_note" ] && say "$_note"
   if container_exists; then
     say "starting existing Goku container…"
     docker start "$NAME" >/dev/null
@@ -583,7 +638,7 @@ cmd_restart() { cmd_stop; cmd_start "$@"; }
 cmd_status() {
   [ $# -eq 0 ] || usage_die "unknown argument: $1"
   _state=""; _img=""
-  if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1 && container_exists; then
+  if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1 && { adopt_legacy; container_exists; }; then
     _state=$(docker inspect -f '{{.State.Status}}' "$NAME" 2>/dev/null)
     _img=$(docker inspect -f '{{.Config.Image}}' "$NAME" 2>/dev/null)
   fi
@@ -603,7 +658,9 @@ cmd_status() {
     say "Goku: not running (run 'goku start')"
     exit 0
   fi
-  if [ -n "$_state" ]; then say "Container:     $_state ($NAME)"; else say "Container:     none managed by this CLI ($NAME)"; fi
+  if [ -z "$_state" ]; then say "Container:     none managed by this CLI ($NAME)"
+  elif $LEGACY; then say "Container:     $_state ($NAME, the former name — goku start renames it to $DEFAULT_NAME)"
+  else say "Container:     $_state ($NAME)"; fi
   if $_healthy; then
     say "Backend:       healthy (${_running} of ${_total} services running, version ${_ver:-unknown})"
     say "AWS endpoint:  $ENDPOINT"
@@ -611,7 +668,11 @@ cmd_status() {
   elif [ "$_state" = running ]; then
     say "Backend:       starting…"
   fi
-  [ -n "$_img" ] && say "Image:         $_img"
+  if [ -n "$_img" ] && is_legacy_image "$_img" && ! is_legacy_image "$IMAGE"; then
+    say "Image:         $_img (the image's former name — run goku update to move to ${IMAGE%:*})"
+  elif [ -n "$_img" ]; then
+    say "Image:         $_img"
+  fi
   return 0
 }
 
@@ -620,12 +681,19 @@ cmd_update() {
   say "checking for updates…"
   docker pull "$IMAGE" >/dev/null 2>&1 || die "could not pull $IMAGE (offline?)"
   latest=$(docker image inspect -f '{{.Id}}' "$IMAGE" 2>/dev/null)
-  current=""
-  container_exists && current=$(docker inspect -f '{{.Image}}' "$NAME" 2>/dev/null)
-  if [ "$latest" = "$current" ]; then
+  current=""; _ci=""; _move=false
+  if container_exists; then
+    current=$(docker inspect -f '{{.Image}}' "$NAME" 2>/dev/null)
+    _ci=$(docker inspect -f '{{.Config.Image}}' "$NAME" 2>/dev/null)
+    # The image under its former name moves to the new one, even when both are the same release.
+    is_legacy_image "$_ci" && ! is_legacy_image "$IMAGE" && _move=true
+  fi
+  if [ "$latest" = "$current" ] && ! $_move; then
+    rename_legacy
     say "already on the newest version."
     exit 0
   fi
+  _old=$NAME
   if container_exists; then
     say "updating Goku (your resources are preserved)…"
     docker stop -t 30 "$NAME" >/dev/null 2>&1 || true
@@ -639,10 +707,18 @@ cmd_update() {
         >/dev/null 2>&1 || true
     fi
     docker rm "$NAME" >/dev/null 2>&1 || true
+    $LEGACY && { NAME=$DEFAULT_NAME; LEGACY=false; }  # created again under the new name
   else
     say "downloaded newest image."
   fi
   run_container || die "failed to start updated container"
+  if [ "$_old" != "$NAME" ] && $_move; then
+    say "renamed container $_old → $NAME and moved it from $_ci to $IMAGE (Mimir is now Goku)"
+  elif [ "$_old" != "$NAME" ]; then
+    say "renamed container $_old → $NAME (Mimir is now Goku)"
+  elif $_move; then
+    say "moved Goku from $_ci to $IMAGE (Mimir is now Goku)"
+  fi
   if wait_healthy; then
     say "updated ✔ — console: http://localhost:${CONSOLE_PORT}"
   else
@@ -655,8 +731,9 @@ cmd_uninstall() {
   need_docker
   purge=false
   [ "${1:-}" = "--purge" ] && purge=true
-  # Engine containers (databases, Lambda environments…) carry the label mimir.instance=<id of this
-  # installation>; only those are removed — never other Goku stacks on the same Docker daemon.
+  # Engine containers (databases, Lambda environments…) carry the label goku.instance=<id of this
+  # installation>, or mimir.instance on those of Goku 4.0; only those are removed — never other Goku
+  # stacks on the same Docker daemon.
   _iid=""
   if container_running && API_SOFT=true API_TIMEOUT=3 api GET /_mimir/health; then _iid=$(jget instanceId); fi
   if [ -z "$_iid" ] && container_exists; then
@@ -665,7 +742,8 @@ cmd_uninstall() {
   say "removing Goku container…"
   docker rm -f "$NAME" >/dev/null 2>&1 || true
   if [ -n "$_iid" ]; then
-    docker ps -aq --filter "label=mimir.instance=$_iid" | xargs -r docker rm -f >/dev/null 2>&1 || true
+    { docker ps -aq --filter "label=goku.instance=$_iid"; docker ps -aq --filter "label=mimir.instance=$_iid"; } \
+      | sort -u | xargs -r docker rm -f >/dev/null 2>&1 || true
   fi
   if $purge; then
     say "removing saved state ($VOLUME volume)…"
@@ -1214,7 +1292,7 @@ chaos_status() {
   if $JSON_OUT; then out_json; return 0; fi
   if [ "$(jget active)" = true ]; then _state="${C_R}ACTIVE${C_0}"; else _state="${C_G}inactive${C_0}"; fi
   say "Fault injection: $_state — $(jget activeRules) active rules, $(jget runningExperiments) running experiments, $(jget totalInjections) injections"
-  [ "$(jget enabled)" = false ] && say "  (disabled by configuration: mimir.fault-injection.enabled=false)"
+  [ "$(jget enabled)" = false ] && say "  (disabled by configuration: GOKU_FAULT_INJECTION_ENABLED=false)"
   api GET /_mimir/chaos/experiments || api_die "could not list experiments"
   _running=$(jrows experiments id presetId name state endsAt:time | awk -F'\t' '$4 == "RUNNING"')
   if [ -n "$_running" ]; then
@@ -1851,7 +1929,7 @@ Global options: --json  --endpoint URL  --console-url URL  --region R  --no-colo
 Exit codes: 0 ok · 1 failed / not ready / test failures · 2 usage · 3 Goku unreachable · 4 Goku too old
 
 Console: $CONSOLE_URL · AWS endpoint: $ENDPOINT
-Docs: https://github.com/tanuj24/mimir
+Docs: https://tanuj24.github.io/goku/
 EOF
 }
 
@@ -1860,8 +1938,12 @@ help_cmd() {
     start) cat <<'EOF'
 goku start [--no-open]
   Starts the Goku container (pulling the image on first run), waits until it is healthy and
-  opens the console. State is kept in the mimir-data volume.
-  Env: GOKU_IMAGE, GOKU_CONTAINER (mimir), GOKU_CONSOLE_PORT (8080), GOKU_EDGE_PORT (4566),
+  opens the console. State is kept in the mimir-data volume. The Docker socket and /tmp/goku-glue
+  (the work folder of Glue jobs) are mounted into it. Mimir is now Goku: a container named mimir
+  from before (with no goku container) is renamed goku, and one on the image's former name,
+  tanujsoni027/mimir-aws, starts as it is until 'goku update' moves it to tanujsoni027/goku.
+  Env: GOKU_IMAGE (tanujsoni027/goku:latest), GOKU_CONTAINER (goku; when set, nothing is renamed),
+       GOKU_CONSOLE_PORT (8080), GOKU_EDGE_PORT (4566),
        GOKU_ENGINE_PORTS (5500-5524, "off" to publish none), GOKU_DATA_VOLUME (mimir-data),
        GOKU_AUTO_PERSIST (off = keep no state), GOKU_NO_BROWSER=1
        (the former MIMIR_* names work too; GOKU_* wins when both are set)
@@ -1928,7 +2010,7 @@ EOF
     ;;
     ready) cat <<'EOF'
 goku ready [--services s3,sqs,...] [--wait SECONDS] [--subscribe] [--no-engines] [--quiet] [--json]
-  Asks /_mimir/ready whether the services (default: every subscribed one) can be used right now.
+  Asks Goku whether the services (default: every subscribed one) can be used right now.
   Exit 0 when ready, 1 when not ready (after --wait), 2 for unknown service names, 3 when Goku is
   not reachable. With --wait the command also waits for Goku itself to come up — use it in CI
   right after starting the container:
