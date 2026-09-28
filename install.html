@@ -229,7 +229,9 @@
         <tr><td><code>goku data</code></td><td>Shows where your data lives and how big it is; <code>goku data open</code> opens the folder, <code>goku data migrate</code> moves an older install's volume into it.</td></tr>
         <tr><td><code>goku open</code></td><td>Opens the console, or a page in it: <code>goku open sqs</code>, <code>goku open lambda my-fn</code>.</td></tr>
         <tr><td><code>goku env</code></td><td>Prints the endpoint and credential variables for your AWS CLI and SDKs.</td></tr>
-        <tr><td><code>goku doctor</code></td><td>Checks Docker, ports, saved state, curl and the backend's features.</td></tr>
+        <tr><td><code>goku doctor</code></td><td>Checks Docker, ports, saved state, curl and the backend's features, and whether the MCP endpoint answers.</td></tr>
+        <tr><td><code>goku mcp</code></td><td>Goku's MCP server for AI assistants, on stdin and stdout. Starts Goku when it isn't running.</td></tr>
+        <tr><td><code>goku mcp config</code></td><td>Prints the setup for Claude Code, Claude Desktop, Cursor, VS Code and Windsurf; <code>goku mcp config cursor</code> prints one.</td></tr>
         <tr><td><code>goku uninstall</code></td><td>Removes Goku and keeps your data folder; add <code>--purge</code> to delete it too.</td></tr>
       </table>
     </div>
@@ -252,6 +254,13 @@
     </div>
     <p>Then <code>aws s3 ls</code> lists your local buckets. On macOS and Linux, <code>eval "$(goku env --unset)"</code> switches back to real AWS. To configure a tool by hand, use the endpoint <strong>http://localhost:4566</strong>, region <strong>us-east-1</strong> and any local credentials such as <strong>test</strong> / <strong>test</strong>.</p>
     <p>Next, create your first bucket, table, queue and function with the <a href="run-aws-locally.html">run AWS locally guide</a>.</p>
+    <h3 id="mcp">Connect an AI assistant</h3>
+    <p>Goku serves an MCP server at <code>http://localhost:8080/mcp</code>, so AI assistants can work with your local AWS too, and nothing they change reaches real AWS. For Claude Code:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">$ </span><code>claude mcp add goku -- goku mcp</code></pre>
+    </div>
+    <p><code>goku mcp</code> starts Goku if it isn't running, and <code>goku mcp config</code> prints the setup for Claude Desktop, Cursor, VS Code and Windsurf. The <a href="mcp.html">MCP guide</a> covers every client and the 25 tools.</p>
   </section>
 
   <section class="wrap" id="docker">
@@ -425,7 +434,7 @@ docker pull tanujsoni027/goku:latest</code></pre>
   <footer class="wrap">
     <p class="signoff">See your cloud, before you ship your cloud.</p>
     <p><a href="index.html">Home</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
-    <p class="footer-guides"><span>Guides:</span> <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a></p>
+    <p class="footer-guides"><span>Guides:</span> <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a> · <a href="mcp.html">AI assistants (MCP)</a></p>
     <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
   </footer>
 

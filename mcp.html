@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1120">
+  <title>MCP Server for Local AWS: Connect AI Assistants | Goku</title>
+  <meta name="description" content="Connect Claude Code, Cursor, VS Code and other AI assistants to a local AWS sandbox with Goku's free MCP server: 25 tools and any AWS API, never your real AWS.">
+  <link rel="canonical" href="https://tanuj24.github.io/goku/mcp.html">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Goku">
+  <meta property="og:title" content="MCP server for local AWS: connect AI assistants to Goku">
+  <meta property="og:description" content="Connect Claude Code, Cursor, VS Code and other AI assistants to a local AWS sandbox with Goku's free MCP server: 25 tools and any AWS API, never your real AWS.">
+  <meta property="og:url" content="https://tanuj24.github.io/goku/mcp.html">
+  <meta property="og:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta property="og:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <meta property="article:published_time" content="2026-09-28">
+  <meta property="article:modified_time" content="2026-09-28">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MCP server for local AWS: connect AI assistants to Goku">
+  <meta name="twitter:description" content="Connect Claude Code, Cursor, VS Code and other AI assistants to a local AWS sandbox with Goku's free MCP server: 25 tools and any AWS API, never your real AWS.">
+  <meta name="twitter:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta name="twitter:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to connect an AI assistant to a local AWS sandbox with MCP",
+  "description": "Connect Claude Code, Claude Desktop, Cursor, VS Code, Windsurf or any other MCP client to Goku's MCP server at http://localhost:8080/mcp, so the assistant works with a local AWS sandbox instead of your AWS account.",
+  "url": "https://tanuj24.github.io/goku/mcp.html",
+  "mainEntityOfPage": "https://tanuj24.github.io/goku/mcp.html",
+  "image": "https://tanuj24.github.io/goku/assets/goku-social-preview.png",
+  "inLanguage": "en",
+  "datePublished": "2026-09-28",
+  "dateModified": "2026-09-28",
+  "author": {
+    "@type": "Person",
+    "name": "Tanuj Soni"
+  },
+  "about": {
+    "@id": "https://tanuj24.github.io/goku/#software",
+    "name": "Goku"
+  },
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "Docker"
+    },
+    {
+      "@type": "HowToTool",
+      "name": "goku CLI 0.5.0 or later"
+    },
+    {
+      "@type": "HowToTool",
+      "name": "An MCP client such as Claude Code, Claude Desktop, Cursor, VS Code or Windsurf"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Install the goku CLI",
+      "text": "Install the goku CLI. On macOS or Linux: curl -fsSL https://tanuj24.github.io/goku/install.sh | sh. On Windows, in PowerShell: irm https://tanuj24.github.io/goku/install.ps1 | iex. Goku needs Docker, and the MCP server needs Goku 4.1 or later.",
+      "url": "https://tanuj24.github.io/goku/mcp.html#step-1"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Add Goku to your assistant",
+      "text": "For Claude Code, run claude mcp add goku -- goku mcp. goku mcp starts Goku if it isn't running. Clients that take a URL connect to http://localhost:8080/mcp over Streamable HTTP, and goku mcp config claude-desktop, cursor, vscode or windsurf prints the setup for each client.",
+      "url": "https://tanuj24.github.io/goku/mcp.html#step-2"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Ask your assistant to work with local AWS",
+      "text": "Ask, for example: Create a DynamoDB table called orders and add three sample orders to it. The assistant uses Goku's 25 tools, including aws_call for any operation of the emulated AWS services, and every change stays in the sandbox on your machine.",
+      "url": "https://tanuj24.github.io/goku/mcp.html#step-3"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Which AI assistants can connect to Goku?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Claude Code, Claude Desktop, Cursor, VS Code, Windsurf and any other MCP client: over Streamable HTTP at http://localhost:8080/mcp, or through the goku mcp command."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the assistant touch my real AWS account?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Every tool, aws_call included, acts on the Goku on your machine. The assistant needs no AWS account or credentials."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it safe to give an assistant full access?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The access is to your local sandbox only, and the endpoint refuses other websites. Save a snapshot first for an easy way back."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What can the assistant do in Goku?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It gets 25 tools, from logs, snapshots, fault injection and IAM to aws_call for any operation of the emulated AWS services."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I turn the MCP server off?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Run the Goku container with GOKU_MCP=off and /mcp answers 404."
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://tanuj24.github.io/goku/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://tanuj24.github.io/goku/#guides"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "AI assistants (MCP)",
+      "item": "https://tanuj24.github.io/goku/mcp.html"
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #101a2c;
+      --surface2: #0d1424;
+      --line: #1e2b40;
+      --ink: #e6ecf5;
+      --muted: #93a1b7;
+      --teal: #14b8a6;
+      --teal-deep: #0d9488;
+      --cyan: #4cc9f0;
+      --glow: rgba(20,184,166,0.13);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { color-scheme: dark; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); font-size: 1.05rem; line-height: 1.7; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    a { color: var(--cyan); }
+
+    nav { position: sticky; top: 0; z-index: 50; background: rgba(11,17,32,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    nav .wrap { display: flex; align-items: center; gap: 22px; height: 56px; }
+    .wordmark { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; margin-right: auto; }
+    .wordmark img { height: 32px; width: auto; display: block; }
+    .wordmark span { color: var(--teal); }
+    nav a.navlink { color: var(--muted); text-decoration: none; font-size: 0.95rem; padding: 4px 2px; white-space: nowrap; }
+    nav a.navlink:hover { color: var(--ink); }
+    nav a.navlink.active { color: var(--teal); font-weight: 600; }
+    @media (max-width: 640px) { nav .wrap { gap: 16px; } .nav-wide { display: none; } }
+
+    nav.crumbs { position: static; z-index: auto; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; }
+    header.article { padding: 26px 0 40px; background: radial-gradient(900px 420px at 50% -80px, var(--glow), transparent 70%); }
+    .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 26px; }
+    .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 8px; }
+    .crumbs li + li::before { content: "/"; margin-right: 8px; color: var(--line); }
+    .crumbs a { color: var(--muted); text-decoration: none; }
+    .crumbs a:hover { color: var(--ink); }
+    .crumbs [aria-current] { color: var(--ink); }
+    h1 { font-size: clamp(2rem, 4.6vw, 2.9rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+    .grad { background: linear-gradient(90deg, #14b8a6, #4cc9f0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lede { font-size: 1.15rem; color: var(--muted); max-width: 800px; margin-bottom: 12px; }
+    .lede strong { color: var(--ink); }
+    .meta { font-size: 0.85rem; color: var(--muted); }
+    .rename-note { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 12px 16px; color: var(--muted); font-size: 0.93rem; margin-top: 20px; max-width: 800px; }
+    .rename-note strong { color: var(--ink); }
+    .toc { margin-top: 22px; font-size: 0.93rem; color: var(--muted); }
+    .toc strong { color: var(--ink); margin-right: 6px; }
+    .toc a { color: var(--muted); }
+    .toc a:hover { color: var(--ink); }
+
+    section, section.wrap { padding-top: 44px; padding-bottom: 44px; border-top: 1px solid var(--line); scroll-margin-top: 70px; }
+    .kicker { text-transform: uppercase; letter-spacing: .1em; font-size: 0.78rem; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
+    h2 { font-size: 1.6rem; letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 14px; }
+    h3 { font-size: 1.1rem; line-height: 1.4; margin: 24px 0 6px; }
+    p { color: var(--muted); margin-bottom: 12px; }
+    p strong, li strong { color: var(--ink); }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    td code, p code, li code, .card code, .callout code, .rename-note code, h3 code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; font-size: 0.88em; color: var(--ink); overflow-wrap: anywhere; }
+    ul.list, ol.list { margin: 8px 0 14px; }
+    ul.list { list-style: none; }
+    ul.list li { color: var(--muted); padding-left: 20px; position: relative; margin-bottom: 8px; }
+    ul.list li::before { content: ""; position: absolute; left: 4px; top: 0.72em; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+    ol.list { padding-left: 22px; }
+    ol.list li { color: var(--muted); margin-bottom: 8px; padding-left: 4px; }
+    ol.list li::marker { color: var(--teal); font-weight: 700; }
+
+    .term { background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin: 14px 0 20px; text-align: left; }
+    .term-bar { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #febc2e; }
+    .dot.g { background: #28c840; }
+    .term-title { color: var(--muted); font-size: 0.78rem; margin-left: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .term .copy { margin-left: auto; flex: none; background: var(--surface); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 3px 12px; font-size: 0.75rem; font-family: inherit; cursor: pointer; transition: color .15s ease, border-color .15s ease; }
+    .term .copy:hover { color: var(--teal); border-color: var(--teal); }
+    .term .copy:focus-visible { outline: 2px solid var(--cyan); outline-offset: 1px; }
+    .term pre { margin: 0; padding: 16px 18px; overflow-x: auto; font-size: 0.88rem; line-height: 1.55; color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .prompt { color: var(--teal); user-select: none; -webkit-user-select: none; }
+    .cmt { color: #6b7a90; }
+    @media (max-width: 640px) { .term pre.one { white-space: pre-wrap; overflow-wrap: anywhere; } .term pre { font-size: 0.82rem; padding: 14px; } }
+
+    .table-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 18px; overflow-x: auto; margin: 18px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: left; text-transform: uppercase; letter-spacing: .06em; font-size: 0.75rem; color: var(--muted); padding: 12px; border-bottom: 1px solid var(--line); }
+    td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--muted); vertical-align: top; }
+    td.goku { color: var(--teal); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    .table-note { font-size: 0.85rem; }
+    @media (max-width: 640px) {
+      .table-card { padding: 2px 8px;
+        background:
+          linear-gradient(to right, var(--surface) 30%, rgba(16,26,44,0)) left / 32px 100% no-repeat local,
+          linear-gradient(to left, var(--surface) 30%, rgba(16,26,44,0)) right / 32px 100% no-repeat local,
+          radial-gradient(farthest-side at 0 50%, rgba(20,184,166,0.35), transparent) left / 10px 100% no-repeat scroll,
+          radial-gradient(farthest-side at 100% 50%, rgba(20,184,166,0.35), transparent) right / 10px 100% no-repeat scroll,
+          var(--surface); }
+      th, td { padding: 9px 8px; }
+      table { font-size: 0.88rem; }
+      td code { white-space: nowrap; overflow-wrap: normal; }
+    }
+
+    .callout { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 14px 16px; color: var(--muted); margin: 16px 0; }
+    .callout strong { color: var(--ink); }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 20px 0; }
+    .card { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; color: var(--muted); text-decoration: none; font-size: 0.95rem; transition: border-color .15s ease, box-shadow .15s ease; }
+    a.card:hover { border-color: var(--teal); box-shadow: 0 8px 30px rgba(20,184,166,0.08); }
+    .card strong { color: var(--ink); display: block; margin-bottom: 6px; font-size: 1rem; }
+    a.card strong { color: var(--cyan); }
+
+    figure.shot { margin: 18px 0 26px; }
+    figure.shot picture { display: block; }
+    figure.shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); }
+    figure.shot figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 10px; }
+
+    .faq h3 { font-size: 1.08rem; color: var(--ink); margin: 22px 0 6px; }
+
+    footer, footer.wrap { padding-top: 44px; padding-bottom: 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    footer .signoff { color: var(--ink); font-weight: 600; margin-bottom: 8px; }
+    footer p { margin-bottom: 8px; }
+    .footer-guides span { color: var(--ink); font-weight: 600; }
+    .disclaimer { font-size: 0.8rem; margin-top: 12px; }
+
+    .asks { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin: 16px 0 20px; }
+    .asks li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; color: var(--ink); font-size: 0.95rem; line-height: 1.55; }
+    .tool-names { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .card .tool-names code { font-size: 0.8em; }
+  </style>
+</head>
+<body>
+  <nav aria-label="Main">
+    <div class="wrap">
+      <a class="wordmark" href="index.html"><img src="assets/goku-logo-bar.svg" alt="" width="74" height="32">Goku<span>.</span></a>
+      <a class="navlink" href="index.html">Home</a>
+      <a class="navlink nav-wide" href="index.html#whats-new">What's new</a>
+      <a class="navlink nav-wide active" href="index.html#guides">Guides</a>
+      <a class="navlink" href="install.html">Install</a>
+      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a>
+    </div>
+  </nav>
+
+  <header class="article">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#guides">Guides</a></li>
+          <li><span aria-current="page">AI assistants (MCP)</span></li>
+        </ol>
+      </nav>
+      <div class="kicker">Guide · AI assistants</div>
+      <h1>Connect AI assistants to <span class="grad">local AWS</span> with MCP</h1>
+      <p class="lede">Goku includes an <strong>MCP server for AWS that runs on your machine</strong>. Claude Code, Claude Desktop, Cursor, VS Code, Windsurf and other MCP clients can use it to create resources, call any AWS API, read logs, take snapshots and inject faults in a local sandbox. Nothing reaches your real AWS account.</p>
+      <p class="meta">Updated 28 September 2026 · Goku 4.1.0 · goku CLI 0.5.0 · Free, no AWS account</p>
+      <p class="rename-note"><strong>Goku was formerly called Mimir.</strong> Same product, new name: the image is now <code>tanujsoni027/goku</code> (it was <code>tanujsoni027/mimir-aws</code>) and the command is <code>goku</code>. See <a href="install.html#names">old and new names</a>.</p>
+      <p class="toc"><strong>On this page:</strong> <a href="#what">What it does</a> · <a href="#step-1">Install</a> · <a href="#step-2">Connect</a> · <a href="#step-3">Ask</a> · <a href="#tools">Tools</a> · <a href="#aws-call">aws_call</a> · <a href="#security">Security</a> · <a href="#faq">FAQ</a></p>
+    </div>
+  </header>
+
+  <section class="wrap" id="what">
+    <div class="kicker">A sandbox, not your account</div>
+    <h2>What Goku's MCP server does</h2>
+    <p>The Model Context Protocol (MCP) is how AI assistants call tools. Goku serves it at <strong>http://localhost:8080/mcp</strong>, on the console's port, over Streamable HTTP, with <strong>25 tools</strong>: Goku's own, and <code>aws_call</code>, which calls any operation of the emulated AWS services.</p>
+    <p>An assistant holding your AWS credentials can run up costs or delete something real. With Goku it works on a sandbox instead:</p>
+    <ul class="list">
+      <li><strong>No AWS account or keys.</strong> Every tool acts on the Goku on your machine.</li>
+      <li><strong>Mistakes are cheap.</strong> Save a snapshot first and restore it if the assistant goes too far.</li>
+      <li><strong>One local cloud.</strong> What the assistant creates, your AWS CLI, SDKs and the console see too.</li>
+    </ul>
+  </section>
+
+  <section class="wrap" id="step-1">
+    <div class="kicker">Step 1</div>
+    <h2>Install Goku and the goku CLI</h2>
+    <p>goku CLI 0.5.0 adds <code>goku mcp</code>, the bridge most clients start. On macOS and Linux:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">$ </span><code>curl -fsSL https://tanuj24.github.io/goku/install.sh | sh</code></pre>
+    </div>
+    <p>On Windows, in PowerShell:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">PowerShell</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">PS&gt; </span><code>irm https://tanuj24.github.io/goku/install.ps1 | iex</code></pre>
+    </div>
+    <p>Already installed? Run <code>goku update --cli</code> and <code>goku update</code>: the MCP server needs Goku 4.1 or later. More options are on the <a href="install.html">install page</a>.</p>
+  </section>
+
+  <section class="wrap" id="step-2">
+    <div class="kicker">Step 2</div>
+    <h2>Connect your assistant</h2>
+    <p>Clients that start a command run <code>goku mcp</code>, which bridges stdio to the endpoint and <strong>starts Goku if it isn't running</strong>. Clients that take a URL connect to <code>http://localhost:8080/mcp</code>; nothing starts Goku over HTTP, so run <code>goku start</code> first.</p>
+
+    <h3>Claude Code</h3>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">$ </span><code>claude mcp add goku -- goku mcp</code></pre>
+    </div>
+    <p>Add <code>--scope user</code> for every project. Or over HTTP:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">$ </span><code>claude mcp add --transport http goku http://localhost:8080/mcp</code></pre>
+    </div>
+    <p>To share it with your team, commit a <code>.mcp.json</code>:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">.mcp.json</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>{
+  "mcpServers": {
+    "goku": { "type": "http", "url": "http://localhost:8080/mcp" }
+  }
+}</code></pre>
+    </div>
+
+    <h3>Claude Desktop</h3>
+    <p>Add Goku to <code>claude_desktop_config.json</code> (macOS: <code>~/Library/Application Support/Claude/</code>, Windows: <code>%APPDATA%\Claude\</code>), then restart Claude Desktop:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">claude_desktop_config.json</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>{
+  "mcpServers": {
+    "goku": { "command": "goku", "args": ["mcp"] }
+  }
+}</code></pre>
+    </div>
+    <p>Desktop apps don't see your shell's <code>PATH</code>: <code>goku mcp config claude-desktop</code> prints this entry with the full path of <code>goku</code>.</p>
+
+    <h3>Cursor</h3>
+    <p>In <code>~/.cursor/mcp.json</code> (all projects) or <code>.cursor/mcp.json</code> (one project):</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">.cursor/mcp.json</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>{
+  "mcpServers": {
+    "goku": { "url": "http://localhost:8080/mcp" }
+  }
+}</code></pre>
+    </div>
+    <p>With the goku CLI instead: <code>{ "command": "goku", "args": ["mcp"] }</code>.</p>
+
+    <h3>VS Code</h3>
+    <p>In <code>.vscode/mcp.json</code>:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">.vscode/mcp.json</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>{
+  "servers": {
+    "goku": { "type": "http", "url": "http://localhost:8080/mcp" }
+  }
+}</code></pre>
+    </div>
+    <p>With the goku CLI instead: <code>{ "type": "stdio", "command": "goku", "args": ["mcp"] }</code>.</p>
+
+    <h3>Windsurf and every other client</h3>
+    <p><code>goku mcp config</code> prints each client's setup and the file it goes in:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>goku mcp config          <span class="cmt"># Claude Code, Claude Desktop, Cursor, VS Code and Windsurf</span>
+goku mcp config windsurf   <span class="cmt"># or claude-code, claude-desktop, cursor, vscode</span></code></pre>
+    </div>
+    <p>Windsurf's file is <code>~/.codeium/windsurf/mcp_config.json</code>. Other clients take the URL (Streamable HTTP) or <code>goku mcp</code> (stdio). The console's <strong>MCP</strong> page, <code>http://localhost:8080/ai-assistants</code>, shows the same setup.</p>
+  </section>
+
+  <section class="wrap" id="step-3">
+    <div class="kicker">Step 3</div>
+    <h2>Ask for what you need</h2>
+    <p>Ask in plain language. From the console's <strong>Things to ask</strong>:</p>
+    <ul class="asks">
+      <li>Create a DynamoDB table called orders and add three sample orders to it.</li>
+      <li>Deploy a Python Lambda function that says hello, invoke it, and show me its logs.</li>
+      <li>My order-processor Lambda fails. Find out why from its logs and the recent request journeys.</li>
+      <li>Throttle half of the DynamoDB PutItem calls for five minutes, so I can test my retries.</li>
+      <li>Save a snapshot called before-migration, then run the migration script.</li>
+      <li>Can the role LambdaExecutionRole read from the S3 bucket reports?</li>
+    </ul>
+  </section>
+
+  <section class="wrap" id="tools">
+    <div class="kicker">Tools</div>
+    <h2>The 25 tools</h2>
+    <p>Goku's tools start with <code>goku_</code>; the AWS tools reach every emulated service.</p>
+    <div class="cards">
+      <div class="card"><strong>Goku and services</strong><span class="tool-names"><code>goku_status</code> <code>goku_services_list</code> <code>goku_service_subscribe</code> <code>goku_service_unsubscribe</code> <code>goku_service_delete</code> <code>goku_load_sample_data</code></span>Version and health, services and their subscriptions, and sample data.</div>
+      <div class="card"><strong>Resource Center</strong><span class="tool-names"><code>goku_resources</code> <code>goku_leftovers</code></span>Every container Goku runs, with CPU, memory and idle time, and what older versions left behind.</div>
+      <div class="card"><strong>CloudWatch Logs</strong><span class="tool-names"><code>goku_logs_groups</code> <code>goku_logs_events</code></span>Log groups and their newest events, with a filter pattern and a start time such as <code>15m</code>.</div>
+      <div class="card"><strong>Environment snapshots</strong><span class="tool-names"><code>goku_snapshot_list</code> <code>goku_snapshot_save</code> <code>goku_snapshot_restore</code> <code>goku_snapshot_reset</code></span>List, save and restore the whole environment, or reset services to empty.</div>
+      <div class="card"><strong>Fault injection</strong><span class="tool-names"><code>goku_chaos_list</code> <code>goku_chaos_add</code> <code>goku_chaos_remove</code> <code>goku_chaos_clear</code></span>Errors, latency, timeouts, dropped or duplicated messages and Lambda cold starts.</div>
+      <div class="card"><strong>IAM</strong><span class="tool-names"><code>goku_iam_simulate</code> <code>goku_iam_effective_access</code></span>Whether a role or user may act on a resource and why, and all it can do.</div>
+      <div class="card"><strong>Journeys and links</strong><span class="tool-names"><code>goku_journeys_recent</code> <code>goku_console_url</code></span>Requests followed across services with the hop that failed, and console links.</div>
+      <div class="card"><strong>AWS</strong><span class="tool-names"><code>aws_list_services</code> <code>aws_list_operations</code> <code>aws_call</code></span>The emulated services, their operations and whether Goku implements them, and any call.</div>
+    </div>
+    <p>Tool hints such as <code>readOnlyHint</code> and <code>destructiveHint</code> let clients that confirm destructive actions ask before <code>aws_call</code>, <code>goku_service_delete</code>, <code>goku_snapshot_restore</code>, <code>goku_snapshot_reset</code>, <code>goku_chaos_remove</code> and <code>goku_chaos_clear</code>.</p>
+  </section>
+
+  <section class="wrap" id="aws-call">
+    <div class="kicker">Any AWS API</div>
+    <h2>How <code>aws_call</code> works</h2>
+    <p><code>aws_call</code> sends any operation of an emulated service with the AWS SDK for JavaScript v3. The assistant passes the service, operation and input as JSON:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">aws_call input</span><button class="copy" type="button">Copy</button></div>
+      <pre><code>{
+  "service": "dynamodb",
+  "operation": "PutItem",
+  "input": {
+    "TableName": "orders",
+    "Item": { "id": { "S": "o-1" }, "total": { "N": "42" } }
+  }
+}</code></pre>
+    </div>
+    <ul class="list">
+      <li><strong><code>service</code></strong> takes the API name (<code>dynamodb</code>, <code>stepfunctions</code>), the SDK client name (<code>sfn</code>) or an alias (<code>states</code>, <code>eventbridge</code>); <strong><code>operation</code></strong> takes <code>PutItem</code>, <code>putItem</code> or <code>put-item</code>.</li>
+      <li><strong>Binary data</strong> goes in as base64, as with the AWS CLI, and comes back as text when it is UTF-8, base64 otherwise, up to 1 MB.</li>
+      <li><strong>AWS errors</strong> come back as a tool error with the error name, message and HTTP status.</li>
+      <li><strong><code>account_id</code> and <code>region</code></strong> act in another Goku account or region.</li>
+    </ul>
+  </section>
+
+  <section class="wrap" id="security">
+    <div class="kicker">Security</div>
+    <h2>Security, and turning it off</h2>
+    <p>The endpoint gives full access to your local Goku without a confirmation step, so it only answers requests from your machine:</p>
+    <ul class="list">
+      <li><strong>Answers only this machine's names:</strong> <code>localhost</code>, <code>127.0.0.1</code>, <code>[::1]</code>, <code>host.docker.internal</code>, <code>*.localhost</code> and names Goku is configured with. This blocks DNS rebinding.</li>
+      <li><strong>Refuses other websites:</strong> browser requests from any origin but the Goku console get <code>403</code>. Command-line and desktop clients, which send no <code>Origin</code>, are allowed.</li>
+    </ul>
+    <p>Settings, on the Goku container:</p>
+    <ul class="list">
+      <li><code>GOKU_MCP=off</code> turns the endpoint off: <code>/mcp</code> answers <code>404</code>. The default is <code>on</code>.</li>
+      <li><code>GOKU_MCP_ALLOWED_HOSTS</code>: more host names the endpoint answers to, comma-separated.</li>
+      <li><code>GOKU_MCP_ALLOWED_ORIGINS</code>: more browser origins allowed to call it, comma-separated.</li>
+    </ul>
+    <p>For example, <code>docker run -e GOKU_MCP=off …</code> starts Goku without it. <code>goku doctor</code> says whether the endpoint answers.</p>
+  </section>
+
+  <section class="wrap faq" id="faq">
+    <div class="kicker">FAQ</div>
+    <h2>Frequently asked questions</h2>
+    <h3>Which AI assistants can connect to Goku?</h3>
+    <p>Claude Code, Claude Desktop, Cursor, VS Code, Windsurf and any other MCP client: over Streamable HTTP at <code>http://localhost:8080/mcp</code>, or through the <code>goku mcp</code> command.</p>
+    <h3>Does the assistant touch my real AWS account?</h3>
+    <p>No. Every tool, <code>aws_call</code> included, acts on the Goku on your machine. The assistant needs no AWS account or credentials.</p>
+    <h3>Is it safe to give an assistant full access?</h3>
+    <p>The access is to your local sandbox only, and the endpoint refuses other websites. Save a snapshot first for an easy way back.</p>
+    <h3>What can the assistant do in Goku?</h3>
+    <p>It gets 25 tools, from logs, snapshots, fault injection and IAM to <code>aws_call</code> for any operation of the emulated AWS services.</p>
+    <h3>Can I turn the MCP server off?</h3>
+    <p>Yes. Run the Goku container with <code>GOKU_MCP=off</code> and <code>/mcp</code> answers <code>404</code>.</p>
+  </section>
+
+  <section class="wrap" id="related">
+    <div class="kicker">Keep going</div>
+    <h2>More Goku guides</h2>
+    <div class="cards">
+      <a class="card" href="run-aws-locally.html"><strong>Run AWS locally without an account</strong>Install Goku, point the AWS CLI at localhost:4566 and create S3 buckets, DynamoDB tables, SQS queues and Lambda functions on your machine.</a>
+      <a class="card" href="test-aws-lambda-locally.html"><strong>Test AWS Lambda locally</strong>Create, invoke and debug Lambda functions in real runtime containers, read their CloudWatch logs and stop on breakpoints in VS Code or JetBrains IDEs.</a>
+      <a class="card" href="dynamodb-local.html"><strong>DynamoDB on your machine</strong>Tables, items, GSI queries, PartiQL, Streams and vector search on localhost, with your data kept between restarts.</a>
+      <a class="card" href="aws-glue-locally.html"><strong>Run AWS Glue jobs locally</strong>Glue 6.0 and 5.1 jobs and notebooks on real Spark with the awsglue libraries, a local Data Catalog and S3.</a>
+      <a class="card" href="install.html"><strong>Install Goku</strong>Every install option: the goku CLI on macOS, Linux and Windows, or a single Docker command.</a>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <p class="signoff">See your cloud, before you ship your cloud.</p>
+    <p><a href="index.html">Home</a> · <a href="install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
+    <p class="footer-guides"><span>Guides:</span> <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a> · <a href="mcp.html">AI assistants (MCP)</a></p>
+    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.term .copy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var code = btn.closest('.term').querySelector('code').textContent;
+        function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(code).then(done);
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = code; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

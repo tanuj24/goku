@@ -1,17 +1,17 @@
 {
   "schema": 1,
   "goku": {
-    "version": "4.0.0",
+    "version": "4.1.0",
     "image": "tanujsoni027/goku",
-    "tag": "4.0.0",
-    "released": "2026-09-27",
+    "tag": "4.1.0",
+    "released": "2026-09-28",
     "notes": "https://tanuj24.github.io/goku/#whats-new",
-    "summary": "Mimir is now Goku everywhere. Update from the console, and keep every piece of state, databases included, in a folder on your disk."
+    "summary": "Connect AI assistants to your local AWS: Goku's MCP server works with Claude Code, Claude Desktop, Cursor, VS Code and more."
   },
   "cli": {
-    "version": "0.4.0",
-    "released": "2026-09-27",
-    "notes": "https://github.com/tanuj24/goku/releases/tag/v0.4.0",
-    "download": "https://github.com/tanuj24/goku/releases/download/v0.4.0/"
+    "version": "0.5.0",
+    "released": "2026-09-28",
+    "notes": "https://github.com/tanuj24/goku/releases/tag/v0.5.0",
+    "download": "https://github.com/tanuj24/goku/releases/download/v0.5.0/"
   }
 }

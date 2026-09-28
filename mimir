@@ -1924,6 +1924,8 @@ Working with a running Goku
   chaos            Fault injection: presets, stop, panic button, events
   iam              Enforcement mode, access-denied log, generate-policy, IAM Lab tests
   lambda debug     Step-through debugging of a Lambda function from your IDE
+  (goku mcp, the MCP server for AI assistants, is in the goku binary only; clients that
+   speak Streamable HTTP can use Goku's own endpoint: $CONSOLE_URL/mcp)
 
 Global options: --json  --endpoint URL  --console-url URL  --region R  --no-color
 Exit codes: 0 ok · 1 failed / not ready / test failures · 2 usage · 3 Goku unreachable · 4 Goku too old
@@ -2160,6 +2162,9 @@ case "$CMD" in
   chaos)     cmd_chaos "$@" ;;
   iam)       cmd_iam "$@" ;;
   lambda)    cmd_lambda "$@" ;;
+  mcp)       err "goku mcp is in the goku binary only (macOS, Linux x86_64/arm64, Windows), not in this script."
+             err "An MCP client that speaks Streamable HTTP can use Goku's own endpoint: $CONSOLE_URL/mcp"
+             exit "$EX_USAGE" ;;
   version|-v|--version) cmd_version ;;
   help)      help_cmd "${1:-}" ;;
   ""|-h|--help) usage ;;

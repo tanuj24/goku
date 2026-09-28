@@ -73,6 +73,22 @@ docker run -d --name goku -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 \
 
 The [install guide](https://tanuj24.github.io/goku/install.html) covers every option, including upgrades and troubleshooting.
 
+## AI assistants (MCP)
+
+Goku serves the Model Context Protocol at `http://localhost:8080/mcp` (Streamable HTTP), so Claude Code, Claude
+Desktop, Cursor, VS Code, Windsurf and other MCP clients can work with your local AWS: 25 tools, including
+`aws_call` for any operation of the emulated AWS services. Everything they change stays on your machine; nothing
+reaches real AWS.
+
+```bash
+claude mcp add goku -- goku mcp                                  # Claude Code; goku mcp starts Goku if it isn't running
+claude mcp add --transport http goku http://localhost:8080/mcp   # or over HTTP, while Goku runs
+goku mcp config cursor                                           # the setup for claude-desktop, cursor, vscode or windsurf
+```
+
+Requests from other websites are refused, and `GOKU_MCP=off` turns the endpoint off. The
+[MCP guide](https://tanuj24.github.io/goku/mcp.html) has the setup for every client and the full tool list.
+
 ## Features
 
 - **73 AWS-compatible services and 60 console pages.** They include:
@@ -100,6 +116,7 @@ The [install guide](https://tanuj24.github.io/goku/install.html) covers every op
 - [Test and debug AWS Lambda locally](https://tanuj24.github.io/goku/test-aws-lambda-locally.html)
 - [Run DynamoDB locally](https://tanuj24.github.io/goku/dynamodb-local.html)
 - [Run AWS Glue jobs locally](https://tanuj24.github.io/goku/aws-glue-locally.html)
+- [Connect AI assistants to local AWS with MCP](https://tanuj24.github.io/goku/mcp.html)
 
 ## Mimir is now Goku
 
