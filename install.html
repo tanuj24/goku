@@ -119,6 +119,7 @@
     .kicker { text-transform: uppercase; letter-spacing: .1em; font-size: 0.78rem; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
     h2 { font-size: 1.6rem; letter-spacing: -0.01em; margin-bottom: 14px; }
     h3 { font-size: 1.1rem; margin: 24px 0 6px; }
+    h3[id] { scroll-margin-top: 70px; }
     p { color: var(--muted); margin-bottom: 12px; }
     p strong, li strong { color: var(--ink); }
     td code, p code, li code, .card code, .callout code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; font-size: 0.88em; color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-wrap: anywhere; }
@@ -229,13 +230,21 @@
         <tr><td><code>goku data</code></td><td>Shows where your data lives and how big it is; <code>goku data open</code> opens the folder, <code>goku data migrate</code> moves an older install's volume into it.</td></tr>
         <tr><td><code>goku open</code></td><td>Opens the console, or a page in it: <code>goku open sqs</code>, <code>goku open lambda my-fn</code>.</td></tr>
         <tr><td><code>goku env</code></td><td>Prints the endpoint and credential variables for your AWS CLI and SDKs.</td></tr>
-        <tr><td><code>goku doctor</code></td><td>Checks Docker, ports, saved state, curl and the backend's features, and whether the MCP endpoint answers.</td></tr>
+        <tr><td><code>goku doctor</code></td><td>Checks Docker, ports, saved state, curl and the backend's features, whether the MCP endpoint answers and whether your AWS profiles are mounted.</td></tr>
         <tr><td><code>goku mcp</code></td><td>Goku's MCP server for AI assistants, on stdin and stdout. Starts Goku when it isn't running.</td></tr>
         <tr><td><code>goku mcp config</code></td><td>Prints the setup for Claude Code, Claude Desktop, Cursor, VS Code and Windsurf; <code>goku mcp config cursor</code> prints one.</td></tr>
+        <tr><td><code>goku ws ls</code></td><td>Lists your <a href="workspaces.html">workspaces</a> with their state, services and memory, and what runs outside them. <code>goku ws</code> is short for <code>goku workspace</code>.</td></tr>
+        <tr><td><code>goku ws create NAME</code></td><td>Saves services as a workspace: <code>--services lambda,ecs,dynamodb</code>, <code>--template data</code> or <code>--from-current</code>; <code>--auto-pause 30</code> pauses it after 30 idle minutes.</td></tr>
+        <tr><td><code>goku ws start NAME</code></td><td>Turns a workspace's services on and brings back what it paused or stopped. <code>pause</code> freezes its containers, <code>resume</code> unfreezes them, <code>stop</code> frees their memory and keeps the data, and <code>switch</code> starts it and stops the others.</td></tr>
+        <tr><td><code>goku ws export NAME</code></td><td>Writes a workspace as JSON to share; <code>goku ws import FILE</code> adds it. Also <code>show</code>, <code>edit</code>, <code>delete</code> and <code>stop-outside</code>.</td></tr>
+        <tr><td><code>goku iam profiles</code></td><td>Lists the AWS profiles on this machine: type, region, SSO account and role, never keys.</td></tr>
+        <tr><td><code>goku iam connect</code></td><td>Connects the IAM Lab to the AWS account of a profile (<code>--profile NAME</code>) and scans its IAM, read-only. Signs in on your machine, SSO and MFA included.</td></tr>
+        <tr><td><code>goku iam roles</code></td><td>Lists the account's roles: who each one trusts, when it was last used and its policies. <code>goku iam roles deploy</code> searches.</td></tr>
+        <tr><td><code>goku iam access ROLE</code></td><td>What a role can do: who can assume it, its policies, the actions it is allowed per service and its risks. <a href="aws-iam-role-permissions.html">Guide</a>.</td></tr>
         <tr><td><code>goku uninstall</code></td><td>Removes Goku and keeps your data folder; add <code>--purge</code> to delete it too.</td></tr>
       </table>
     </div>
-    <p>The CLI also drives a running Goku: <code>goku services</code>, <code>goku ready</code>, <code>goku snapshot</code>, <code>goku chaos</code>, <code>goku iam</code> and <code>goku lambda debug</code>. Run <code>goku help &lt;command&gt;</code> for the details.</p>
+    <p>The CLI also drives a running Goku: <code>goku services</code>, <code>goku ready</code>, <code>goku snapshot</code>, <code>goku chaos</code>, <code>goku iam</code> and <code>goku lambda debug</code>. Run <code>goku help &lt;command&gt;</code> for the details. The <code>goku ws</code> and <code>goku iam</code> role commands need Goku 4.2 and goku CLI 0.6.0 or later.</p>
   </section>
 
   <section class="wrap" id="env">
@@ -260,7 +269,10 @@
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
       <pre class="one"><span class="prompt">$ </span><code>claude mcp add goku -- goku mcp</code></pre>
     </div>
-    <p><code>goku mcp</code> starts Goku if it isn't running, and <code>goku mcp config</code> prints the setup for Claude Desktop, Cursor, VS Code and Windsurf. The <a href="mcp.html">MCP guide</a> covers every client and the 25 tools.</p>
+    <p><code>goku mcp</code> starts Goku if it isn't running, and <code>goku mcp config</code> prints the setup for Claude Desktop, Cursor, VS Code and Windsurf. The <a href="mcp.html">MCP guide</a> covers every client and the 34 tools.</p>
+    <h3 id="aws-profiles">Use your AWS profiles in the IAM Lab</h3>
+    <p>The IAM Lab can show what the roles of your real AWS account can do, with an AWS profile you already have. <code>goku start</code> mounts your AWS config folder read-only into Goku (<code>~/.aws</code>, or <code>%USERPROFILE%\.aws</code> on Windows, at <code>/run/goku/aws</code>). Only the IAM Lab reads it, every AWS call it makes is read-only, and credentials are held in memory only. <code>goku update</code> adds the mount to an existing container, <code>goku doctor</code> shows whether it is there, and <code>GOKU_AWS_PROFILES=off</code> leaves it out.</p>
+    <p>Running the image with plain Docker? Add <code>-v ~/.aws:/run/goku/aws:ro</code> to your <a href="#docker"><code>docker run</code></a> (on Windows, <code>-v "$env:USERPROFILE\.aws:/run/goku/aws:ro"</code>). Profiles that need your terminal, such as an MFA code or an expired SSO sign-in, connect with <code>goku iam connect --profile NAME</code>. The <a href="aws-iam-role-permissions.html">role permissions guide</a> walks through it.</p>
   </section>
 
   <section class="wrap" id="docker">
@@ -289,7 +301,7 @@ docker run -d --name goku `
   -v /tmp/goku-glue:/tmp/goku-glue `
   tanujsoni027/goku:latest</code></pre>
     </div>
-    <p>The web console is at <strong>http://localhost:8080</strong> and the AWS-compatible endpoint at <strong>http://localhost:4566</strong>. Add <code>-e GOKU_SERVICES=all</code> to start with every service subscribed, and <code>-p 2000:2000/udp</code> to send X-Ray segments from apps on your host.</p>
+    <p>The web console is at <strong>http://localhost:8080</strong> and the AWS-compatible endpoint at <strong>http://localhost:4566</strong>. Add <code>-e GOKU_SERVICES=all</code> to start with every service subscribed, <code>-p 2000:2000/udp</code> to send X-Ray segments from apps on your host, and <code>-v ~/.aws:/run/goku/aws:ro</code> to <a href="#aws-profiles">use your AWS profiles in the IAM Lab</a>.</p>
     <div class="callout"><strong>Everything lives in your data folder.</strong> Goku keeps every bucket, table, function and job in the folder you mount at <code>/app/data</code>, and the data of its engines too: RDS PostgreSQL databases, OpenSearch, MSK, ECR, DocumentDB, MemoryDB, Amazon MQ and Redshift. Stop Goku, update it or reset Docker, then start it with the same folder and you resume where you left off. Leave the <code>-v</code> for the folder out and Goku keeps its state in a <code>goku-data</code> Docker volume instead. RDS MySQL and MariaDB data stays in a Docker volume on macOS and Windows.</div>
   </section>
 
@@ -434,7 +446,7 @@ docker pull tanujsoni027/goku:latest</code></pre>
   <footer class="wrap">
     <p class="signoff">See your cloud, before you ship your cloud.</p>
     <p><a href="index.html">Home</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
-    <p class="footer-guides"><span>Guides:</span> <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a> · <a href="mcp.html">AI assistants (MCP)</a></p>
+    <p class="footer-guides"><span>Guides:</span> <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a> · <a href="mcp.html">AI assistants (MCP)</a> · <a href="workspaces.html">Workspaces</a> · <a href="aws-iam-role-permissions.html">IAM role permissions</a></p>
     <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
   </footer>
 

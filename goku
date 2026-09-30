@@ -1153,7 +1153,7 @@ snap_show() {
   if $JSON_OUT; then out_json; return 0; fi
   _pre=""; [ -n "$(jget manifest.name)" ] && _pre="manifest."
   say "${C_B}$(jfirst "${_pre}name" name)${C_0}  $(jfirst "${_pre}description" description)"
-  say "  created:      $(jfirst "${_pre}createdAt" createdAt | awk "$AWK_LIB"'{print isotime($0)}') UTC by Goku $(jfirst "${_pre}mimirVersion" mimirVersion)"
+  say "  created:      $(jfirst "${_pre}createdAt" createdAt | awk "$AWK_LIB"'{print isotime($0)}') UTC by Goku $(jfirst "${_pre}gokuVersion" "${_pre}mimirVersion" gokuVersion mimirVersion)"
   say "  size:         $(jfirst sizeBytes "${_pre}totalBytes" | awk "$AWK_LIB"'{print hbytes($1)}')"
   say "  engine data:  $(jfirst "${_pre}options.includeEngineData" includeEngineData)   subscriptions: $(jfirst "${_pre}options.includeSubscriptions" includeSubscriptions)"
   say "  accounts:     $(jrows "${_pre}accounts" @key | while IFS= read -r _i; do jget "${_pre}accounts.$_i"; done | tr '\n' ' ')"

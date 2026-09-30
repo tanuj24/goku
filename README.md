@@ -76,7 +76,7 @@ The [install guide](https://tanuj24.github.io/goku/install.html) covers every op
 ## AI assistants (MCP)
 
 Goku serves the Model Context Protocol at `http://localhost:8080/mcp` (Streamable HTTP), so Claude Code, Claude
-Desktop, Cursor, VS Code, Windsurf and other MCP clients can work with your local AWS: 25 tools, including
+Desktop, Cursor, VS Code, Windsurf and other MCP clients can work with your local AWS: 34 tools, including
 `aws_call` for any operation of the emulated AWS services. Everything they change stays on your machine; nothing
 reaches real AWS.
 
@@ -99,7 +99,13 @@ Requests from other websites are refused, and `GOKU_MCP=off` turns the endpoint 
 - **AWS Lambda:** every current runtime on arm64 and x86_64, plus step-through debugging and response streaming.
 - **AWS Glue 6.0 and 5.1:** real PySpark jobs and notebooks, and the Data Catalog.
 - **DynamoDB:** vector search, a PartiQL editor and an item explorer.
+- **4,255 of the 5,849 AWS operations it emulates (73%).** Glue, 22 core services and all 14 data services are
+  complete; operations Goku can't fully reproduce locally are marked partial on the console's coverage page.
+- **Workspaces:** save the services you work with together, such as Lambda, ECS and DynamoDB, and start, pause, stop
+  or switch them as one, so only what you use today takes memory. `goku ws` does it from a terminal.
 - **IAM Policy Lab:** see who gains or loses access before you ship an IAM change.
+- **Role access:** see what any role in your real AWS account can do, with an AWS profile you already have: every
+  allowed action, who can assume it and its risks. Read-only, with credentials held in memory only.
 - **Developer tools:**
   - environment snapshots
   - fault injection
@@ -117,6 +123,8 @@ Requests from other websites are refused, and `GOKU_MCP=off` turns the endpoint 
 - [Run DynamoDB locally](https://tanuj24.github.io/goku/dynamodb-local.html)
 - [Run AWS Glue jobs locally](https://tanuj24.github.io/goku/aws-glue-locally.html)
 - [Connect AI assistants to local AWS with MCP](https://tanuj24.github.io/goku/mcp.html)
+- [Run only the AWS services you need locally with Workspaces](https://tanuj24.github.io/goku/workspaces.html)
+- [See what an AWS IAM role can do, from your AWS profile](https://tanuj24.github.io/goku/aws-iam-role-permissions.html)
 
 ## Mimir is now Goku
 

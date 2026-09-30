@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1120">
+  <title>See What an AWS IAM Role Can Do: Effective Permissions | Goku</title>
+  <meta name="description" content="See what an AWS IAM role can do: every allowed action, who can assume it and its risks, from the AWS profile you already have. Local, read-only and free.">
+  <link rel="canonical" href="https://tanuj24.github.io/goku/aws-iam-role-permissions.html">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Goku">
+  <meta property="og:title" content="See what an AWS IAM role can do: effective permissions from your AWS profile, locally and read-only">
+  <meta property="og:description" content="See what an AWS IAM role can do: every allowed action, who can assume it and its risks, from the AWS profile you already have. Local, read-only and free.">
+  <meta property="og:url" content="https://tanuj24.github.io/goku/aws-iam-role-permissions.html">
+  <meta property="og:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta property="og:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <meta property="article:published_time" content="2026-09-30">
+  <meta property="article:modified_time" content="2026-09-30">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="See what an AWS IAM role can do: effective permissions from your AWS profile, locally and read-only">
+  <meta name="twitter:description" content="See what an AWS IAM role can do: every allowed action, who can assume it and its risks, from the AWS profile you already have. Local, read-only and free.">
+  <meta name="twitter:image" content="https://tanuj24.github.io/goku/assets/goku-social-preview.png">
+  <meta name="twitter:image:alt" content="Goku: run AWS locally, free. 73 AWS-compatible services and a web console on your laptop">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to see what an AWS IAM role can do with the AWS profile you already have",
+  "description": "Connect Goku's IAM Lab to your AWS account with an existing AWS profile, scan its roles with read-only calls, and see a role's effective permissions, who can assume it and its risks.",
+  "url": "https://tanuj24.github.io/goku/aws-iam-role-permissions.html",
+  "mainEntityOfPage": "https://tanuj24.github.io/goku/aws-iam-role-permissions.html",
+  "image": "https://tanuj24.github.io/goku/screenshots/services/iam-role-access.png",
+  "inLanguage": "en",
+  "datePublished": "2026-09-30",
+  "dateModified": "2026-09-30",
+  "author": {
+    "@type": "Person",
+    "name": "Tanuj Soni"
+  },
+  "about": {
+    "@id": "https://tanuj24.github.io/goku/#software",
+    "name": "Goku"
+  },
+  "tool": [
+    {
+      "@type": "HowToTool",
+      "name": "Docker"
+    },
+    {
+      "@type": "HowToTool",
+      "name": "goku CLI 0.6.0 or later"
+    },
+    {
+      "@type": "HowToTool",
+      "name": "An AWS CLI profile with IAM read access, such as IAMReadOnlyAccess, SecurityAudit or ReadOnlyAccess"
+    }
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Install or update Goku",
+      "text": "Install the goku CLI, or run goku update --cli and goku update: role access needs Goku 4.2 and goku CLI 0.6.0 or later. goku start mounts ~/.aws read-only into Goku at /run/goku/aws; with plain Docker, add -v ~/.aws:/run/goku/aws:ro.",
+      "url": "https://tanuj24.github.io/goku/aws-iam-role-permissions.html#step-1"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Connect a profile",
+      "text": "In the console, open IAM, then Role access, and connect one of your profiles. Or run goku iam connect --profile NAME, which signs in on your machine with the AWS CLI, SSO and MFA included, and hands Goku a session held in memory only. Goku scans the account's IAM with read-only calls.",
+      "url": "https://tanuj24.github.io/goku/aws-iam-role-permissions.html#step-2"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Pick a role and see its access",
+      "text": "Run goku iam roles to list the account's roles, then goku iam access ROLE to see who can assume it, its policies, the actions it is allowed per service with their resources and conditions, and its risks.",
+      "url": "https://tanuj24.github.io/goku/aws-iam-role-permissions.html#step-3"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does Goku change anything in my AWS account?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Every AWS call Goku makes with a profile passes a read-only guard: only reads such as sts:GetCallerIdentity and IAM Get, List and Simulate operations can be sent, and anything else fails before it is signed, even when the profile is an administrator."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where are my AWS credentials kept?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In Goku's memory, only until they expire. They are never saved, logged or returned by any API. Your ~/.aws folder is mounted read-only, and only the IAM Lab reads it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which AWS profiles work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Access keys, IAM Identity Center (SSO) and assume-role profiles. Profiles that need your terminal, such as an MFA code, a credential helper or an expired SSO sign-in, connect with goku iam connect --profile NAME."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What permissions does the profile need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "IAM read access. The AWS managed policies IAMReadOnlyAccess, SecurityAudit or ReadOnlyAccess are enough."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I keep Goku from seeing my ~/.aws folder?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Set GOKU_AWS_PROFILES=off for the goku CLI and it doesn't mount the folder. With plain Docker, leave out the -v ~/.aws:/run/goku/aws:ro mount."
+      }
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://tanuj24.github.io/goku/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://tanuj24.github.io/goku/#guides"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "IAM role permissions",
+      "item": "https://tanuj24.github.io/goku/aws-iam-role-permissions.html"
+    }
+  ]
+}
+  </script>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #101a2c;
+      --surface2: #0d1424;
+      --line: #1e2b40;
+      --ink: #e6ecf5;
+      --muted: #93a1b7;
+      --teal: #14b8a6;
+      --teal-deep: #0d9488;
+      --cyan: #4cc9f0;
+      --glow: rgba(20,184,166,0.13);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { color-scheme: dark; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); font-size: 1.05rem; line-height: 1.7; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    a { color: var(--cyan); }
+
+    nav { position: sticky; top: 0; z-index: 50; background: rgba(11,17,32,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    nav .wrap { display: flex; align-items: center; gap: 22px; height: 56px; }
+    .wordmark { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.12rem; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; margin-right: auto; }
+    .wordmark img { height: 32px; width: auto; display: block; }
+    .wordmark span { color: var(--teal); }
+    nav a.navlink { color: var(--muted); text-decoration: none; font-size: 0.95rem; padding: 4px 2px; white-space: nowrap; }
+    nav a.navlink:hover { color: var(--ink); }
+    nav a.navlink.active { color: var(--teal); font-weight: 600; }
+    @media (max-width: 640px) { nav .wrap { gap: 16px; } .nav-wide { display: none; } }
+
+    nav.crumbs { position: static; z-index: auto; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; }
+    header.article { padding: 26px 0 40px; background: radial-gradient(900px 420px at 50% -80px, var(--glow), transparent 70%); }
+    .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 26px; }
+    .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 8px; }
+    .crumbs li + li::before { content: "/"; margin-right: 8px; color: var(--line); }
+    .crumbs a { color: var(--muted); text-decoration: none; }
+    .crumbs a:hover { color: var(--ink); }
+    .crumbs [aria-current] { color: var(--ink); }
+    h1 { font-size: clamp(2rem, 4.6vw, 2.9rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+    .grad { background: linear-gradient(90deg, #14b8a6, #4cc9f0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lede { font-size: 1.15rem; color: var(--muted); max-width: 800px; margin-bottom: 12px; }
+    .lede strong { color: var(--ink); }
+    .meta { font-size: 0.85rem; color: var(--muted); }
+    .rename-note { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 12px 16px; color: var(--muted); font-size: 0.93rem; margin-top: 20px; max-width: 800px; }
+    .rename-note strong { color: var(--ink); }
+    .toc { margin-top: 22px; font-size: 0.93rem; color: var(--muted); }
+    .toc strong { color: var(--ink); margin-right: 6px; }
+    .toc a { color: var(--muted); }
+    .toc a:hover { color: var(--ink); }
+
+    section, section.wrap { padding-top: 44px; padding-bottom: 44px; border-top: 1px solid var(--line); scroll-margin-top: 70px; }
+    .kicker { text-transform: uppercase; letter-spacing: .1em; font-size: 0.78rem; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
+    h2 { font-size: 1.6rem; letter-spacing: -0.01em; line-height: 1.3; margin-bottom: 14px; }
+    h3 { font-size: 1.1rem; line-height: 1.4; margin: 24px 0 6px; }
+    p { color: var(--muted); margin-bottom: 12px; }
+    p strong, li strong { color: var(--ink); }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    td code, p code, li code, .card code, .callout code, .rename-note code, h3 code { background: var(--surface2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; font-size: 0.88em; color: var(--ink); overflow-wrap: anywhere; }
+    ul.list, ol.list { margin: 8px 0 14px; }
+    ul.list { list-style: none; }
+    ul.list li { color: var(--muted); padding-left: 20px; position: relative; margin-bottom: 8px; }
+    ul.list li::before { content: ""; position: absolute; left: 4px; top: 0.72em; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+    ol.list { padding-left: 22px; }
+    ol.list li { color: var(--muted); margin-bottom: 8px; padding-left: 4px; }
+    ol.list li::marker { color: var(--teal); font-weight: 700; }
+
+    .term { background: var(--surface2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin: 14px 0 20px; text-align: left; }
+    .term-bar { display: flex; align-items: center; gap: 7px; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #febc2e; }
+    .dot.g { background: #28c840; }
+    .term-title { color: var(--muted); font-size: 0.78rem; margin-left: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .term .copy { margin-left: auto; flex: none; background: var(--surface); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 3px 12px; font-size: 0.75rem; font-family: inherit; cursor: pointer; transition: color .15s ease, border-color .15s ease; }
+    .term .copy:hover { color: var(--teal); border-color: var(--teal); }
+    .term .copy:focus-visible { outline: 2px solid var(--cyan); outline-offset: 1px; }
+    .term pre { margin: 0; padding: 16px 18px; overflow-x: auto; font-size: 0.88rem; line-height: 1.55; color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .prompt { color: var(--teal); user-select: none; -webkit-user-select: none; }
+    .cmt { color: #6b7a90; }
+    @media (max-width: 640px) { .term pre.one { white-space: pre-wrap; overflow-wrap: anywhere; } .term pre { font-size: 0.82rem; padding: 14px; } }
+
+    .table-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 18px; overflow-x: auto; margin: 18px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: left; text-transform: uppercase; letter-spacing: .06em; font-size: 0.75rem; color: var(--muted); padding: 12px; border-bottom: 1px solid var(--line); }
+    td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--muted); vertical-align: top; }
+    td.goku { color: var(--teal); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    .table-note { font-size: 0.85rem; }
+    @media (max-width: 640px) {
+      .table-card { padding: 2px 8px;
+        background:
+          linear-gradient(to right, var(--surface) 30%, rgba(16,26,44,0)) left / 32px 100% no-repeat local,
+          linear-gradient(to left, var(--surface) 30%, rgba(16,26,44,0)) right / 32px 100% no-repeat local,
+          radial-gradient(farthest-side at 0 50%, rgba(20,184,166,0.35), transparent) left / 10px 100% no-repeat scroll,
+          radial-gradient(farthest-side at 100% 50%, rgba(20,184,166,0.35), transparent) right / 10px 100% no-repeat scroll,
+          var(--surface); }
+      th, td { padding: 9px 8px; }
+      table { font-size: 0.88rem; }
+      td code { white-space: nowrap; overflow-wrap: normal; }
+    }
+
+    .callout { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 10px; padding: 14px 16px; color: var(--muted); margin: 16px 0; }
+    .callout strong { color: var(--ink); }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 20px 0; }
+    .card { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; color: var(--muted); text-decoration: none; font-size: 0.95rem; transition: border-color .15s ease, box-shadow .15s ease; }
+    a.card:hover { border-color: var(--teal); box-shadow: 0 8px 30px rgba(20,184,166,0.08); }
+    .card strong { color: var(--ink); display: block; margin-bottom: 6px; font-size: 1rem; }
+    a.card strong { color: var(--cyan); }
+
+    figure.shot { margin: 18px 0 26px; }
+    figure.shot picture { display: block; }
+    figure.shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); }
+    figure.shot figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 10px; }
+
+    .faq h3 { font-size: 1.08rem; color: var(--ink); margin: 22px 0 6px; }
+
+    footer, footer.wrap { padding-top: 44px; padding-bottom: 64px; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    footer .signoff { color: var(--ink); font-weight: 600; margin-bottom: 8px; }
+    footer p { margin-bottom: 8px; }
+    .footer-guides span { color: var(--ink); font-weight: 600; }
+    .disclaimer { font-size: 0.8rem; margin-top: 12px; }
+
+    .asks { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin: 16px 0 20px; }
+    .asks li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; color: var(--ink); font-size: 0.95rem; line-height: 1.55; }
+    .tool-names { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .card .tool-names code { font-size: 0.8em; }
+    figure.shot.narrow img { max-width: 640px; margin-left: auto; margin-right: auto; }
+    figure.shot.narrow figcaption { text-align: center; }
+  </style>
+</head>
+<body>
+  <nav aria-label="Main">
+    <div class="wrap">
+      <a class="wordmark" href="index.html"><img src="assets/goku-logo-bar.svg" alt="" width="74" height="32">Goku<span>.</span></a>
+      <a class="navlink" href="index.html">Home</a>
+      <a class="navlink nav-wide" href="index.html#whats-new">What's new</a>
+      <a class="navlink nav-wide active" href="index.html#guides">Guides</a>
+      <a class="navlink" href="install.html">Install</a>
+      <a class="navlink nav-wide" href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a>
+    </div>
+  </nav>
+
+  <header class="article">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#guides">Guides</a></li>
+          <li><span aria-current="page">IAM role permissions</span></li>
+        </ol>
+      </nav>
+      <div class="kicker">Guide · IAM</div>
+      <h1>See what an AWS IAM role <span class="grad">can do</span></h1>
+      <p class="lede"><strong>Effective permissions from your AWS profile, locally and read-only.</strong> Goku's IAM Lab connects to your real AWS account with a profile you already have, scans its roles, and shows for any role every action it is allowed and the policy statement behind it, who can assume it in plain words, and what is risky. Nothing in the account changes, and your credentials stay in memory.</p>
+      <p class="meta">Updated 30 September 2026 · Goku 4.2.0 · goku CLI 0.6.0 · Free</p>
+      <p class="rename-note"><strong>Goku was formerly called Mimir.</strong> Same product, new name: the image is now <code>tanujsoni027/goku</code> (it was <code>tanujsoni027/mimir-aws</code>) and the command is <code>goku</code>. See <a href="install.html#names">old and new names</a>.</p>
+      <p class="toc"><strong>On this page:</strong> <a href="#what">What you see</a> · <a href="#read-only">Read-only</a> · <a href="#step-1">Install</a> · <a href="#step-2">Connect</a> · <a href="#step-3">Pick a role</a> · <a href="#mcp">MCP</a> · <a href="#faq">FAQ</a></p>
+    </div>
+  </header>
+
+  <section class="wrap" id="what">
+    <div class="kicker">Effective permissions</div>
+    <h2>What you see for each role</h2>
+    <p>A role's access is spread over its trust policy, managed and inline policies and permissions boundary. The IAM Lab puts it together, from a scan of the account:</p>
+    <ul class="list">
+      <li><strong>Every action it is allowed</strong>, service by service, with the resources and conditions that apply and the policy statement behind each. Actions are marked allowed, scoped to some resources, conditional or denied, and counted by access level: List, Read, Write, Permissions management and Tagging.</li>
+      <li><strong>Who can assume it, in plain words:</strong> an AWS service, another account or a GitHub Actions workflow through OIDC, with its conditions spelled out, such as &ldquo;Only GitHub repo acme/app on any branch&rdquo;.</li>
+      <li><strong>Its policies and permissions boundary</strong>, and when it was last used.</li>
+      <li><strong>Its risks</strong>, such as administrator access, privilege escalation and trust from other accounts.</li>
+      <li><strong>Exports</strong> as JSON, Markdown or CSV, for a review or a ticket.</li>
+    </ul>
+    <figure class="shot">
+      <picture><source type="image/webp" srcset="screenshots/iam-role-effective-permissions-by-service.webp"><img src="screenshots/iam-role-effective-permissions-by-service.png" width="1118" height="1020" alt="An AWS IAM role in Goku's IAM Lab: administrator warning, allowed actions by access level, and S3 actions with their resources and condition keys" loading="lazy" decoding="async"></picture>
+      <figcaption>A role's access: a summary, allowed actions by access level, and each action with its resources and condition keys. The account shown is sample data.</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap" id="read-only">
+    <div class="kicker">Safe by design</div>
+    <h2>Read-only, with your own profile</h2>
+    <ul class="list">
+      <li><strong>No role to deploy.</strong> Goku uses an AWS profile you already have: access keys, IAM Identity Center (SSO) or assume-role.</li>
+      <li><strong>Read-only, always.</strong> Every AWS call made with a profile passes a read-only guard, so nothing in the account can change, even when the profile is an administrator. Only these calls can be sent: <code>sts:GetCallerIdentity</code>; IAM operations that start with <code>Get</code>, <code>List</code> or <code>Simulate</code>; the Access Analyzer checks <code>ValidatePolicy</code>, <code>CheckNoNewAccess</code>, <code>CheckAccessNotGranted</code> and <code>CheckNoPublicAccess</code>; Organizations <code>Describe</code> and <code>List</code> calls; and SSO's <code>GetRoleCredentials</code>. <code>sts:AssumeRole</code> runs only to follow an assume-role profile. Anything else fails before it is signed.</li>
+      <li><strong>Credentials in memory only.</strong> They are never saved, logged or returned by any API, and Goku keeps them only until they expire.</li>
+      <li><strong>Your <code>~/.aws</code> is mounted read-only</strong>, and only the IAM Lab reads it.</li>
+    </ul>
+    <p>The profile needs IAM read access: the AWS managed policies <code>IAMReadOnlyAccess</code>, <code>SecurityAudit</code> or <code>ReadOnlyAccess</code> are enough.</p>
+  </section>
+
+  <section class="wrap" id="step-1">
+    <div class="kicker">Step 1</div>
+    <h2>Install or update Goku</h2>
+    <p>Role access needs Goku 4.2 and goku CLI 0.6.0 or later. On macOS and Linux:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">$ </span><code>curl -fsSL https://tanuj24.github.io/goku/install.sh | sh</code></pre>
+    </div>
+    <p>On Windows, in PowerShell:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">PowerShell</span><button class="copy" type="button">Copy</button></div>
+      <pre class="one"><span class="prompt">PS&gt; </span><code>irm https://tanuj24.github.io/goku/install.ps1 | iex</code></pre>
+    </div>
+    <p>Already installed? Run <code>goku update --cli</code>, then <code>goku update</code>.</p>
+    <p><code>goku start</code> mounts your AWS config folder read-only into Goku (<code>~/.aws</code>, or <code>%USERPROFILE%\.aws</code> on Windows, at <code>/run/goku/aws</code>), so the console can list your profiles. Files that <code>AWS_CONFIG_FILE</code> or <code>AWS_SHARED_CREDENTIALS_FILE</code> name elsewhere are mounted read-only too. <code>goku update</code> recreates an existing container to add the mount, and <code>goku doctor</code> shows whether it is there. <code>GOKU_AWS_PROFILES=off</code> leaves it out.</p>
+    <p>Running the image with plain Docker? Add the mount to your <code>docker run</code>:</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>mkdir -p ~/.goku/data
+docker run -d --name goku \
+  -p 8080:80 -p 4566:4566 -p 5500-5524:5500-5524 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v ~/.goku/data:/app/data \
+  -v /tmp/goku-glue:/tmp/goku-glue \
+  -v ~/.aws:/run/goku/aws:ro \
+  tanujsoni027/goku:latest</code></pre>
+    </div>
+    <p>In PowerShell, the mount is <code>-v "$env:USERPROFILE\.aws:/run/goku/aws:ro"</code>. The rest of the command is on the <a href="install.html#docker">install page</a>.</p>
+  </section>
+
+  <section class="wrap" id="step-2">
+    <div class="kicker">Step 2</div>
+    <h2>Connect a profile</h2>
+    <h3>In the console</h3>
+    <p>Open <strong>IAM</strong> in the console and choose <strong>Role access</strong>, <code>http://localhost:8080/iam/roles</code>. Your profiles are listed with their type and region; <strong>Connect</strong> scans the account's IAM (roles, users and policies) into a snapshot.</p>
+    <figure class="shot">
+      <picture><source type="image/webp" srcset="screenshots/iam-lab-connect-aws-profile-read-only.webp"><img src="screenshots/iam-lab-connect-aws-profile-read-only.png" width="1118" height="960" alt="Role access in Goku's IAM Lab: connected AWS accounts and the AWS profiles of ~/.aws with access keys, SSO, assume-role and credential process types, read-only" loading="lazy" decoding="async"></picture>
+      <figcaption>Role access lists the profiles of your <code>~/.aws</code>. A profile that needs your terminal shows the command to run.</figcaption>
+    </figure>
+    <h3>From a terminal</h3>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>goku iam profiles                 <span class="cmt"># type, region, SSO account and role; never keys</span>
+goku iam connect --profile prod   <span class="cmt"># sign in, connect read-only, scan</span></code></pre>
+    </div>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>goku iam connect --profile prod</code>
+getting credentials for profile prod from the AWS CLI…
+connecting profile prod to Goku (read-only)…
+  ✔ profile credentials                   terminal session
+  ✔ sts:GetCallerIdentity                 arn:aws:sts::123456789012:assumed-role/Admin/me
+  ✔ iam:GetAccountAuthorizationDetails    allowed
+  – iam:SimulatePrincipalPolicy           optional — AccessDenied: not allowed
+Connected acme-prod (123456789012) with profile prod: 213 roles, 45 users, 1,204 policies.</pre>
+    </div>
+    <p><code>goku iam connect</code> takes the profile from <code>--profile</code>, else <code>AWS_PROFILE</code>, the only profile or <code>default</code>, or asks. It gets the profile's credentials on your machine with the AWS CLI (<code>aws configure export-credentials</code>), so SSO, MFA codes and credential helpers work, and it runs <code>aws sso login</code> first when an SSO sign-in has expired. Goku receives a session in the body of one request, never on a command line, on disk or on screen. Without the AWS CLI, only access-key profiles work.</p>
+    <p>No goku CLI at hand? <strong>Paste temporary credentials</strong> in the console takes the output of <code>aws configure export-credentials --profile NAME --format env</code>.</p>
+  </section>
+
+  <section class="wrap" id="step-3">
+    <div class="kicker">Step 3</div>
+    <h2>Pick a role and see its access</h2>
+    <p>The roles list shows who each role trusts, when it was last used and its policies, with filters for service roles, cross-account roles, federated (OIDC or SAML) roles and roles not used in 90 days. Service-linked roles are hidden unless you ask for them.</p>
+    <figure class="shot">
+      <picture><source type="image/webp" srcset="screenshots/iam-lab-aws-account-roles-list.webp"><img src="screenshots/iam-lab-aws-account-roles-list.png" width="1118" height="590" alt="The roles of an AWS account in Goku's IAM Lab with who each role trusts, such as GitHub Actions OIDC, AWS Lambda or another account, when it was last used and its policies" loading="lazy" decoding="async"></picture>
+      <figcaption>The account's roles, with who each one trusts, when it was last used and its policies.</figcaption>
+    </figure>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">terminal</span><button class="copy" type="button">Copy</button></div>
+      <pre><span class="prompt">$ </span><code>goku iam roles                                  <span class="cmt"># NAME, TRUSTED BY, LAST USED, POLICIES</span>
+goku iam roles deploy                           <span class="cmt"># search name, path, ARN or who it trusts</span>
+goku iam access ci-deployer                     <span class="cmt"># who can assume it, policies, access per service, risks</span>
+goku iam access ci-deployer --service s3,iam    <span class="cmt"># and its S3 and IAM actions</span>
+goku iam access ci-deployer --all --json &gt; ci-deployer.json
+goku iam access ci-deployer --open              <span class="cmt"># the role in the console</span></code></pre>
+    </div>
+    <p><code>--profile NAME</code> or <code>--connection ID</code> picks the account; the default is the profile you scanned most recently. The answers come from the scan, not from new calls to AWS, so rescan from the roles list, or run <code>goku iam connect</code> again, to see changes made since. In the console, <strong>Export</strong> saves a role's access as JSON, Markdown or CSV.</p>
+    <figure class="shot">
+      <picture><source type="image/webp" srcset="screenshots/iam-role-who-can-assume-trust-policy.webp"><img src="screenshots/iam-role-who-can-assume-trust-policy.png" width="1118" height="1190" alt="Who can assume an AWS IAM role, in plain words: a GitHub Actions OIDC provider limited to one repository, and another AWS account that must pass an external ID" loading="lazy" decoding="async"></picture>
+      <figcaption>Who can assume the role, in plain words, with each condition of its trust policy and the statement it comes from.</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap" id="mcp">
+    <div class="kicker">AI assistants</div>
+    <h2>Ask your AI assistant</h2>
+    <p>Goku's <a href="mcp.html">MCP server</a> has four tools for the roles of your AWS account:</p>
+    <div class="cards">
+      <div class="card"><strong>Profiles and connect</strong><span class="tool-names"><code>goku_iam_aws_profiles</code> <code>goku_iam_connect_aws_profile</code></span>Your AWS profiles, never their keys, and a read-only connection and scan of one account.</div>
+      <div class="card"><strong>Roles and access</strong><span class="tool-names"><code>goku_iam_aws_roles</code> <code>goku_iam_role_access</code></span>The account's roles and who they trust, and everything one role can do. Both read Goku's scan, not AWS.</div>
+    </div>
+    <p>When a profile needs you, for an SSO sign-in or an MFA code, the tool says which command to run in your terminal. Ask, for example:</p>
+    <ul class="asks">
+      <li>List my AWS profiles and connect dev.</li>
+      <li>Which roles in my dev account can another account assume?</li>
+      <li>What can ci-deployer do in S3, and who can assume it?</li>
+    </ul>
+  </section>
+
+  <section class="wrap faq" id="faq">
+    <div class="kicker">FAQ</div>
+    <h2>Frequently asked questions</h2>
+    <h3>Does Goku change anything in my AWS account?</h3>
+    <p>No. Every AWS call Goku makes with a profile passes a read-only guard: only reads such as <code>sts:GetCallerIdentity</code> and IAM <code>Get</code>, <code>List</code> and <code>Simulate</code> operations can be sent, and anything else fails before it is signed, even when the profile is an administrator.</p>
+    <h3>Where are my AWS credentials kept?</h3>
+    <p>In Goku's memory, only until they expire. They are never saved, logged or returned by any API. Your <code>~/.aws</code> folder is mounted read-only, and only the IAM Lab reads it.</p>
+    <h3>Which AWS profiles work?</h3>
+    <p>Access keys, IAM Identity Center (SSO) and assume-role profiles. Profiles that need your terminal, such as an MFA code, a credential helper or an expired SSO sign-in, connect with <code>goku iam connect --profile NAME</code>.</p>
+    <h3>What permissions does the profile need?</h3>
+    <p>IAM read access. The AWS managed policies <code>IAMReadOnlyAccess</code>, <code>SecurityAudit</code> or <code>ReadOnlyAccess</code> are enough.</p>
+    <h3>How do I keep Goku from seeing my <code>~/.aws</code> folder?</h3>
+    <p>Set <code>GOKU_AWS_PROFILES=off</code> for the goku CLI and it doesn't mount the folder. With plain Docker, leave out the <code>-v ~/.aws:/run/goku/aws:ro</code> mount.</p>
+  </section>
+
+  <section class="wrap" id="related">
+    <div class="kicker">Keep going</div>
+    <h2>More Goku guides</h2>
+    <div class="cards">
+      <a class="card" href="run-aws-locally.html"><strong>Run AWS locally without an account</strong>Install Goku, point the AWS CLI at localhost:4566 and create S3 buckets, DynamoDB tables, SQS queues and Lambda functions on your machine.</a>
+      <a class="card" href="test-aws-lambda-locally.html"><strong>Test AWS Lambda locally</strong>Create, invoke and debug Lambda functions in real runtime containers, read their CloudWatch logs and stop on breakpoints in VS Code or JetBrains IDEs.</a>
+      <a class="card" href="dynamodb-local.html"><strong>DynamoDB on your machine</strong>Tables, items, GSI queries, PartiQL, Streams and vector search on localhost, with your data kept between restarts.</a>
+      <a class="card" href="workspaces.html"><strong>Run only the AWS services you need</strong>Save the services you work with as workspaces and start, pause, stop or switch them together, so only what you use today takes memory.</a>
+      <a class="card" href="mcp.html"><strong>Connect AI assistants to local AWS</strong>Give Claude Code, Claude Desktop, Cursor, VS Code or Windsurf 34 tools and any AWS API call on a local sandbox, never your real AWS account.</a>
+      <a class="card" href="install.html"><strong>Install Goku</strong>Every install option: the goku CLI on macOS, Linux and Windows, or a single Docker command.</a>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <p class="signoff">See your cloud, before you ship your cloud.</p>
+    <p><a href="index.html">Home</a> · <a href="install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
+    <p class="footer-guides"><span>Guides:</span> <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a> · <a href="mcp.html">AI assistants (MCP)</a> · <a href="workspaces.html">Workspaces</a> · <a href="aws-iam-role-permissions.html">IAM role permissions</a></p>
+    <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.term .copy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var code = btn.closest('.term').querySelector('code').textContent;
+        function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(code).then(done);
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = code; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) {}
+          document.body.removeChild(ta);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

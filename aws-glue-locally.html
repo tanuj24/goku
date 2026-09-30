@@ -403,6 +403,7 @@ aws glue create-table \
       <li><strong>Python shell jobs</strong> run Python 3.9 with AWS's <code>analytics</code> library set.</li>
       <li><strong>Orchestration.</strong> Triggers (on-demand, scheduled, conditional and event), workflows, bookmarks, retries and concurrency limits work, and Step Functions can run a job with <code>arn:aws:states:::glue:startJobRun.sync</code>.</li>
     </ul>
+    <p>Glue jobs and notebooks run in containers that take memory. Save Glue, S3 and Athena as a &ldquo;Data day&rdquo; <a href="workspaces.html">workspace</a> to start them together, and pause or stop the workspace when you move on to other work.</p>
   </section>
 
   <section class="wrap" id="limits">
@@ -439,7 +440,8 @@ aws glue create-table \
       <a class="card" href="run-aws-locally.html"><strong>Run AWS locally without an account</strong>Install Goku, point the AWS CLI at localhost:4566 and create S3 buckets, DynamoDB tables, SQS queues and Lambda functions on your machine.</a>
       <a class="card" href="test-aws-lambda-locally.html"><strong>Test AWS Lambda locally</strong>Create, invoke and debug Lambda functions in real runtime containers, read their CloudWatch logs and stop on breakpoints in VS Code or JetBrains IDEs.</a>
       <a class="card" href="dynamodb-local.html"><strong>DynamoDB on your machine</strong>Tables, items, GSI queries, PartiQL, Streams and vector search on localhost, with your data kept between restarts.</a>
-      <a class="card" href="mcp.html"><strong>Connect AI assistants to local AWS</strong>Give Claude Code, Claude Desktop, Cursor, VS Code or Windsurf 25 tools and any AWS API call on a local sandbox, never your real AWS account.</a>
+      <a class="card" href="mcp.html"><strong>Connect AI assistants to local AWS</strong>Give Claude Code, Claude Desktop, Cursor, VS Code or Windsurf 34 tools and any AWS API call on a local sandbox, never your real AWS account.</a>
+      <a class="card" href="workspaces.html"><strong>Run only the AWS services you need</strong>Save the services you work with as workspaces and start, pause, stop or switch them together, so only what you use today takes memory.</a>
       <a class="card" href="install.html"><strong>Install Goku</strong>Every install option: the goku CLI on macOS, Linux and Windows, or a single Docker command.</a>
     </div>
   </section>
@@ -447,7 +449,7 @@ aws glue create-table \
   <footer class="wrap">
     <p class="signoff">See your cloud, before you ship your cloud.</p>
     <p><a href="index.html">Home</a> · <a href="install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
-    <p class="footer-guides"><span>Guides:</span> <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a> · <a href="mcp.html">AI assistants (MCP)</a></p>
+    <p class="footer-guides"><span>Guides:</span> <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a> · <a href="mcp.html">AI assistants (MCP)</a> · <a href="workspaces.html">Workspaces</a> · <a href="aws-iam-role-permissions.html">IAM role permissions</a></p>
     <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
   </footer>
 

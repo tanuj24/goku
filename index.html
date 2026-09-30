@@ -33,9 +33,9 @@
     "applicationCategory": "DeveloperApplication",
     "description": "Goku (formerly Mimir) is a local AWS cloud emulator in one Docker image: 73 AWS-compatible services including S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway and Glue, with a web console covering 60 services. Free to use.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "softwareVersion": "4.1.0",
+    "softwareVersion": "4.2.0",
     "datePublished": "2026-09-27",
-    "dateModified": "2026-09-28",
+    "dateModified": "2026-09-30",
     "url": "https://tanuj24.github.io/goku/",
     "downloadUrl": "https://tanuj24.github.io/goku/install.html",
     "installUrl": "https://tanuj24.github.io/goku/install.html",
@@ -44,10 +44,13 @@
       "https://tanuj24.github.io/goku/screenshots/goku-console-home-aws-services.png",
       "https://tanuj24.github.io/goku/screenshots/step-functions-workflow-graph-live-execution.png",
       "https://tanuj24.github.io/goku/screenshots/api-gateway-rest-api-local-invoke.png",
-      "https://tanuj24.github.io/goku/screenshots/rds-local-postgresql-container.png"
+      "https://tanuj24.github.io/goku/screenshots/rds-local-postgresql-container.png",
+      "https://tanuj24.github.io/goku/screenshots/services/workspaces.png",
+      "https://tanuj24.github.io/goku/screenshots/services/iam-role-access.png"
     ],
     "featureList": [
       "73 AWS-compatible services on one endpoint, http://localhost:4566",
+      "4,255 of the 5,849 operations of the emulated AWS APIs (73%), with Glue, 22 core services and 14 data services complete",
       "Web console for 60 services on http://localhost:8080",
       "Real engines: PostgreSQL, MySQL and MariaDB for RDS, Redis and Valkey for ElastiCache, k3s for EKS",
       "Lambda in real runtime containers for every runtime AWS Lambda supports today",
@@ -55,8 +58,10 @@
       "AWS Glue 6.0 and 5.1 jobs and notebooks on real Spark",
       "DynamoDB vector search, PartiQL and Streams",
       "IAM Policy Lab",
+      "Role access: what any role in a real AWS account can do, from an AWS profile you already have, read-only",
+      "Workspaces: start, pause, stop or switch groups of services together to save memory",
       "Environment snapshots and fault injection",
-      "MCP server for AI assistants such as Claude Code, Claude Desktop, Cursor, VS Code and Windsurf, with 25 tools including aws_call for any operation of the emulated AWS services",
+      "MCP server for AI assistants such as Claude Code, Claude Desktop, Cursor, VS Code and Windsurf, with 34 tools including aws_call for any operation of the emulated AWS services",
       "Everything kept in a data folder on your disk",
       "goku CLI for macOS, Linux and Windows"
     ],
@@ -82,6 +87,16 @@
         "@type": "Question",
         "name": "Can I test and debug Lambda functions locally?",
         "acceptedAnswer": { "@type": "Answer", "text": "Yes. Lambda functions run in real runtime containers for every runtime AWS Lambda supports today, with logs, versions, aliases, function URLs and event source mappings (SQS, Kinesis, DynamoDB Streams). You can step through a handler from VS Code, IntelliJ, PyCharm or GoLand." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I run only the AWS services I need, to save memory?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Save the services you work with together as a workspace, for example Lambda, ECS and DynamoDB, and start, pause, stop or switch them as one from the console, the goku ws command or MCP. Pause freezes the containers: they keep their memory and use no CPU. Stop frees the memory and keeps the data." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can Goku show what a role in my real AWS account can do?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The IAM Lab connects to your AWS account with an AWS profile you already have (access keys, SSO or assume-role), scans its roles with read-only calls and shows for any role every action it is allowed, who can assume it and its risks. Nothing in the account changes, and credentials are held in memory only." }
       },
       {
         "@type": "Question",
@@ -288,20 +303,20 @@
     <div class="wrap">
       <div class="announce" role="note" aria-label="Announcements">
         <div class="announce-row">
-          <span class="announce-tag">New in 4.1</span>
-          <p><strong>AI assistants can now work with your local AWS.</strong> Goku serves MCP, so Claude Code, Claude Desktop, Cursor, VS Code and Windsurf can create resources, call any AWS API and read logs on your machine, never real AWS. <a href="mcp.html">Connect yours</a>.</p>
+          <span class="announce-tag">New in 4.2</span>
+          <p><strong>Run only the services you need today.</strong> Workspaces start, pause and stop groups of services together to save memory, the IAM Lab shows what any role in your AWS account can do from the AWS profile you already have, and Goku now answers 73% of the AWS operations it emulates. <a href="workspaces.html">Try workspaces</a>.</p>
         </div>
         <div class="announce-row">
           <span class="announce-tag">New name</span>
           <p><strong>Mimir is now Goku, everywhere.</strong> Every name is Goku now: the image <code>tanujsoni027/goku</code>, the <code>goku</code> container and command, and <code>GOKU_*</code> settings. Existing installs move over automatically and the old names keep working for now, so start using the goku names.</p>
         </div>
-        <a href="#whats-new">What's new in Goku 4.1 &rarr;</a>
+        <a href="#whats-new">What's new in Goku 4.2 &rarr;</a>
       </div>
       <img class="hero-logo" src="assets/goku-logo.svg" width="660" height="240" alt="Goku logo: a terminal prompt surfing a golden cloud, with the tagline See your cloud, before you ship your cloud">
       <h1>Goku — Your <span class="grad">Local AWS Cloud</span></h1>
       <p class="tagline"><strong>Goku</strong> (formerly Mimir) is a local AWS cloud emulator: 73 AWS-compatible services — S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway, Glue and more — on <strong>localhost:4566</strong>, with a web console for 60 services on <strong>localhost:8080</strong>, real container-backed engines, and zero AWS account. Free.</p>
       <a class="btn btn-primary" href="install.html">Install Goku</a>
-      <a class="btn btn-ghost" href="#whats-new">What's new in 4.1</a>
+      <a class="btn btn-ghost" href="#whats-new">What's new in 4.2</a>
       <div class="terminal">
         <div class="term-bar">
           <span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span>
@@ -326,28 +341,97 @@
   </div>
 
   <section class="wrap" id="whats-new">
-    <span class="kicker">Release notes · 4.1.0</span>
-    <h2>What's new in Goku 4.1</h2>
-    <p class="section-lede">Goku 4.1 connects AI assistants to your local AWS. Claude Code, Claude Desktop, Cursor, VS Code, Windsurf and any other MCP client can now work with Goku directly: create and inspect resources, call any AWS API, read logs, take snapshots and inject faults, all against the sandbox on your machine and never real AWS.</p>
+    <span class="kicker">Release notes · 4.2.0</span>
+    <h2>What's new in Goku 4.2</h2>
+    <p class="section-lede">Goku 4.2 answers 73% of the AWS operations it emulates, up from 42%: Glue, the core services and every data service are now complete. Workspaces let you run only the services you're working with today and pause or stop the rest to save memory. And the IAM Lab can show what any role in your real AWS account can do, using the AWS profile you already have.</p>
 
     <div class="cards">
       <div class="card">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-5M9 8V2M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8z"/></svg></div>
-        <h3>An MCP server for Goku</h3>
-        <p>Goku serves the Model Context Protocol at <code>http://localhost:8080/mcp</code>, on the console's port, over Streamable HTTP. 25 tools cover status, services, sample data, the Resource Center, logs, snapshots, fault injection, IAM and request journeys, and <code>aws_call</code> calls any operation of the emulated AWS services. Tool hints mark the ones that can delete.</p>
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/><path d="m3 17.5 9 5 9-5"/></svg></div>
+        <h3>Workspaces: only what you use today</h3>
+        <p>Save the services you work with together, such as &ldquo;Serverless day&rdquo; (Lambda, ECS, DynamoDB) or &ldquo;Data day&rdquo; (Glue, S3, Athena), then <strong>Start</strong>, <strong>Pause</strong>, <strong>Stop</strong> or <strong>Switch to</strong> them as one. Pause keeps the containers' memory and uses no CPU; Stop frees the memory and keeps the data. <a href="workspaces.html">How workspaces work</a>.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.6-1.4 1.7-2.1 3-2.1s2.4.7 3 2.1M15 10h3M15 14h3"/></svg></div>
+        <h3>See what an AWS role can do</h3>
+        <p><strong>IAM Lab &rarr; Role access</strong> connects to your AWS account with a profile you already have: access keys, SSO or assume-role, with no role to deploy. Pick a role to see every action it is allowed and the statement behind it, who can assume it in plain words, and its risks. Read-only, always. <a href="aws-iam-role-permissions.html">See a role's permissions</a>.</p>
       </div>
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg></div>
-        <h3>Setup in one line: goku mcp</h3>
-        <p>goku CLI 0.5.0 adds <code>goku mcp</code>, a stdio bridge that starts Goku when it isn't running. <code>claude mcp add goku -- goku mcp</code> is all Claude Code needs, and <code>goku mcp config</code> prints the setup for Claude Desktop, Cursor, VS Code and Windsurf.</p>
-      </div>
-      <div class="card">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></div>
-        <h3>The AI assistants page</h3>
-        <p><strong>MCP</strong> in the console's top bar shows the endpoint, copy-paste setup for each client, things to ask and every tool. Requests from other websites are refused, and <code>GOKU_MCP=off</code> turns the endpoint off.</p>
+        <h3>goku CLI 0.6.0 and MCP</h3>
+        <p><code>goku ws</code> starts, pauses, stops and switches workspaces from your terminal, and <code>goku iam profiles</code>, <code>connect</code>, <code>roles</code> and <code>access ROLE</code> show what a role can do. Nine new MCP tools let AI assistants do both, 34 in total.</p>
       </div>
     </div>
-    <p>Set it up in a minute: <a href="mcp.html">connect an AI assistant to Goku</a>, with the setup for every client, the full tool list and how <code>aws_call</code> works.</p>
+
+    <div class="rename">
+      <h3>4,255 of 5,849 AWS operations: 73%, up from 42%</h3>
+      <p>Goku 4.2 adds 1,820 operations. Each one keeps real state and follows AWS's request and response shapes, errors and paging.</p>
+      <ul>
+        <li><strong>Glue and 22 core services:</strong> 1,997 of their 2,003 operations, up from 918.</li>
+        <li><strong>All 14 data services are complete,</strong> 1,147 of 1,147: RDS, Neptune, DocumentDB, Redshift and Redshift Serverless, OpenSearch and the Elasticsearch Service API, ElastiCache, MemoryDB, MSK, AWS Backup, Transfer Family, EKS and Lake Formation.</li>
+        <li><strong>Gaps are marked.</strong> Where AWS does work that can't be reproduced locally, the operation is marked <strong>partial</strong> on the console's Service coverage page, with a note saying what is missing.</li>
+      </ul>
+    </div>
+
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <tr><th>Service</th><th>Goku 4.1</th><th>Goku 4.2</th></tr>
+          <tr><td>Glue</td><td>107 / 300</td><td class="goku">299 / 300</td></tr>
+          <tr><td>Systems Manager</td><td>23 / 152</td><td class="goku">152 / 152</td></tr>
+          <tr><td>CloudWatch Logs</td><td>27 / 118</td><td class="goku">117 / 118</td></tr>
+          <tr><td>IAM</td><td>100 / 180</td><td class="goku">178 / 180</td></tr>
+          <tr><td>Cognito user pools</td><td>57 / 132</td><td class="goku">132 / 132</td></tr>
+          <tr><td>CloudFormation</td><td>27 / 90</td><td class="goku">89 / 90</td></tr>
+          <tr><td>Athena</td><td>13 / 70</td><td class="goku">70 / 70</td></tr>
+          <tr><td>API Gateway (REST, HTTP and WebSocket)</td><td>125 / 227</td><td class="goku">227 / 227</td></tr>
+          <tr><td>Lambda</td><td>54 / 88</td><td class="goku">88 / 88</td></tr>
+          <tr><td>S3</td><td>71 / 116</td><td class="goku">116 / 116</td></tr>
+          <tr><td>RDS</td><td>39 / 164</td><td class="goku">164 / 164</td></tr>
+          <tr><td>Redshift and Redshift Serverless</td><td>87 / 210</td><td class="goku">210 / 210</td></tr>
+          <tr><td>OpenSearch and the Elasticsearch Service API</td><td>24 / 147</td><td class="goku">147 / 147</td></tr>
+          <tr><td>EKS</td><td>7 / 70</td><td class="goku">70 / 70</td></tr>
+        </table>
+      </div>
+    </div>
+    <p>ECR, AWS Backup, ElastiCache, Transfer Family, Neptune, MSK, KMS, Secrets Manager, STS, CloudWatch, EventBridge, Step Functions, Kinesis, Firehose, ECS, DynamoDB, SNS, DocumentDB, MemoryDB and Lake Formation are complete too.</p>
+
+    <div class="devtools">
+      <h3>Highlights, all running against your local data</h3>
+      <p>A few of the new operations:</p>
+      <ul>
+        <li><strong>Glue:</strong> Data Quality rules evaluated over the table's data, column statistics computed from the data, connections tested with a real login, and blueprint runs that create workflows, jobs, crawlers and triggers.</li>
+        <li><strong>Systems Manager:</strong> Run Command executes scripts in Goku's EC2 instances, and Automation runs its steps, including AWS API calls.</li>
+        <li><strong>CloudWatch Logs:</strong> Logs Insights queries, including PPL and SQL, live tail, and subscription filters delivered to Lambda, Kinesis and Firehose.</li>
+        <li><strong>CloudFormation:</strong> StackSets deployed into other Goku accounts and Regions, resource scans, and templates generated from your resources.</li>
+        <li><strong>API Gateway:</strong> custom domains and base path mappings, usage plans enforced on requests, and OpenAPI export and import.</li>
+        <li><strong>Cognito user pools:</strong> MFA challenges at sign-in, token revocation, devices and passkey registration.</li>
+        <li><strong>RDS and Aurora:</strong> snapshots are real dumps that restore into new engines, PostgreSQL read replicas use real streaming replication, and blue/green switchovers work.</li>
+        <li><strong>Redshift:</strong> restore a single table from a snapshot, scheduled pause, resume and resize, and data sharing with live reads across accounts.</li>
+        <li><strong>OpenSearch:</strong> upgrades with rollback, packages and cross-cluster search on the real engine, and the Elasticsearch Service API on the same domains.</li>
+        <li><strong>EKS:</strong> access entries become Kubernetes RBAC in the cluster, and node groups are real k3s nodes.</li>
+        <li><strong>MSK:</strong> plaintext, TLS and SASL/SCRAM listeners, and replicators between clusters.</li>
+        <li><strong>Transfer Family:</strong> real SFTP connectors, AS2 servers with signing and encryption, and upload workflows that invoke Lambda.</li>
+      </ul>
+    </div>
+
+    <div class="rename">
+      <h3>Answers that now match AWS</h3>
+      <p>Some answers changed to match AWS's behaviour, so code that relied on the old ones may notice:</p>
+      <ul>
+        <li><strong>STS <code>GetCallerIdentity</code></strong> reports the caller: the IAM user of a user key, or the assumed-role or federated-user ARN of a session. Before, it always reported the account root.</li>
+        <li><strong>CloudWatch Logs</strong> <code>FilterLogEvents</code> and metric filters use AWS's filter-pattern syntax instead of substring matching.</li>
+        <li><strong>KMS</strong> refuses cryptographic operations with disabled keys, and <strong>IAM</strong> <code>DeleteUser</code> refuses while the user still has credentials.</li>
+        <li><strong>RDS</strong> real-engine instances are <code>creating</code> until the engine accepts connections, <strong>EKS</strong> clusters created from 4.2 on check tokens against their access entries, and new <strong>MSK</strong> clusters default to TLS-only client traffic.</li>
+      </ul>
+    </div>
+    <p class="also">Also in 4.2: images pushed to an ECR repository's URI with <code>docker push</code> now show up in <code>DescribeImages</code> and <code>ListImages</code>, with a registry front that keeps each account's and Region's images apart, and the last Mimir names users could see, such as the images and S3 buckets Goku creates, are Goku names now. Nothing needs to be rebuilt or re-created.</p>
+  </section>
+
+  <section class="wrap" id="whats-new-4-1">
+    <span class="kicker">Release notes · 4.1.0</span>
+    <h2>Earlier: Goku 4.1</h2>
+    <p class="section-lede">Goku 4.1 connected AI assistants to your local AWS. Goku serves the Model Context Protocol at <code>http://localhost:8080/mcp</code>, so Claude Code, Claude Desktop, Cursor, VS Code, Windsurf and any other MCP client can create and inspect resources, call any AWS API, read logs, take snapshots and inject faults, all against the sandbox on your machine. goku CLI 0.5.0 added <code>goku mcp</code>, a stdio bridge that starts Goku when it isn't running, and <code>goku mcp config</code> prints the setup for each client. <a href="mcp.html">Connect an AI assistant to Goku</a>.</p>
   </section>
 
   <section class="wrap" id="whats-new-4-0">
@@ -467,7 +551,7 @@
   <section class="wrap" id="service-explorer">
     <span class="kicker">Every service, a real console</span>
     <h2>Pick a service, see its console</h2>
-    <p class="section-lede">A tour of the bundled web console: 27 of its 60 service consoles, grouped the way AWS groups them, plus tools new in Goku 4.0. Click any one to see its page.</p>
+    <p class="section-lede">A tour of the bundled web console: 27 of its 60 service consoles, grouped the way AWS groups them, plus Goku's own tools, with Workspaces and IAM Role access new in Goku 4.2. Click any one to see its page.</p>
     <div class="explorer">
       <div class="svc-nav" aria-label="Console services by category">
         <div class="svc-group">
@@ -523,7 +607,8 @@
           <span class="svc-group-label" id="svc-cat-security">Security &amp; Identity</span>
           <div class="svc-list" role="group" aria-labelledby="svc-cat-security">
             <button class="svc-btn" type="button" data-svc="iam" aria-pressed="false">IAM</button>
-            <button class="svc-btn" type="button" data-svc="iam-policy-lab" aria-pressed="false">IAM Policy Lab<span class="svc-new">New</span></button>
+            <button class="svc-btn" type="button" data-svc="iam-policy-lab" aria-pressed="false">IAM Policy Lab</button>
+            <button class="svc-btn" type="button" data-svc="iam-role-access" aria-pressed="false">IAM Role access<span class="svc-new">New</span></button>
             <button class="svc-btn" type="button" data-svc="cognito" aria-pressed="false">Cognito</button>
             <button class="svc-btn" type="button" data-svc="kms" aria-pressed="false">KMS</button>
             <button class="svc-btn" type="button" data-svc="secrets" aria-pressed="false">Secrets Manager</button>
@@ -546,10 +631,11 @@
         <div class="svc-group">
           <span class="svc-group-label" id="svc-cat-tools">Goku tools</span>
           <div class="svc-list" role="group" aria-labelledby="svc-cat-tools">
-            <button class="svc-btn" type="button" data-svc="resource-center" aria-pressed="false">Resource Center<span class="svc-new">New</span></button>
-            <button class="svc-btn" type="button" data-svc="fault-injection" aria-pressed="false">Fault Injection<span class="svc-new">New</span></button>
-            <button class="svc-btn" type="button" data-svc="journeys" aria-pressed="false">Journeys<span class="svc-new">New</span></button>
-            <button class="svc-btn" type="button" data-svc="service-coverage" aria-pressed="false">Service coverage<span class="svc-new">New</span></button>
+            <button class="svc-btn" type="button" data-svc="workspaces" aria-pressed="false">Workspaces<span class="svc-new">New</span></button>
+            <button class="svc-btn" type="button" data-svc="resource-center" aria-pressed="false">Resource Center</button>
+            <button class="svc-btn" type="button" data-svc="fault-injection" aria-pressed="false">Fault Injection</button>
+            <button class="svc-btn" type="button" data-svc="journeys" aria-pressed="false">Journeys</button>
+            <button class="svc-btn" type="button" data-svc="service-coverage" aria-pressed="false">Service coverage</button>
           </div>
         </div>
       </div>
@@ -631,7 +717,15 @@
       </a>
       <a class="card guide" href="mcp.html">
         <h3>Connect AI assistants to local AWS</h3>
-        <p>Give Claude Code, Claude Desktop, Cursor, VS Code or Windsurf 25 tools and any AWS API call on a local sandbox, never your real AWS account.</p>
+        <p>Give Claude Code, Claude Desktop, Cursor, VS Code or Windsurf 34 tools and any AWS API call on a local sandbox, never your real AWS account.</p>
+      </a>
+      <a class="card guide" href="workspaces.html">
+        <h3>Run only the AWS services you need</h3>
+        <p>Save the services you work with as workspaces and start, pause, stop or switch them together, so only what you use today takes memory.</p>
+      </a>
+      <a class="card guide" href="aws-iam-role-permissions.html">
+        <h3>See what an AWS IAM role can do</h3>
+        <p>Connect the IAM Lab with an AWS profile you already have and see a role's effective permissions, who can assume it and its risks, read-only.</p>
       </a>
     </div>
   </section>
@@ -645,6 +739,10 @@
     <p>Install Goku and point your AWS CLI or SDK at http://localhost:4566, region <strong>us-east-1</strong>, with any local credentials such as <strong>test</strong> / <strong>test</strong> — <code>goku env</code> sets these for you. No account and no sign-up. Once the image and any runtime images your services need are pulled, everything runs on your machine without internet access. Walkthrough: <a href="run-aws-locally.html">how to run AWS locally</a>.</p>
     <h3>Can I test and debug Lambda functions locally?</h3>
     <p>Yes. Functions run in real runtime containers for every runtime AWS Lambda supports today, with logs, versions, aliases, function URLs and event source mappings. Step through a handler from VS Code, IntelliJ, PyCharm or GoLand. See <a href="test-aws-lambda-locally.html">testing AWS Lambda locally</a>.</p>
+    <h3>Can I run only the AWS services I need, to save memory?</h3>
+    <p>Yes. Save the services you work with together as a workspace, for example Lambda, ECS and DynamoDB, and start, pause, stop or switch them as one from the console, <code>goku ws</code> or MCP. Pause freezes the containers: they keep their memory and use no CPU. Stop frees the memory and keeps the data. See <a href="workspaces.html">running only the services you need</a>.</p>
+    <h3>Can Goku show what a role in my real AWS account can do?</h3>
+    <p>Yes. The IAM Lab connects to your AWS account with an AWS profile you already have (access keys, SSO or assume-role), scans its roles with read-only calls and shows for any role every action it is allowed, who can assume it and its risks. Nothing in the account changes, and credentials are held in memory only. See <a href="aws-iam-role-permissions.html">what an AWS IAM role can do</a>.</p>
     <h3>Does my data survive restarts and updates?</h3>
     <p>Yes. Everything Goku keeps, databases included, lives in a data folder on your disk (<code>~/.goku/data</code>, or <code>%LOCALAPPDATA%\Goku\data</code> on Windows). It survives stops, updates, reinstalls and Docker resets. Environment snapshots can save and restore the whole local cloud.</p>
     <h3>Does Goku run on Windows and Apple Silicon?</h3>
@@ -658,7 +756,7 @@
   <footer class="wrap">
     <p class="signoff">See your cloud, before you ship your cloud.</p>
     <p><a href="install.html">Install</a> · <a href="https://hub.docker.com/r/tanujsoni027/goku">Docker Hub</a> · <a href="https://github.com/tanuj24/goku/issues">Support</a></p>
-    <p class="footer-guides"><span>Guides:</span> <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a> · <a href="mcp.html">AI assistants (MCP)</a></p>
+    <p class="footer-guides"><span>Guides:</span> <a href="run-aws-locally.html">Run AWS locally</a> · <a href="test-aws-lambda-locally.html">Test Lambda locally</a> · <a href="dynamodb-local.html">DynamoDB local</a> · <a href="aws-glue-locally.html">AWS Glue locally</a> · <a href="mcp.html">AI assistants (MCP)</a> · <a href="workspaces.html">Workspaces</a> · <a href="aws-iam-role-permissions.html">IAM role permissions</a></p>
     <p class="disclaimer">Goku is an independent project, not affiliated with, endorsed by, or sponsored by Amazon Web Services. AWS and AWS service names are trademarks of Amazon.com, Inc.</p>
   </footer>
 
@@ -727,6 +825,7 @@
         'kafka':            { name: 'MSK/Kafka',          cat: 'Analytics',           file: 'kafka.png' },
         'iam':              { name: 'IAM',                cat: 'Security & Identity', file: 'iam.png' },
         'iam-policy-lab':   { name: 'IAM Policy Lab',     cat: 'Security & Identity', file: 'iam-policy-lab.png', page: true },
+        'iam-role-access':  { name: 'IAM Role access',    cat: 'Security & Identity', file: 'iam-role-access.png', page: true },
         'cognito':          { name: 'Cognito',            cat: 'Security & Identity', file: 'cognito.png' },
         'kms':              { name: 'KMS',                cat: 'Security & Identity', file: 'kms.png' },
         'secrets':          { name: 'Secrets Manager',    cat: 'Security & Identity', file: 'secrets.png' },
@@ -734,6 +833,7 @@
         'ssm':              { name: 'Systems Manager',    cat: 'Management',          file: 'ssm.png' },
         'logs':             { name: 'CloudWatch Logs',    cat: 'Observability',       file: 'logs.png' },
         'metrics':          { name: 'CloudWatch Metrics', cat: 'Observability',       file: 'metrics.png' },
+        'workspaces':       { name: 'Workspaces',         cat: 'Goku tools',          file: 'workspaces.png', page: true },
         'resource-center':  { name: 'Resource Center',    cat: 'Goku tools',          file: 'resource-center.png', page: true },
         'fault-injection':  { name: 'Fault Injection',    cat: 'Goku tools',          file: 'fault-injection.png', page: true },
         'journeys':         { name: 'Journeys',           cat: 'Goku tools',          file: 'journeys.png', page: true },
