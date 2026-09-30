@@ -438,7 +438,7 @@ docker pull tanujsoni027/goku:latest</code></pre>
       <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">PowerShell</span><button class="copy" type="button">Copy</button></div>
       <pre class="one"><span class="prompt">PS&gt; </span><code>$env:GOKU_CONSOLE_PORT = "9090"; $env:GOKU_EDGE_PORT = "4567"; goku start</code></pre>
     </div>
-    <p>Data endpoints live in a dedicated 5500–5659 range (RDS, ElastiCache and Neptune through the published 5500–5524 ports; the rest bind automatically), so they won't clash with a local Redis, Postgres or Elasticsearch.</p>
+    <p>Data endpoints live in a dedicated 5500–5689 range (RDS, ElastiCache and Neptune through the published 5500–5524 ports; the rest bind automatically), so they won't clash with a local Redis, Postgres or Elasticsearch.</p>
     <h3>Still stuck?</h3>
     <p>Open an issue at <a href="https://github.com/tanuj24/goku/issues">github.com/tanuj24/goku/issues</a> — include the output of <code>goku doctor</code> and <code>goku logs</code>.</p>
   </section>
