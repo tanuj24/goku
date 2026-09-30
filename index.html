@@ -212,6 +212,15 @@
     img.shot.modal { max-width: 768px; display: block; margin-left: auto; margin-right: auto; }
 
     /* What's new */
+    /* What's new: screenshots of the new features */
+    .shotgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 20px; align-items: start; margin: 26px 0 10px; }
+    .shotgrid figure { margin: 0; }
+    figure.wn-shot { margin: 18px 0 8px; }
+    .shotgrid picture, figure.wn-shot picture { display: block; }
+    .shotgrid img, figure.wn-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); }
+    .shotgrid figcaption, figure.wn-shot figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+    .shotgrid figcaption strong, figure.wn-shot figcaption strong { color: var(--ink); }
+    @media (max-width: 760px) { .shotgrid { grid-template-columns: 1fr; } }
     .rename { background: linear-gradient(135deg, rgba(20,184,166,0.10), rgba(76,201,240,0.06)); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 14px; padding: 22px 22px 10px; margin: 22px 0 18px; }
     .rename h3 { font-size: 1.25rem; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
     .rename ul { list-style: none; margin: 4px 0 12px; }
@@ -363,6 +372,25 @@
       </div>
     </div>
 
+    <div class="shotgrid" aria-label="Screenshots of the features new in Goku 4.2">
+      <figure>
+        <picture><source type="image/webp" srcset="screenshots/services/workspaces.webp"><img src="screenshots/services/workspaces.png" width="1440" height="860" alt="The Workspaces page in the Goku console: running, paused and stopped workspaces with their services, containers, memory and CPU" loading="lazy" decoding="async"></picture>
+        <figcaption><strong>Workspaces.</strong> Every workspace with its state, services, memory and CPU, live, and one-click Start, Pause, Stop or Switch. <a href="workspaces.html">Workspaces guide</a></figcaption>
+      </figure>
+      <figure>
+        <picture><source type="image/webp" srcset="screenshots/goku-mcp-ai-assistants-page.webp"><img src="screenshots/goku-mcp-ai-assistants-page.png" width="1440" height="860" alt="The AI assistants (MCP) page in the Goku console with the MCP endpoint and copy-paste setup for Claude Code, Claude Desktop, Cursor and VS Code" loading="lazy" decoding="async"></picture>
+        <figcaption><strong>AI assistants (MCP).</strong> Connect Claude Code, Cursor, VS Code and others to your local AWS: 34 tools, now including workspaces and role access. <a href="mcp.html">MCP guide</a></figcaption>
+      </figure>
+      <figure>
+        <picture><source type="image/webp" srcset="screenshots/workspaces-switcher-console-top-bar.webp"><img src="screenshots/workspaces-switcher-console-top-bar.png" width="1216" height="1054" alt="The workspace switcher in the Goku console top bar listing workspaces with their state and Start, Pause, Stop and Switch actions" loading="lazy" decoding="async"></picture>
+        <figcaption><strong>The switcher in the top bar.</strong> Switch to another workspace from any page. Pause keeps memory; Stop frees it.</figcaption>
+      </figure>
+      <figure>
+        <picture><source type="image/webp" srcset="screenshots/iam-role-effective-permissions-by-service.webp"><img src="screenshots/iam-role-effective-permissions-by-service.png" width="1118" height="1020" alt="The IAM Lab role access page in the Goku console showing an AWS role&rsquo;s allowed actions per service, with resource scope and conditions" loading="lazy" decoding="async"></picture>
+        <figcaption><strong>What an AWS role can do.</strong> Every action a role in your AWS account is allowed, per service, with the policy statement behind it. <a href="aws-iam-role-permissions.html">Role permissions guide</a></figcaption>
+      </figure>
+    </div>
+
     <div class="rename">
       <h3>4,255 of 5,849 AWS operations: 73%, up from 42%</h3>
       <p>Goku 4.2 adds 1,820 operations. Each one keeps real state and follows AWS's request and response shapes, errors and paging.</p>
@@ -371,6 +399,10 @@
         <li><strong>All 14 data services are complete,</strong> 1,147 of 1,147: RDS, Neptune, DocumentDB, Redshift and Redshift Serverless, OpenSearch and the Elasticsearch Service API, ElastiCache, MemoryDB, MSK, AWS Backup, Transfer Family, EKS and Lake Formation.</li>
         <li><strong>Gaps are marked.</strong> Where AWS does work that can't be reproduced locally, the operation is marked <strong>partial</strong> on the console's Service coverage page, with a note saying what is missing.</li>
       </ul>
+      <figure class="wn-shot">
+        <picture><source type="image/webp" srcset="screenshots/goku-service-coverage-73-percent-aws-operations.webp"><img src="screenshots/goku-service-coverage-73-percent-aws-operations.png" width="1440" height="860" alt="The Service coverage page in the Goku console: 4,255 of 5,849 AWS operations implemented, 442 partial, with API Gateway, Redshift, RDS, Systems Manager, OpenSearch and Cognito at 100%" loading="lazy" decoding="async"></picture>
+        <figcaption><strong>Service coverage</strong> in the console: search any AWS operation to see whether Goku answers it, and what is partial.</figcaption>
+      </figure>
     </div>
 
     <div class="table-card">
