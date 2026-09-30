@@ -495,7 +495,7 @@
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
         <h3>Everything in a folder on disk</h3>
-        <p>Buckets, tables, functions and the data of every engine (RDS PostgreSQL databases, OpenSearch, MSK, ECR, DocumentDB, MemoryDB, Amazon MQ and Redshift) live in <code>~/.goku/data</code> (<code>%LOCALAPPDATA%\Goku\data</code> on Windows). Reset Docker, update or reinstall: start Goku with the same folder and resume where you left off. Existing data moves in by itself.</p>
+        <p>Buckets, tables, functions and the data of every engine (RDS PostgreSQL databases, OpenSearch, ECR, DocumentDB, MemoryDB, Amazon MQ and Redshift) live in <code>~/.goku/data</code> (<code>%LOCALAPPDATA%\Goku\data</code> on Windows). On macOS and Windows, MSK and RDS MySQL keep their data in Docker volumes, which also survive restarts and updates. Reset Docker, update or reinstall: start Goku with the same folder and resume where you left off. Existing data moves in by itself.</p>
       </div>
       <div class="card">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg></div>
