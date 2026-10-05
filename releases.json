@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "goku": {
-    "version": "4.2.1",
+    "version": "4.2.2",
     "image": "tanujsoni027/goku",
-    "tag": "4.2.1",
-    "released": "2026-09-30",
+    "tag": "4.2.2",
+    "released": "2026-10-05",
     "notes": "https://tanuj24.github.io/goku/#whats-new",
-    "summary": "Amazon MSK works on macOS and Windows and is reachable from your machine; a cluster that cannot start says why; subscribe with names such as msk."
+    "summary": "Every engine that cannot start says why: RDS, Redshift, OpenSearch, EKS, ElastiCache, MemoryDB, DocumentDB, Neptune, Amazon MQ, MWAA and ECR fail with the engine's own error instead of failing silently or staying creating."
   },
   "cli": {
     "version": "0.6.0",
