@@ -33,7 +33,7 @@
     "applicationCategory": "DeveloperApplication",
     "description": "Goku (formerly Mimir) is a local AWS cloud emulator in one Docker image: 73 AWS-compatible services including S3, Lambda, DynamoDB, RDS, Step Functions, API Gateway and Glue, with a web console covering 60 services. Free to use.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "softwareVersion": "4.2.2",
+    "softwareVersion": "4.2.3",
     "datePublished": "2026-09-27",
     "dateModified": "2026-09-30",
     "url": "https://tanuj24.github.io/goku/",
@@ -353,9 +353,10 @@
   </div>
 
   <section class="wrap" id="whats-new">
-    <span class="kicker">Release notes · 4.2.2</span>
+    <span class="kicker">Release notes · 4.2.3</span>
     <h2>What's new in Goku 4.2</h2>
     <div class="patch-note">
+      <p><strong>4.2.3:</strong> RDS runs the database versions AWS offers today. Each engine version now runs exactly that version, and new databases default to PostgreSQL 18.6, MySQL 8.4.11 and MariaDB 12.3.3. Upgrade a database to a newer version from the console or with <code>ModifyDBInstance</code>: its data, users and passwords move with it, and if the new version does not come up the old one comes back on the untouched data. Databases created on earlier releases keep the engine that created their data and show the version they really run.</p>
       <p><strong>4.2.2:</strong> Every engine that cannot start now says why. An RDS instance, Redshift cluster, OpenSearch domain, EKS cluster, ElastiCache or MemoryDB cluster, DocumentDB or Neptune cluster, Amazon MQ broker or MWAA environment whose engine exits, runs out of memory or never becomes ready fails at once with the engine's own error, in its status, its events and the console, with a link to the engine's logs. Nothing stays creating forever, and PostgreSQL, MongoDB, RabbitMQ and Valkey keep their data in Docker volumes where the data folder does not keep owners and permissions (a Windows drive, for one). Thanks to the user who reported their RDS instances failing without a reason.</p>
       <p><strong>4.2.1:</strong> Amazon MSK now works on macOS and Windows: Kafka brokers keep their data in a Docker volume where the data folder is a Docker Desktop file share, and data from a cluster that already ran is copied over. Brokers are reachable from your machine at the <code>localhost</code> address <code>GetBootstrapBrokers</code> returns, a cluster whose broker cannot start moves to <code>FAILED</code> and says why, and <code>goku services subscribe msk</code> works. Thanks to the user who reported these. Update with <code>goku update</code> or <strong>Update now</strong> in the console.</p>
     </div>
